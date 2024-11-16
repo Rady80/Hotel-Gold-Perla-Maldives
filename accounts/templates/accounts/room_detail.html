@@ -1,0 +1,17 @@
+<h1>{{ room.name }}</h1>
+<p>{{ room.description }}</p>
+
+<div class="room-images">
+    {% for image in room.images.all %}
+        <div class="room-image">
+            <img src="{{ image.image.url }}" alt="{{ image.caption }}">
+            {% if image.caption %}
+                <p>{{ image.caption }}</p>
+            {% endif %}
+
+    {% for message in messages %}
+<p id="messages">{{ message }}</p>
+{% endfor %}
+        </div>
+    {% endfor %}
+</div>

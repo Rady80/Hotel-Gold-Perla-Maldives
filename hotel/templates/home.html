@@ -1,0 +1,156 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+        integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-image: url("{% static '/images/hotel.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Kontejner pro zarovnání na střed */
+        .container-center {
+            height: 100vh;
+            display: flex;
+            align-items: center;  /* Vertikální zarovnání */
+            justify-content: center;  /* Horizontální zarovnání */
+        }
+
+        /* Karta uživatele */
+        .user_card {
+            width: 350px;
+            background-color: 0px 6px 12px rgba(0, 0, 0, 0.5);  /* Intenzivnější černý stín */
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5);  /* Intenzivnější černý stín */
+        }
+
+        /* Styl pro název hotelu */
+        .title {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: black;
+            font-weight: bold;
+            padding: 15px;
+            text-align: center;  /* Zarovnání textu na střed */
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-size: 1.8rem;  /* Zvětšení písma názvu hotelu */
+        }
+
+        .form_container {
+            margin-top: 20px;
+        }
+
+        .login_btn {
+            width: 100%;
+            background: #00FF7F !important; /* Jarní zelená */
+            color: Black !important;
+        }
+
+        .login_btn:focus {
+            box-shadow: none !important;
+            0px !important;  /* Změněno outline na 0px, aby nebyl žádný obrys */
+        }
+        
+        /* Text v input group - například ikony před inputy */
+        .input-group-text {
+            background: #007FFF !important;  /* Azurová*/
+            color: #ffffff !important;        /* Zachována bílá barva textu pro lepší kontrast */
+            border: 0 !important;
+            border-radius: 0.25rem 0 0 0.25rem !important;
+        }
+
+         /* Tlačítko pro přihlášení - stav focus */
+        .input_user,
+        .input_pass:focus {
+            box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.5);  /* Modrý stín */
+            outline: 0px !important;  /* Změněno outline na 0px, aby nebyl žádný obrys */
+        }
+
+        #messages {
+            background-color: grey;
+            color: #000000 !important;  /* Plná černá barva */
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+
+  </style>
+
+</head>
+
+<body>
+    <div class="container-center">
+        <div class="user_card text-white">
+            <!-- Název hotelu -->
+            <div class="title fancy-title">
+                Hotel Gold Perla Maldives
+            <style>
+
+    /* Styl pro název hotelu */
+    .fancy-title {
+        font-family: 'Georgia', serif; /* Elegantní font, můžete změnit na libovolný jiný */
+        font-size: 2.5rem;  /* Zvýšená velikost písma */
+        font-weight: bold;  /* Písmo bude tučné */
+        font-style: italic; /* Přidán kurzívní styl */
+        color: #000000; /* Černá barva */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Jemný stín pro lepší kontrast */
+        text-align: center; /* Text vycentrován na střed */
+        margin-bottom: 30px;
+        border-radius: 10px;
+    }
+
+</style>
+            </div>
+
+
+            <div class="form_container">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" name="username" placeholder="Username..." class="form-control">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input type="password" name="password" placeholder="Password..." class="form-control">
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3 login_container">
+                        <input class="btn login_btn" type="submit" value="Login">
+                    </div>
+                </form>
+            </div>
+
+            {% for message in messages %}
+            <p id="messages">{{ message }}</p>
+            {% endfor %}
+
+            <div class="mt-4" style="color: #000000;">
+                <div class="d-flex justify-content-center links">
+                    Don't have an account? <a href="{% url 'register' %}" class="ml-2" style="color: #000000;">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
