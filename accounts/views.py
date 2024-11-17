@@ -8,26 +8,29 @@ from datetime import datetime, date, timedelta
 from accounts.models import Guest, Employee
 from room.models import Booking
 from .forms import CreateUserForm
-from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm
 
-
-# Vytvoření uživatelského účtu
+# ------------------------------
+# Pohled pro registraci uživatele
+# ------------------------------
 def register_page(request):
     """
     Registrace nového uživatele a vytvoření profilu hosta.
     """
-    form = CreateUserForm()
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('home')  # Pokud je uživatel přihlášen, přesměrovat na domovskou stránku
     else:
-        if request.method == 'POST':
+        form = CreateUserForm()  # Instance registračního formuláře
+        if request.method == 'POST':  # Kontrola odeslání formuláře
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 email = request.POST.get("email")
+                # Kontrola, zda e-mail již existuje
                 if User.objects.filter(email=email).exists():
-                    messages.error(request, 'Email address is already taken.')
+                    messages.error(request, 'Tento e-mail je již používán.')
                     return redirect('register')
 
+                # Uložení nového uživatele
                 user = form.save()
                 username = form.cleaned_data.get('username')
 
@@ -39,36 +42,42 @@ def register_page(request):
                 phone_number = request.POST.get("phoneNumber")
                 Guest.objects.create(user=user, phoneNumber=phone_number)
 
-                messages.success(request, f'Guest account was successfully created for {username}.')
-                return redirect('login')
+                login(request, user)  # Automatické přihlášení uživatele po registraci
+                messages.success(request, f'Uživatelský účet pro {username} byl úspěšně vytvořen.')
+                return redirect('home')  # Přesměrování na domovskou stránku
+            else:
+                messages.error(request, 'Došlo k chybě během registrace. Zkontrolujte zadané údaje.')
 
         context = {'form': form}
         return render(request, 'accounts/register.html', context)
 
-
-# Přihlášení uživatele
+# ------------------------------
+# Pohled pro přihlášení uživatele
+# ------------------------------
 def login_page(request):
     """
     Přihlášení uživatele k systému.
     """
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('home')  # Pokud je uživatel přihlášen, přesměrovat na domovskou stránku
     else:
-        if request.method == "POST":
+        if request.method == "POST":  # Kontrola odeslání přihlašovacího formuláře
             username = request.POST.get('username')
             password = request.POST.get('password')
 
+            # Autentizace uživatele
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                login(request, user)
-                return redirect('home')
+                login(request, user)  # Přihlášení uživatele
+                return redirect('home')  # Přesměrování na domovskou stránku
             else:
-                messages.error(request, "Username or password is incorrect.")
+                messages.error(request, "Nesprávné uživatelské jméno nebo heslo.")
 
         return render(request, 'accounts/login.html')
 
-
-# Odhlášení uživatele
+# ------------------------------
+# Pohled pro odhlášení uživatele
+# ------------------------------
 def logout_user(request):
     """
     Odhlášení uživatele a přesměrování na přihlašovací stránku.
@@ -76,8 +85,9 @@ def logout_user(request):
     logout(request)
     return redirect('login')
 
-
-# Zobrazení seznamu hostů
+# ------------------------------
+# Pohled pro zobrazení hostů
+# ------------------------------
 @login_required(login_url='login')
 def guests(request):
     """
@@ -86,15 +96,14 @@ def guests(request):
     role = str(request.user.groups.first()) if request.user.groups.exists() else "guest"
     path = f"{role}/"
 
-    # Základní seznam hostů z posledních 30 dní
+    # Výchozí seznam hostů za posledních 30 dní
     bookings = Booking.objects.all()
     fd = datetime.combine(date.today() - timedelta(days=30), datetime.min.time())
     ld = datetime.combine(date.today(), datetime.min.time())
     guests = [b.guest for b in bookings if b.endDate >= fd.date() and b.startDate <= ld.date()]
 
     if request.method == "POST":
-        if "filterDate" in request.POST:
-            # Získání časového rozsahu pro filtrování
+        if "filterDate" in request.POST:  # Filtrování podle data
             fd = request.POST.get("f_day") or "1970-01-01"
             ld = request.POST.get("l_day") or "2030-01-01"
 
@@ -103,8 +112,7 @@ def guests(request):
 
             guests = [b.guest for b in bookings if b.endDate >= fd.date() and b.startDate <= ld.date()]
 
-        if "filterGuest" in request.POST:
-            # Filtrování podle uživatelských údajů
+        if "filterGuest" in request.POST:  # Filtrování podle atributů uživatele
             users = User.objects.all()
 
             if request.POST.get("id"):
@@ -135,8 +143,9 @@ def guests(request):
     }
     return render(request, path + "guests.html", context)
 
-
-# Zobrazení seznamu zaměstnanců
+# ------------------------------
+# Pohled pro zaměstnance
+# ------------------------------
 @login_required(login_url='login')
 def employees(request):
     """
@@ -152,6 +161,11 @@ def employees(request):
     }
     return render(request, path + "employees.html", context)
 
-# Funkce pro zobrazení stránky Zlatá perla
+# ------------------------------
+# Pohled pro statickou stránku Zlaté Perly
+# ------------------------------
 def pearl_view(request):
+    """
+    Zobrazení statické stránky Zlaté Perly.
+    """
     return render(request, 'pearl.html')  # Odkaz na šablonu pearl.html

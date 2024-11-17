@@ -59,9 +59,10 @@ class Employee(models.Model):
     Model pro zaměstnance.
     Každý zaměstnanec je propojen s uživatelem a obsahuje informace o telefonním čísle a platu.
     """
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE, verbose_name="Uživatel")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     phoneNumber = PhoneNumberField(unique=True, verbose_name="Telefonní číslo")
     salary = models.FloatField(verbose_name="Plat")
+    salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Povolení prázdných hodnot
 
     def __str__(self):
         return f"{self.user.username} (Zaměstnanec)"

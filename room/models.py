@@ -23,6 +23,7 @@ class Room(models.Model):
     name = models.CharField(max_length=100, verbose_name="Název pokoje")  # Název pokoje
     description = models.TextField(verbose_name="Popis pokoje")  # Popis pokoje
     room_number = models.CharField(max_length=10, verbose_name="Číslo pokoje", unique=True, null=True, blank=True)  # Číslo pokoje
+    description = models.TextField(null=True, blank=True)  # Povolení prázdných hodnot
     status = models.CharField(
         max_length=20,
         choices=[('Available', 'Dostupné'), ('Occupied', 'Obsazené'), ('Maintenance', 'Údržba')],

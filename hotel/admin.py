@@ -7,60 +7,80 @@ from .models import (
 # Registrace modelu Announcement
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_created')  # Zobrazené sloupce
-    search_fields = ('title', 'description')  # Vyhledávací pole
-    list_filter = ('date_created',)  # Filtry na postranním panelu
-    ordering = ('-date_created',)  # Výchozí řazení
+    """
+    Konfigurace zobrazení oznámení v administraci.
+    """
+    list_display = ('content', 'sender', 'date')  # Sloupce zobrazené v seznamu
+    search_fields = ('content',)  # Pole, ve kterých lze vyhledávat
+    list_filter = ('date', 'sender')  # Filtry na bočním panelu
+    ordering = ('-date',)  # Výchozí řazení (od nejnovějšího)
 
 
 # Registrace modelu Event
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'date', 'location')
-    search_fields = ('name', 'location')
-    list_filter = ('date',)
-    ordering = ('-date',)
+    """
+    Konfigurace zobrazení událostí v administraci.
+    """
+    list_display = ('eventType', 'location', 'startDate', 'endDate')  # Zobrazené sloupce
+    search_fields = ('eventType', 'location')  # Pole pro vyhledávání
+    list_filter = ('startDate', 'endDate')  # Filtry na postranním panelu
+    ordering = ('-startDate',)  # Výchozí řazení
 
 
 # Registrace modelu EventAttendees
 @admin.register(EventAttendees)
 class EventAttendeesAdmin(admin.ModelAdmin):
-    list_display = ('event', 'guest')
-    search_fields = ('event__name', 'guest__user__username')
-    list_filter = ('event',)
+    """
+    Konfigurace zobrazení účastníků událostí v administraci.
+    """
+    list_display = ('event', 'guest', 'numberOfDependees')  # Zobrazené sloupce
+    search_fields = ('event__eventType', 'guest__user__username')  # Vyhledávací pole
+    list_filter = ('event',)  # Filtry na postranním panelu
 
 
 # Registrace modelu Bills
 @admin.register(Bills)
 class BillsAdmin(admin.ModelAdmin):
-    list_display = ('guest', 'amount', 'date_created')
-    search_fields = ('guest__user__username', 'amount')
-    list_filter = ('date_created',)
-    ordering = ('-date_created',)
+    """
+    Konfigurace zobrazení faktur v administraci.
+    """
+    list_display = ('guest', 'totalAmount', 'date')  # Zobrazené sloupce
+    search_fields = ('guest__user__username', 'totalAmount')  # Vyhledávací pole
+    list_filter = ('date',)  # Filtry na postranním panelu
+    ordering = ('-date',)  # Výchozí řazení (od nejnovějšího)
 
 
 # Registrace modelu FoodMenu
 @admin.register(FoodMenu)
 class FoodMenuAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'availability')
-    search_fields = ('name',)
-    list_filter = ('availability',)
-    ordering = ('name',)
+    """
+    Konfigurace zobrazení jídelního menu v administraci.
+    """
+    list_display = ('startDate', 'endDate', 'menuItems')  # Zobrazené sloupce
+    search_fields = ('menuItems',)  # Vyhledávací pole
+    ordering = ('-startDate',)  # Výchozí řazení
 
 
 # Registrace modelu Report
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_created')
-    search_fields = ('title', 'description')
-    list_filter = ('date_created',)
-    ordering = ('-date_created',)
+    """
+    Konfigurace zobrazení reportů v administraci.
+    """
+    list_display = ('date', 'content')  # Zobrazené sloupce
+    search_fields = ('content',)  # Vyhledávací pole
+    list_filter = ('date',)  # Filtry na postranním panelu
+    ordering = ('-date',)  # Výchozí řazení (od nejnovějšího)
 
 
 # Registrace modelu Storage
 @admin.register(Storage)
 class StorageAdmin(admin.ModelAdmin):
-    list_display = ('item_name', 'quantity', 'date_added')
-    search_fields = ('item_name',)
-    list_filter = ('date_added',)
-    ordering = ('-date_added',)
+    """
+    Konfigurace zobrazení skladu v administraci.
+    """
+    list_display = ('itemName', 'itemType', 'quantity')  # Zobrazené sloupce
+    search_fields = ('itemName',)  # Vyhledávací pole
+    list_filter = ('itemType',)  # Filtry na postranním panelu
+    ordering = ('itemName',)  # Výchozí řazení

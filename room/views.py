@@ -7,7 +7,7 @@ from django.db.models import Q
 from datetime import datetime, timedelta
 from accounts.models import Guest
 from room.models import Room, Booking, Dependees, RoomServices, Refund
-from .forms import editRoom
+from .forms import EditRoomForm
 
 # Funkce pro určení role uživatele
 def get_user_role(user):
@@ -29,8 +29,8 @@ def rooms(request):
     """
     Zobrazuje seznam pokojů a umožňuje jejich filtrování na základě parametrů (dostupnost, cena atd.).
     """
-    role = get_user_role(request.user)
-    rooms = Room.objects.all()
+    role = get_user_role(request.user)  # Získání role uživatele
+    rooms = Room.objects.all()  # Načtení všech pokojů
     first_day, last_day = None, None
 
     def check_availability(start_date, end_date):
@@ -47,11 +47,13 @@ def rooms(request):
 
     if request.method == "POST":
         if "dateFilter" in request.POST:
+            # Filtrování podle dat
             first_day = datetime.strptime(request.POST.get("fd", ""), '%Y-%m-%d')
             last_day = datetime.strptime(request.POST.get("ld", ""), '%Y-%m-%d')
             rooms = check_availability(first_day.date(), last_day.date())
 
         if "filter" in request.POST:
+            # Filtrování podle dalších kritérií
             filters = {
                 'number__icontains': request.POST.get("number"),
                 'capacity__gte': request.POST.get("capacity"),
@@ -103,6 +105,7 @@ def room_profile(request, id):
 
     if request.method == "POST":
         if "lockRoom" in request.POST:
+            # Zablokování pokoje
             start_date = datetime.strptime(request.POST.get("bsd"), '%Y-%m-%d').date()
             end_date = datetime.strptime(request.POST.get("bed"), '%Y-%m-%d').date()
             if not any(b.startDate <= end_date and b.endDate >= start_date for b in bookings):
@@ -111,9 +114,11 @@ def room_profile(request, id):
             else:
                 messages.error(request, "Pokoj je v tomto období již rezervován.")
         elif "unlockRoom" in request.POST:
+            # Odblokování pokoje
             room.statusStartDate, room.statusEndDate = None, None
             room.save()
         elif "deleteRoom" in request.POST:
+            # Smazání pokoje
             if not any(b.startDate <= datetime.now().date() <= b.endDate for b in bookings):
                 room.delete()
                 return redirect("rooms")
@@ -135,10 +140,10 @@ def room_edit(request, pk):
     """
     role = get_user_role(request.user)
     room = Room.objects.get(number=pk)
-    form = editRoom(instance=room)
+    form = EditRoomForm(instance=room)
 
     if request.method == "POST":
-        form = editRoom(request.POST, instance=room)
+        form = EditRoomForm(request.POST, instance=room)
         if form.is_valid():
             form.save()
             return redirect("room-profile", id=room.number)
