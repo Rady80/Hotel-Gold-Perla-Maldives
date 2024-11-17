@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -12,6 +11,8 @@
         integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+
         body,
         html {
             margin: 0;
@@ -22,101 +23,216 @@
             background-size: cover;
         }
 
-        /* Kontejner pro zarovnání na střed */
         .container-center {
             height: 100vh;
             display: flex;
-            align-items: center;  /* Vertikální zarovnání */
-            justify-content: center;  /* Horizontální zarovnání */
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Karta uživatele */
         .user_card {
-            width: 350px;
-            background-color: 0px 6px 12px rgba(0, 0, 0, 0.5);  /* Intenzivnější černý stín */
+            width: 300px;
+            background-color: rgba(0, 0, 0, 0.6);
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5);  /* Intenzivnější černý stín */
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Styl pro název hotelu */
         .title {
-            background-color: rgba(255, 255, 255, 0.3);
-            color: black;
-            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #98FB98; /* Pastelově zelená */
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background-color: rgba(255, 255, 255, 0.2);
             padding: 15px;
-            text-align: center;  /* Zarovnání textu na střed */
-            margin-bottom: 20px;
             border-radius: 10px;
-            font-size: 1.8rem;  /* Zvětšení písma názvu hotelu */
+            margin-bottom: 20px;
         }
 
         .form_container {
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .login_btn {
-            width: 100%;
-            background: #00FF7F !important; /* Jarní zelená */
+            width: 50%;
+            padding: 5px;
+            font-size: 14px;
+            background: #00FF7F !important; /* Zelená barva */
             color: Black !important;
+            transition: background-color 0.3s ease-in-out;
+            border-radius: 5px;
         }
 
-        .login_btn:focus {
-            box-shadow: none !important;
-            0px !important;  /* Změněno outline na 0px, aby nebyl žádný obrys */
+        .login_btn:hover {
+            background-color: #32CD32 !important; /* Tmavší zelená při hoveru */
+            color: #ffffff !important;
         }
-        
-        /* Text v input group - například ikony před inputy */
+
         .input-group-text {
-            background: #007FFF !important;  /* Azurová*/
-            color: #ffffff !important;        /* Zachována bílá barva textu pro lepší kontrast */
+            background: #007FFF !important; /* Modrá barva */
+            color: #ffffff !important; /* Bílý text */
             border: 0 !important;
             border-radius: 0.25rem 0 0 0.25rem !important;
         }
 
-         /* Tlačítko pro přihlášení - stav focus */
         .input_user,
         .input_pass:focus {
-            box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.5);  /* Modrý stín */
-            outline: 0px !important;  /* Změněno outline na 0px, aby nebyl žádný obrys */
+            box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.5); /* Modrý stín při focusu */
+            outline: none !important;
         }
 
-        #messages {
-            background-color: grey;
-            color: #000000 !important;  /* Plná černá barva */
-            padding: 10px;
-            margin-top: 10px;
+        .toggle-password {
+            cursor: pointer;
+            color: #000; /* Černá barva oka */
         }
 
+        .toggle-password:hover {
+            color: #555; /* Tmavší šedá při hoveru */
+        }
 
-  </style>
+        .music-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            align-items: center;
+        }
+
+        .music-controls button {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .music-controls button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.1);
+        }
+
+        .music-controls i {
+            color: #000;
+            font-size: 18px;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            background: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById("passwordInput");
+            const toggleIcon = document.getElementById("togglePasswordIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+
+        let audioPlaying = false;
+
+        // Přepínání přehrávání a pauzy
+        function toggleAudio() {
+            const audioElement = document.getElementById("backgroundAudio");
+            const musicIcon = document.getElementById("musicIcon");
+
+            if (audioPlaying) {
+                audioElement.pause();
+                musicIcon.classList.remove("fa-pause");
+                musicIcon.classList.add("fa-play");
+            } else {
+                audioElement.play();
+                musicIcon.classList.remove("fa-play");
+                musicIcon.classList.add("fa-pause");
+            }
+
+            audioPlaying = !audioPlaying;
+        }
+
+        // Zastavení hudby
+        function stopAudio() {
+            const audioElement = document.getElementById("backgroundAudio");
+            const musicIcon = document.getElementById("musicIcon");
+
+            audioElement.pause();
+            audioElement.currentTime = 0; // Vynulování přehrávání
+            musicIcon.classList.remove("fa-pause");
+            musicIcon.classList.add("fa-play");
+            audioPlaying = false;
+        }
+
+        // Úprava hlasitosti
+        function adjustVolume(volume) {
+            const audioElement = document.getElementById("backgroundAudio");
+            audioElement.volume = volume;
+        }
+    </script>
 
 </head>
 
 <body>
+    <!-- Skrytý audio přehrávač -->
+    <audio id="backgroundAudio" loop>
+        <source src="{% static 'audio/background-music.mp3' %}" type="audio/mpeg">
+        <source src="{% static 'audio/background-music.ogg' %}" type="audio/ogg">
+        Váš prohlížeč nepodporuje přehrávání audia.
+    </audio>
+
+    <!-- Ovládací prvky pro hudbu -->
+    <div class="music-controls">
+        <!-- Tlačítko přehrávání/pauzy -->
+        <button onclick="toggleAudio()">
+            <i id="musicIcon" class="fas fa-play"></i>
+        </button>
+
+        <!-- Posuvník hlasitosti -->
+        <input class="volume-slider" type="range" min="0" max="1" step="0.1" onchange="adjustVolume(this.value)" />
+
+        <!-- Tlačítko pro zastavení hudby -->
+        <button onclick="stopAudio()">
+            <i class="fas fa-stop"></i>
+        </button>
+    </div>
+
     <div class="container-center">
         <div class="user_card text-white">
-            <!-- Název hotelu -->
-            <div class="title fancy-title">
+            <div class="title">
                 Hotel Gold Perla Maldives
-            <style>
-
-    /* Styl pro název hotelu */
-    .fancy-title {
-        font-family: 'Georgia', serif; /* Elegantní font, můžete změnit na libovolný jiný */
-        font-size: 2.5rem;  /* Zvýšená velikost písma */
-        font-weight: bold;  /* Písmo bude tučné */
-        font-style: italic; /* Přidán kurzívní styl */
-        color: #000000; /* Černá barva */
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Jemný stín pro lepší kontrast */
-        text-align: center; /* Text vycentrován na střed */
-        margin-bottom: 30px;
-        border-radius: 10px;
-    }
-
-</style>
             </div>
-
 
             <div class="form_container">
                 <form method="POST" action="">
@@ -131,7 +247,13 @@
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
-                        <input type="password" name="password" placeholder="Password..." class="form-control">
+                        <input type="password" id="passwordInput" name="password" placeholder="Password..."
+                            class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text toggle-password" onclick="togglePasswordVisibility()">
+                                <i id="togglePasswordIcon" class="fas fa-eye"></i>
+                            </span>
+                        </div>
                     </div>
 
                     <div class="d-flex justify-content-center mt-3 login_container">
@@ -144,9 +266,10 @@
             <p id="messages">{{ message }}</p>
             {% endfor %}
 
-            <div class="mt-4" style="color: #000000;">
+            <div class="mt-4" style="color: #FFFF00;">
                 <div class="d-flex justify-content-center links">
-                    Don't have an account? <a href="{% url 'register' %}" class="ml-2" style="color: #000000;">Sign Up</a>
+                    Don't have an account? <a href="{% url 'register' %}" class="ml-2"
+                        style="color: #FFFFFF;">Sign Up</a>
                 </div>
             </div>
         </div>

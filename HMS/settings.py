@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'on9*bf65je3#4+jphqufropk!s9*i&$*54@_9t8^6+c)iro2&q'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# BEZPEČNOSTNÍ VAROVÁNÍ: nespouštějte se zapnutým laděním v produkci!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'moje-domena.cz']
 
 
 # Application definition
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     # third part
     'phonenumber_field',
     
-
     # own
     'hotel',
     'accounts',
@@ -109,6 +108,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Nastavení přesměrování po přihlášení
+LOGIN_REDIRECT_URL = '/hotel-management/'  # nebo jiná cesta
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -128,7 +142,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR, "static"]
+# Cesta k vaší složce "static"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Cesta pro ukládání statických souborů při nasazení na server
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # mail
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -137,8 +157,3 @@ STATICFILES_DIRS = [BASE_DIR, "static"]
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'your_email_address'
 # EMAIL_HOST_PASSWORD = 'your_email_address_password'
-
-
-
-
-

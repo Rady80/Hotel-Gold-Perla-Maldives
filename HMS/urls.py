@@ -20,8 +20,14 @@ from django.urls import path
 from accounts.views import *
 from room.views import *
 from hotel.views import *
+from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),  # Odhlášení
+    
     path('admin/', admin.site.urls),
     path('', home, name="home"),
 
@@ -72,4 +78,4 @@ urlpatterns = [
          deleteAnnouncement, name="deleteAnnouncement"),
     path('deleteBooking/<str:pk>/', deleteBooking, name="deleteBooking"),
     path('completeTask/<str:pk>/', completeTask, name="completeTask"),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
