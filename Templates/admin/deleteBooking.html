@@ -1,4 +1,29 @@
 {% extends '../index.html' %}
-{% block context %}
-{% include '../common_pages/deleteBooking.html' %}
+
+{% block content %}
+    <!-- Sekce pro smazání rezervace -->
+    <div class="container mt-4">
+        <h2 class="text-danger">Smazat rezervaci</h2>
+        <p>Opravdu chcete smazat tuto rezervaci?</p>
+
+        <!-- Detail rezervace -->
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">Host: {{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }}</h5>
+                <p class="card-text"><strong>Pokoj:</strong> {{ booking.roomNumber.number }}</p>
+                <p class="card-text"><strong>Datum rezervace:</strong> {{ booking.dateOfReservation }}</p>
+                <p class="card-text"><strong>Začátek pobytu:</strong> {{ booking.startDate }}</p>
+                <p class="card-text"><strong>Konec pobytu:</strong> {{ booking.endDate }}</p>
+            </div>
+        </div>
+
+        <!-- Formulář pro potvrzení nebo zrušení akce -->
+        <form method="POST">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-danger">Smazat</button>
+                <a href="{% url 'bookings' %}" class="btn btn-secondary">Zrušit</a>
+            </div>
+        </form>
+    </div>
 {% endblock %}

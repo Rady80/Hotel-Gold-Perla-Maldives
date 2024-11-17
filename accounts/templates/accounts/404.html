@@ -1,15 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chyba 404 - Nenalezeno</title>
+    <title>404 - Nenalezeno</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #dc3545; /* Červená barva pro výrazné zvýraznění chyby */
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        a {
+            display: inline-block;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #007bff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
-    
-<h1>404 - Nenalezeno</h1>
-    <p>{{ error }}</p>
+    <div class="container">
+        <h1>404 - Nenalezeno</h1>
+        <p>Stránka, kterou hledáte, nebyla nalezena.</p>
+        <p>{{ error }}</p>
+        <a href="/">Vrátit se na hlavní stránku</a>
+    </div>
 </body>
+
 </html>

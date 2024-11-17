@@ -1,49 +1,49 @@
 <div class="container shadow-lg my-3">
+    <!-- Formulář pro vytvoření nové události -->
     <form action="" method="post">
         {% csrf_token %}
+        
+        <!-- Typ události -->
         <div class="form-group">
-            <label for="exampleFormControlSelect1">Event Type</label>
+            <label for="exampleFormControlSelect1"><b>Typ události</b></label>
             <select class="form-control" name="eventType" required="" id="id_eventType">
+                <!-- Výchozí prázdná možnost -->
                 <option value="" selected="">---------</option>
-
-                <option value="Movie">Movie</option>
-
-                <option value="Theater">Theater</option>
-
-                <option value="Conference">Conference</option>
-
-                <option value="Concert">Concert</option>
-
-                <option value="Entertainment">Entertainment</option>
-
-                <option value="Live Music">Live Music</option>
-
+                <!-- Předdefinované typy událostí -->
+                <option value="Movie">Film</option>
+                <option value="Theater">Divadlo</option>
+                <option value="Conference">Konference</option>
+                <option value="Concert">Koncert</option>
+                <option value="Entertainment">Zábava</option>
+                <option value="Live Music">Živá hudba</option>
             </select>
         </div>
 
+        <!-- Lokace události -->
         <div class="form-group">
-            <label for="exampleFormControlInput1">Location</label>
-            <input type="text" class="form-control" name="location" maxlength="100" required="" id="id_location">
+            <label for="exampleFormControlInput1"><b>Místo konání</b></label>
+            <input type="text" class="form-control" name="location" maxlength="100" required="" id="id_location" placeholder="Zadejte místo konání">
         </div>
 
+        <!-- Datum začátku události -->
         <div class="form-group">
-            <label for="exampleFormControlInput1">Start Date</label>
+            <label for="exampleFormControlInput1"><b>Datum začátku</b></label>
             <input type="date" class="form-control" name="startDate" required="" id="id_startDate">
         </div>
 
+        <!-- Datum konce události -->
         <div class="form-group">
-            <label for="exampleFormControlInput1">End Date</label>
+            <label for="exampleFormControlInput1"><b>Datum konce</b></label>
             <input type="date" class="form-control" name="endDate" required="" id="id_endDate">
         </div>
 
+        <!-- Popis události -->
         <div class="form-group">
-            <label for="exampleFormControlTextarea1">Explanation</label>
-            <textarea class="form-control" name="explanation" cols="40" rows="10" required=""
-                id="id_explanation"></textarea>
+            <label for="exampleFormControlTextarea1"><b>Popis události</b></label>
+            <textarea class="form-control" name="explanation" cols="40" rows="5" required="" id="id_explanation" placeholder="Popište událost..."></textarea>
         </div>
 
-
-        <button type="submit" class="btn btn-success w-100">Save</button>
-
+        <!-- Tlačítko pro odeslání formuláře -->
+        <button type="submit" class="btn btn-success w-100">Uložit</button>
     </form>
 </div>

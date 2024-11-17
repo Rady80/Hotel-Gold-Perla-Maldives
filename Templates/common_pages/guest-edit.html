@@ -1,59 +1,67 @@
+<!-- 
+Formulář pro úpravu informací o hostovi a zobrazení seznamu jeho doprovodu.
+-->
+
 <div class="container">
+    <!-- Formulář pro úpravu údajů o hostovi -->
     <form action="" method="POST">
-        {% csrf_token %}
+        {% csrf_token %} <!-- Token CSRF pro zabezpečení formuláře -->
         <div class="row mt-5">
-
+            <!-- Levý sloupec: Jméno a email -->
             <div class="col-6">
-
+                <!-- Pole pro jméno -->
                 <div class="form-group pt-3">
-                    <label for="item-type"><b>Name</b></label>
+                    <label for="id_first_name"><b>Jméno</b></label>
                     <input type="text" class="form-control border border-secondary" id="id_first_name" name="first_name"
-                        value="{{guest.user.first_name}}">
+                        value="{{ guest.user.first_name }}" required>
                 </div>
 
+                <!-- Pole pro email -->
                 <div class="form-group">
-                    <label for="item-quantity"><b>Email</b></label>
-                    <input type="int" class="form-control border border-secondary" name="email" id="id_email"
-                        value="{{guest.user.email}}">
+                    <label for="id_email"><b>Email</b></label>
+                    <input type="email" class="form-control border border-secondary" name="email" id="id_email"
+                        value="{{ guest.user.email }}" required>
                 </div>
-
             </div>
 
+            <!-- Pravý sloupec: Telefonní číslo -->
             <div class="col-6">
-
+                <!-- Pole pro telefonní číslo -->
                 <div class="form-group pt-3">
-                    <label for="item-type"><b>Phone Number</b></label>
+                    <label for="id_phoneNumber"><b>Telefonní číslo</b></label>
                     <input type="text" class="form-control border border-secondary" name="phoneNumber"
-                        id="id_phoneNumber" value="{{guest.phoneNumber}}">
+                        id="id_phoneNumber" value="{{ guest.phoneNumber }}" maxlength="12" required>
                 </div>
-                <button type="submit" class="btn btn-outline-success btn-lg">Save Changes</button>
+
+                <!-- Tlačítko pro odeslání formuláře -->
+                <button type="submit" class="btn btn-outline-success btn-lg">Uložit změny</button>
             </div>
         </div>
-
     </form>
 
     <br><br>
 
-    <div class="row ml-2s">
-        <ul class="list-group">
-            <h4>List of Dependee Names</h4>
-            <form>
-                {% comment %} {% for dependee in dependees%} {% endcomment %}
-                {% comment %} {{dependee.name}} {% endcomment %}
-                {% comment %} {% endfor %} {% endcomment %}
-            </form>
-
+    <!-- Sekce pro zobrazení seznamu doprovodu -->
+    <div class="row ml-2">
+        <ul class="list-group w-100">
+            <h4>Seznam doprovodu</h4>
+            <!-- Iterace přes seznam doprovodu -->
+            {% for dependee in dependees %}
+            <li class="list-group-item">
+                {{ dependee.name }}
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">
+                Žádné osoby v doprovodu nejsou uvedeny.
+            </li>
+            {% endfor %}
         </ul>
     </div>
 
     <br>
 
-    <div class="float-right">
-
-    </div>
-
+    <!-- Prázdný prostor pro odsazení -->
     <div class="py-3">
-        &nbsp
+        &nbsp;
     </div>
-
 </div>

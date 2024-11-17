@@ -1,62 +1,141 @@
+<!-- 
+Hlavní kontejner pro zobrazení seznamu žádostí o refundaci.
+Obsahuje filtrovací formulář, stránkování a modální dialogy.
+-->
+
 <div class="container py-5">
+    <!-- Zobrazení zpráv (např. úspěšné operace) -->
     {% for message in messages %}
     <div class="alert alert-success" role="alert">
-        {{message}}
+        {{ message }}
     </div>
     {% endfor %}
 
+    <!-- Hlavička tabulky -->
     <div class="table-header row">
-
         <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-            <h2>Refunds List</h2>
+            <h2>Seznam refundací</h2>
         </div>
-
     </div>
+
+    <!-- Tabulka s refundacemi -->
     <table class="table table-hover table-striped">
-        <thead class="bg-secondary rounded">
+        <thead class="bg-secondary text-white">
             <tr>
+                <!-- Formulář pro filtrování refundací -->
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th>Guest ID <input type="number" name="gid" value="{{gid}}"
-                            class="form-control border border-secondary"></th>
-                    <th>Guest Name <input type="text" name="name" value="{{name}}"
-                            class="form-control border border-secondary"></th>
-                    <th>Reservation ID<input type="number" name="booking" value="{{booking}}"
-                            class="form-control border border-secondary">
+                    <th>Host ID
+                        <input type="number" name="gid" value="{{ gid }}" class="form-control border border-secondary">
                     </th>
-                    <th>Reason<input type="text" name="reason" value="{{reason}}"
-                            class="form-control border border-secondary"></th>
+                    <th>Jméno hosta
+                        <input type="text" name="name" value="{{ name }}" class="form-control border border-secondary">
                     </th>
-                    <th colspan="2"><button type="submit" name="filter" class="btn btn-warning w-100">Filter</button>
+                    <th>ID rezervace
+                        <input type="number" name="booking" value="{{ booking }}" class="form-control border border-secondary">
+                    </th>
+                    <th>Důvod
+                        <input type="text" name="reason" value="{{ reason }}" class="form-control border border-secondary">
+                    </th>
+                    <th colspan="2">
+                        <button type="submit" name="filter" class="btn btn-warning w-100">Filtrovat</button>
                     </th>
                 </form>
             </tr>
         </thead>
         <tbody>
+            <!-- Iterace přes seznam refundací -->
             {% for r in refunds %}
             <tr>
-                <td>{{r.guest.user.id}}</td>
-                <td><a href="{% url 'guest-profile' r.guest.user.id %}">{{r.guest.user.first_name}}</a></td>
-                <td>{{r.reservation.id}}</td>
-                <td>{{r.reason}}</td>
+                <!-- Zobrazení ID hosta -->
+                <td>{{ r.guest.user.id }}</td>
+                <!-- Jméno hosta s odkazem na jeho profil -->
+                <td><a href="{% url 'guest-profile' r.guest.user.id %}">{{ r.guest.user.first_name }} {{ r.guest.user.last_name }}</a></td>
+                <!-- ID rezervace -->
+                <td>{{ r.reservation.id }}</td>
+                <!-- Důvod refundace -->
+                <td>{{ r.reason }}</td>
 
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="refund" value="{{ r.id }}">
-                    <input type="hidden" name="guestUserId" value="{{ r.guest.user.id }}">
-
-                    <td> <button type="submit" name="decline" class="btn btn-danger">Decline</button> </td>
-                    <td> <button type="submit" name="approve" class="btn btn-success">Approve</button> </td>
-
-                </form>
-
+                <!-- Tlačítka pro akce (schválení/zamítnutí) -->
+                <td>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#declineModal-{{ r.id }}">
+                        Zamítnout
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal-{{ r.id }}">
+                        Schválit
+                    </button>
+                </td>
             </tr>
+
+            <!-- Modální dialog pro zamítnutí -->
+            <div class="modal fade" id="declineModal-{{ r.id }}" tabindex="-1" aria-labelledby="declineModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="declineModalLabel">Potvrzení zamítnutí</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Opravdu chcete zamítnout tuto žádost o refundaci?
+                        </div>
+                        <div class="modal-footer">
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="refund" value="{{ r.id }}">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zavřít</button>
+                                <button type="submit" name="decline" class="btn btn-danger">Zamítnout</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modální dialog pro schválení -->
+            <div class="modal fade" id="approveModal-{{ r.id }}" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="approveModalLabel">Potvrzení schválení</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Opravdu chcete schválit tuto žádost o refundaci?
+                        </div>
+                        <div class="modal-footer">
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="refund" value="{{ r.id }}">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zavřít</button>
+                                <button type="submit" name="approve" class="btn btn-success">Schválit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
-
         </tbody>
-
     </table>
 
-
-
+    <!-- Stránkování -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if refunds.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ refunds.previous_page_number }}">Předchozí</a>
+            </li>
+            {% endif %}
+            {% for page_num in refunds.paginator.page_range %}
+            <li class="page-item {% if refunds.number == page_num %}active{% endif %}">
+                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+            </li>
+            {% endfor %}
+            {% if refunds.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ refunds.next_page_number }}">Další</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
 </div>

@@ -1,20 +1,25 @@
+<!--
+HTML kód pro potvrzení smazání položky menu.
+Tento blok je obalen třídami Bootstrap pro správné zarovnání a stylování.
+-->
+
 <div class="row justify-content-center m-5">
-
+    <!-- Karta s červeným rámečkem a stínem -->
     <div class="card border-danger shadow-lg w-75">
-
         <div class="card-body">
+            <!-- Dotaz na uživatele, zda si je jistý smazáním -->
+            <p>Opravdu chcete smazat toto menu: "{{ food_menu }}"?</p>
 
-            <p>Are you sure you want to delete This Food menu : "{{food_menu}}" ?</p>
-
+            <!-- Formulář pro odeslání požadavku na smazání -->
             <form action="{% url 'deleteFoodMenu' food_menu.id %}" method="post">
-                {% csrf_token %}
-                <a class="btn btn-info" href="{% url 'food-menu' %}">Cancel</a>
-
-                <input class="btn btn-danger" type="submit" value="Confirm">
+                {% csrf_token %} <!-- Token CSRF pro zabezpečení formuláře -->
+                
+                <!-- Tlačítko pro zrušení akce, odkazuje na stránku s přehledem menu -->
+                <a class="btn btn-info" href="{% url 'food-menu' %}">Zrušit</a>
+                
+                <!-- Tlačítko pro potvrzení akce, odesílá formulář -->
+                <input class="btn btn-danger" type="submit" value="Potvrdit">
             </form>
-
         </div>
-
     </div>
-
 </div>

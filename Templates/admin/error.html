@@ -1,7 +1,21 @@
 {% extends '../index.html' %}
 {% load static %}
-{% block context %}
 
-{% include '../common_pages/error.html' %}
-
+{% block content %}
+    <!-- Chybová stránka -->
+    <div class="container mt-5 text-center">
+        <h1 class="display-4 text-danger">Chyba!</h1>
+        <p class="lead">Něco se pokazilo. Zkuste to prosím znovu nebo se obraťte na podporu.</p>
+        
+        <!-- Ikona chyby -->
+        <div class="mt-4">
+            <img src="{% static 'images/error-icon.png' %}" alt="Error Icon" class="img-fluid" style="max-width: 200px;">
+        </div>
+        
+        <!-- Navigační možnosti -->
+        <div class="mt-5">
+            <a href="{% url 'home' %}" class="btn btn-primary">Zpět na domovskou stránku</a>
+            <a href="{% url 'support' %}" class="btn btn-secondary">Kontaktujte podporu</a>
+        </div>
+    </div>
 {% endblock %}

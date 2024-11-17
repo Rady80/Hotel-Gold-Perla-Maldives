@@ -1,26 +1,32 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+"""
+Hlavní skript pro administrativní úlohy Django projektu.
+"""
+
 import os
 import sys
 
-
 def main():
-    """Run administrative tasks."""
+    """
+    Spustí administrativní úlohy.
+    """
+    # Nastavení výchozího konfiguračního modulu pro Django projekt
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HMS.settings')
     try:
+        # Importuje funkci pro spouštění příkazů Django
         from django.core.management import execute_from_command_line
     except ImportError as exc:
+        # Pokud Django není dostupné, vyvolá chybu s vysvětlením
         raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
+            "Nepodařilo se importovat Django. Je nainstalované a dostupné na "
+            "PYTHONPATH? Nezapomněli jste aktivovat virtuální prostředí?"
         ) from exc
+    # Spustí příkazy zadané z příkazového řádku
     execute_from_command_line(sys.argv)
 
-
+# Hlavní bod spuštění skriptu
 if __name__ == '__main__':
     main()
-
     
     
                                                                    

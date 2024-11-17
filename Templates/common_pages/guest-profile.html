@@ -1,61 +1,72 @@
+<!-- 
+Hlavní kontejner zobrazující informace o hostovi, jeho událostech a rezervacích.
+Obsahuje také možnost úpravy údajů a odeslání žádosti o refundaci.
+-->
+
 <div class="container">
     <div class="shadow-lg p-5">
+        <!-- Informace o hostovi -->
         <div class="row mt-5">
             <div class="col-6">
                 <form action="" method="POST">
-                    {% csrf_token %}
+                    {% csrf_token %} <!-- Token CSRF pro ochranu formuláře -->
+                    
+                    <!-- Zobrazení nebo úprava jména -->
                     <div class="p-2 h4">
-                        <span>Name:</span>
+                        <span>Jméno:</span>
                         {% if guest.user.id != request.user.id %}
-                        <span class="font-weight-normal">{{guest.user.first_name}} </span>
+                        <span class="font-weight-normal">{{ guest.user.first_name }}</span>
                         {% else %}
                         <input type="text" class="form-control border border-secondary" id="id_first_name"
-                            value="{{guest.user.first_name}}" name="first_name">
+                            value="{{ guest.user.first_name }}" name="first_name">
                         {% endif %}
                     </div>
 
                     <br>
+
+                    <!-- Zobrazení nebo úprava příjmení -->
                     <div class="p-2 h4">
-                        <span>Surname:</span>
+                        <span>Příjmení:</span>
                         {% if guest.user.id != request.user.id %}
-                        <span class="font-weight-normal"> {{guest.user.last_name}}</span>
+                        <span class="font-weight-normal">{{ guest.user.last_name }}</span>
                         {% else %}
                         <input type="text" class="form-control border border-secondary" id="id_last_name"
-                            value="{{guest.user.last_name}}" name="last_name">
+                            value="{{ guest.user.last_name }}" name="last_name">
                         {% endif %}
                     </div>
 
-
+                    <!-- Zobrazení emailu -->
                     <div class="p-2 h4">
-                        <span>Email :</span>
-                        <span class="font-weight-normal">{{guest.user.email}}</span>
+                        <span>Email:</span>
+                        <span class="font-weight-normal">{{ guest.user.email }}</span>
                     </div>
 
                     <br>
 
+                    <!-- Datum vytvoření účtu -->
                     <div class="p-2 h4">
-                        <span>Account Creation Date:</span>
-                        <span class="font-weight-normal">{{guest.user.date_joined}}</span>
+                        <span>Datum vytvoření účtu:</span>
+                        <span class="font-weight-normal">{{ guest.user.date_joined }}</span>
                     </div>
-
             </div>
 
             <div class="col-6">
-
+                <!-- Zobrazení nebo úprava telefonního čísla -->
                 <div class="p-2 h4">
-                    <span>Phone Number: </span>
+                    <span>Telefonní číslo:</span>
                     {% if guest.user.id != request.user.id %}
-
-                    <span class="font-weight-normal">{{guest.phoneNumber}}</span>
+                    <span class="font-weight-normal">{{ guest.phoneNumber }}</span>
                     {% else %}
                     <input type="text" class="form-control border border-secondary" id="id_phoneNumber"
-                        value="{{guest.phoneNumber}}" name="phoneNumber">
+                        value="{{ guest.phoneNumber }}" name="phoneNumber">
                     {% endif %}
                 </div>
 
                 <br>
+
+                <!-- Tlačítko pro uložení změn (zobrazí se pouze aktuálnímu uživateli) -->
                 {% if guest.user.id == request.user.id %}
-                <button type="submit" name="submit" class="btn btn-success float-right">Save Changes</button>
+                <button type="submit" name="submit" class="btn btn-success float-right">Uložit změny</button>
                 {% endif %}
                 </form>
             </div>
@@ -63,78 +74,77 @@
 
         <br>
 
+        <!-- Seznam navštívených událostí -->
         {% if eventAttendees.first != None %}
         <div class="row">
-            <h4>List Of Attended Events</h4>
+            <h4>Seznam navštívených událostí</h4>
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th>Type</th>
-                        <th>Location</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Typ</th>
+                        <th>Místo</th>
+                        <th>Datum začátku</th>
+                        <th>Datum konce</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {% for eveAt in eventAttendees %}
                     <tr>
-                        <td>{{eveAt.eventType}}</td>
-                        <td>{{eveAt.location}}</td>
-                        <td>{{eveAt.startDate}}</td>
-                        <td>{{eveAt.endtDate}}</td>
+                        <td>{{ eveAt.eventType }}</td>
+                        <td>{{ eveAt.location }}</td>
+                        <td>{{ eveAt.startDate }}</td>
+                        <td>{{ eveAt.endDate }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
-
             </table>
         </div>
         {% endif %}
 
         <br>
 
+        <!-- Tabulka všech minulých rezervací -->
         <div class="row">
             <div class="table-responsive table-striped my-5">
                 <div class="table-header row">
-
                     <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-                        <h2>All Past Reservations</h2>
+                        <h2>Všechny minulé rezervace</h2>
                     </div>
-
                 </div>
+
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Reservation Date</th>
-                            <th>Check in Date</th>
-                            <th>Check out Date</th>
-                            <th>Number of residents</th>
+                            <th>Datum rezervace</th>
+                            <th>Datum přihlášení</th>
+                            <th>Datum odhlášení</th>
+                            <th>Počet rezidentů</th>
+                            <th>Akce</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         {% for bo in bookings %}
                         <tr>
-                            <td>{{bo.dateOfReservation}}</td>
-                            <td>{{bo.startDate}}</td>
-                            <td>{{bo.endDate}}</td>
-                            <td>{{bo.numOfResidents}}</td>
-
-                            {% if role == "guest"%}
-                            <form action="{% url 'request-refund' %}" method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" value="{{bo.id}}" name="bookingId">
-                                <td><button type="submit" class="btn btn-outline-success btn-lg " name="refReq">Send
-                                        Refund Request</button></td>
-                            </form>
-                            {% endif %}
+                            <td>{{ bo.dateOfReservation }}</td>
+                            <td>{{ bo.startDate }}</td>
+                            <td>{{ bo.endDate }}</td>
+                            <td>{{ bo.numOfResidents }}</td>
+                            <td>
+                                <!-- Tlačítko pro žádost o refundaci (pouze pro roli "guest") -->
+                                {% if role == "guest" %}
+                                <form action="{% url 'request-refund' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ bo.id }}" name="bookingId">
+                                    <button type="submit" class="btn btn-outline-success btn-sm" name="refReq">
+                                        Odeslat žádost o refundaci
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
-
                     </tbody>
-
                 </table>
-
             </div>
         </div>
     </div>

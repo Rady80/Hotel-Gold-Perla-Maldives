@@ -1,45 +1,83 @@
+<!-- 
+Hlavní kontejner pro zobrazení a správu služeb pokojů.
+Obsahuje tabulku s možností filtrování a správu záznamů.
+-->
+
 <div class="container py-5">
-
     <div class="table-responsive">
+        <!-- Hlavička tabulky -->
         <div class="table-header row">
-
             <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-                <h2>Room Services</h2>
-                <span class="text-muted">The list include last 1 month room services</span>
+                <h2>Servis pokojů</h2>
+                <span class="text-muted">Seznam obsahuje služby za poslední měsíc</span>
             </div>
-
         </div>
+
+        <!-- Tabulka se službami pokojů -->
         <table class="table table-hover">
             <thead>
                 <tr>
+                    <!-- Formulář pro filtrování -->
                     <form action="" method="POST">
                         {% csrf_token %}
-                        <th>Guest Name<input type="text" class="form-control border border-secondary"></th>
-                        <th>Room Number<input type="text" class="form-control border border-secondary"></th>
-                        <th>Type<input type="text" class="form-control border border-secondary"></th>
-                        <th>Created Date<input type="date" class="form-control border border-secondary"></th>
-                        <th>Price<input type="text" class="form-control border border-secondary"></th>
-                        <th><button type="submit" class="btn btn-warning">Filter</button></th>
+                        <!-- Filtrační sloupce -->
+                        <th>
+                            Jméno hosta
+                            <input type="text" name="guest_name" class="form-control border border-secondary">
+                        </th>
+                        <th>
+                            Číslo pokoje
+                            <input type="text" name="room_number" class="form-control border border-secondary">
+                        </th>
+                        <th>
+                            Typ služby
+                            <input type="text" name="service_type" class="form-control border border-secondary">
+                        </th>
+                        <th>
+                            Datum vytvoření
+                            <input type="date" name="created_date" class="form-control border border-secondary">
+                        </th>
+                        <th>
+                            Cena
+                            <input type="text" name="price" class="form-control border border-secondary">
+                        </th>
+                        <th>
+                            <button type="submit" class="btn btn-warning">Filtrovat</button>
+                        </th>
                     </form>
                 </tr>
             </thead>
             <tbody>
+                <!-- Iterace přes seznam služeb -->
                 {% for rs in room_services %}
                 <tr>
-                    <td><a
-                            href="{% url 'guest-profile' rs.curBooking.guest.user.id %}">{{rs.curBooking.guest.user.first_name}}</a>
+                    <!-- Jméno hosta s odkazem na jeho profil -->
+                    <td>
+                        <a href="{% url 'guest-profile' rs.curBooking.guest.user.id %}">
+                            {{ rs.curBooking.guest.user.first_name }} {{ rs.curBooking.guest.user.last_name }}
+                        </a>
                     </td>
-                    <td><a href="{% url 'room-profile' rs.room.number }">{{rs.room.number}}</a></td>
-                    <td>{{rs.servicesType}}</td>
-                    <td>{{rs.createdDate}}</td>
-                    <td>{{rs.price}}</td>
-                    <td> <a href="" class="btn btn-sm btn-danger px-3">Delete</a></td>
+                    <!-- Číslo pokoje s odkazem na detail pokoje -->
+                    <td>
+                        <a href="{% url 'room-profile' rs.room.number %}">{{ rs.room.number }}</a>
+                    </td>
+                    <!-- Typ služby -->
+                    <td>{{ rs.servicesType }}</td>
+                    <!-- Datum vytvoření -->
+                    <td>{{ rs.createdDate }}</td>
+                    <!-- Cena -->
+                    <td>{{ rs.price }} Kč</td>
+                    <!-- Tlačítko pro odstranění služby -->
+                    <td>
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="service_id" value="{{ rs.id }}">
+                            <button type="submit" name="delete_service" class="btn btn-sm btn-danger px-3">Odstranit</button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
-
         </table>
-
     </div>
-
 </div>

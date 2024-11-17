@@ -1,7 +1,79 @@
 {% extends '../index.html' %}
 {% load static %}
-{% block context %}
 
-{% include '../common_pages/event-edit.html' %}
+{% block content %}
+    <!-- Formulář pro úpravu události -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Upravit událost</h1>
+        <div class="card shadow mt-4">
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Typ události -->
+                    <div class="form-group">
+                        <label for="eventType">Typ události</label>
+                        <select id="eventType" name="eventType" class="form-control">
+                            <option value="Movie" {% if event.eventType == "Movie" %}selected{% endif %}>Film</option>
+                            <option value="Theater" {% if event.eventType == "Theater" %}selected{% endif %}>Divadlo</option>
+                            <option value="Conference" {% if event.eventType == "Conference" %}selected{% endif %}>Konference</option>
+                            <option value="Concert" {% if event.eventType == "Concert" %}selected{% endif %}>Koncert</option>
+                            <option value="Entertainment" {% if event.eventType == "Entertainment" %}selected{% endif %}>Zábava</option>
+                            <option value="Live Music" {% if event.eventType == "Live Music" %}selected{% endif %}>Živá hudba</option>
+                        </select>
+                    </div>
 
+                    <!-- Místo -->
+                    <div class="form-group">
+                        <label for="location">Místo</label>
+                        <input 
+                            type="text" 
+                            id="location" 
+                            name="location" 
+                            class="form-control" 
+                            value="{{ event.location }}" 
+                            required>
+                    </div>
+
+                    <!-- Začátek události -->
+                    <div class="form-group">
+                        <label for="startDate">Datum začátku</label>
+                        <input 
+                            type="date" 
+                            id="startDate" 
+                            name="startDate" 
+                            class="form-control" 
+                            value="{{ event.startDate|date:'Y-m-d' }}" 
+                            required>
+                    </div>
+
+                    <!-- Konec události -->
+                    <div class="form-group">
+                        <label for="endDate">Datum konce</label>
+                        <input 
+                            type="date" 
+                            id="endDate" 
+                            name="endDate" 
+                            class="form-control" 
+                            value="{{ event.endDate|date:'Y-m-d' }}" 
+                            required>
+                    </div>
+
+                    <!-- Popis události -->
+                    <div class="form-group">
+                        <label for="explanation">Popis</label>
+                        <textarea 
+                            id="explanation" 
+                            name="explanation" 
+                            class="form-control" 
+                            rows="4" 
+                            required>{{ event.explanation }}</textarea>
+                    </div>
+
+                    <!-- Odesílací tlačítko -->
+                    <button type="submit" class="btn btn-success btn-block">Uložit změny</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

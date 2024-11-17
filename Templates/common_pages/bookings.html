@@ -1,46 +1,69 @@
 <div class="container py-5">
-
-
+    <!-- Hlavička stránky -->
     <div class="table-header row">
-
         <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-            <h2>Bookings List</h2>
+            <h2>Seznam rezervací</h2>
         </div>
-
     </div>
 
+    <!-- Tabulka s rezervacemi -->
     <table class="table table-hover table-striped">
+        <!-- Hlavička tabulky -->
         <thead class="bg-secondary rounded">
             <tr>
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th>Room Number<input type="number" min="0" name="number" value="{{number}}"
-                            class="form-control border border-secondary"></th>
-                    <th>Guest Name<input type="text" name="name" value="{{name}}"
-                            class="form-control border border-secondary"></th>
-                    <th>Date Of Reservation<input type="date" name="rez" value="{{rez}}"
-                            class="form-control border border-secondary"></th>
-                    <th>Start Day<input type="date" name="fd" value="{{fd}}"
-                            class="form-control border border-secondary"></th>
-                    <th>End Day<input type="date" name="ed" value="{{ed}}" class="form-control border border-secondary">
+                    <!-- Filtrovací formulář -->
+                    <th>
+                        Číslo pokoje
+                        <input type="number" min="0" name="number" value="{{ number }}" class="form-control border border-secondary">
                     </th>
-                    <th class="pb-5">Number of Dependees</th>
-                    <th class="pb-5">Total amount</th>
-                    <th><button type="submit" name="filter" class="btn btn-warning w-100">Filter</button></th>
+                    <th>
+                        Jméno hosta
+                        <input type="text" name="name" value="{{ name }}" class="form-control border border-secondary">
+                    </th>
+                    <th>
+                        Datum rezervace
+                        <input type="date" name="rez" value="{{ rez }}" class="form-control border border-secondary">
+                    </th>
+                    <th>
+                        Datum začátku
+                        <input type="date" name="fd" value="{{ fd }}" class="form-control border border-secondary">
+                    </th>
+                    <th>
+                        Datum konce
+                        <input type="date" name="ed" value="{{ ed }}" class="form-control border border-secondary">
+                    </th>
+                    <th class="pb-5">Počet doprovodů</th>
+                    <th class="pb-5">Celková částka</th>
+                    <th>
+                        <button type="submit" name="filter" class="btn btn-warning w-100">Filtrovat</button>
+                    </th>
                 </form>
-
             </tr>
-
         </thead>
+
+        <!-- Tělo tabulky -->
         <tbody>
             {% for b in bookings %}
             <tr>
-                <td><a href="{% url 'room-profile' b.roomNumber.number %}">{{b.roomNumber.number}}</a></td>
-                <td><a href="{% url 'guest-profile' b.guest.user.id %}">{{b.guest.user.first_name}}</a></td>
+                <!-- Číslo pokoje -->
+                <td>
+                    <a href="{% url 'room-profile' b.roomNumber.number %}">{{ b.roomNumber.number }}</a>
+                </td>
+                <!-- Jméno hosta -->
+                <td>
+                    <a href="{% url 'guest-profile' b.guest.user.id %}">{{ b.guest.user.first_name }}</a>
+                </td>
+                <!-- Datum rezervace -->
                 <td>{{ b.dateOfReservation }}</td>
+                <!-- Datum začátku -->
                 <td>{{ b.startDate }}</td>
+                <!-- Datum konce -->
                 <td>{{ b.endDate }}</td>
+                <!-- Počet doprovodů -->
                 <td>{{ b.numOfDep }}</td>
+                <!-- Celková částka -->
                 <td>
                     {% for key, value in totals.items %}
                     {% if key == b %}
@@ -48,16 +71,16 @@
                     {% endif %}
                     {% endfor %}
                 </td>
+                <!-- Možnost mazání rezervace pro roli admin nebo manager -->
                 {% if role == "admin" or role == 'manager' %}
-                <td> <a href="{% url 'deleteBooking' b.id %}"
-                        class="btn btn-sm btn-outline-danger">Delete&nbsp;Booking</a></td>
+                <td>
+                    <a href="{% url 'deleteBooking' b.id %}" class="btn btn-sm btn-outline-danger">
+                        Smazat rezervaci
+                    </a>
+                </td>
                 {% endif %}
             </tr>
             {% endfor %}
         </tbody>
-
     </table>
-
-
-
 </div>

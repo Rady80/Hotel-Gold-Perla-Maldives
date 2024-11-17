@@ -1,190 +1,182 @@
-// Git Repo: https://github.com/Russian60/flex-calendar
+// Modul AngularJS a hlavní controller
 angular
-    .module('app', ['flexcalendar', 'pascalprecht.translate'])
-    .controller('MainController', ['$scope', function($scope) {
+    .module('app', ['flexcalendar', 'pascalprecht.translate']) // Registrace modulu a závislostí
+    .controller('MainController', ['$scope', function ($scope) {
+        // Nastavení kalendáře
         $scope.options = {
-            defaultDate: "2020-01-01",
-            minDate: "2020-01-01",
-            maxDate: "2045-12-31",
-            disabledDates: [
+            defaultDate: "2020-01-01", // Výchozí datum
+            minDate: "2020-01-01",     // Minimální datum
+            maxDate: "2045-12-31",     // Maximální datum
+            disabledDates: [           // Data, která mají být zakázána
                 "2015-06-22",
                 "2015-07-27",
                 "2015-08-13",
                 "2015-08-15"
             ],
-            dayNamesLength: 1, // 1 for "M", 2 for "Mo", 3 for "Mon"; 9 will show full day names. Default is 1.
-            mondayIsFirstDay: true, //set monday as first day of week. Default is false
-            eventClick: function(date) {
-                console.log(date);
+            dayNamesLength: 1,         // Zkrácené názvy dní (1: "M", 2: "Mo", 3: "Mon")
+            mondayIsFirstDay: true,    // Nastavení pondělí jako prvního dne týdne
+            eventClick: function (date) {
+                console.log("Kliknuto na událost: ", date);
             },
-            dateClick: function(date) {
-                console.log(date);
+            dateClick: function (date) {
+                console.log("Kliknuto na datum: ", date);
             },
-            changeMonth: function(month, year) {
-                console.log(month, year);
+            changeMonth: function (month, year) {
+                console.log("Změněn měsíc: ", month, "Rok: ", year);
             },
         };
 
-        $scope.events = [{
-                foo: 'bar',
+        // Události v kalendáři
+        $scope.events = [
+            {
+                description: 'Nějaká událost',
                 date: "2015-08-18"
             },
             {
-                foo: 'bar',
+                description: 'Další událost',
                 date: "2015-08-20"
             }
         ];
-    }])
+    }]);
 
-    // Library
-    ! function() {
-        "use strict";
+// Definice direktivy pro kalendář
+!function () {
+    "use strict";
 
-        function e() {
-            var e = '<div class="flex-calendar"><div class="month"><div class="arrow {{arrowPrevClass}}" ng-click="prevMonth()"></div><div class="label">{{ selectedMonth | translate }} {{selectedYear}}</div><div class="arrow {{arrowNextClass}}" ng-click="nextMonth()"></div></div><div class="week"><div class="day" ng-repeat="day in weekDays(options.dayNamesLength) track by $index">{{ day }}</div></div><div class="days" ng-repeat="week in weeks"><div class="day"ng-repeat="day in week track by $index"ng-class="{selected: isDefaultDate(day), event: day.event[0], disabled: day.disabled, out: !day}"ng-click="onClick(day, $index, $event)"><div class="number">{{day.day}}</div></div></div></div>',
-                a = {
-                    restrict: "E",
-                    scope: {
-                        options: "=?",
-                        events: "=?"
-                    },
-                    template: e,
-                    controller: t
+    function calendarDirective() {
+        const template = `
+            <div class="flex-calendar">
+                <div class="month">
+                    <div class="arrow {{arrowPrevClass}}" ng-click="prevMonth()"></div>
+                    <div class="label">{{ selectedMonth | translate }} {{selectedYear}}</div>
+                    <div class="arrow {{arrowNextClass}}" ng-click="nextMonth()"></div>
+                </div>
+                <div class="week">
+                    <div class="day" ng-repeat="day in weekDays(options.dayNamesLength) track by $index">{{ day }}</div>
+                </div>
+                <div class="days" ng-repeat="week in weeks">
+                    <div class="day"
+                         ng-repeat="day in week track by $index"
+                         ng-class="{
+                             selected: isDefaultDate(day),
+                             event: day.event[0],
+                             disabled: day.disabled,
+                             out: !day
+                         }"
+                         ng-click="onClick(day, $index, $event)">
+                        <div class="number">{{day.day}}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        return {
+            restrict: "E", // Direktiva pouze jako element
+            scope: {
+                options: "=?", // Možnost předání vlastních parametrů
+                events: "=?",  // Seznam událostí
+            },
+            template: template,
+            controller: calendarController
+        };
+    }
+
+    // Kontroler pro kalendář
+    function calendarController($scope, $filter) {
+        const MONTHS = ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"];
+        const DAYS = ["Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota"];
+
+        // Nastavení dnů týdne
+        $scope.weekDays = (length) => {
+            const days = $scope.options.mondayIsFirstDay ? [...DAYS.slice(1), DAYS[0]] : DAYS;
+            return days.map(day => day.slice(0, length));
+        };
+
+        // Kontrola, zda je datum výchozí
+        $scope.isDefaultDate = (day) => {
+            if (!day) return false;
+            const defaultDate = new Date($scope.options.defaultDate);
+            return day.year === defaultDate.getFullYear() &&
+                day.month === defaultDate.getMonth() &&
+                day.day === defaultDate.getDate();
+        };
+
+        // Přechod na předchozí měsíc
+        $scope.prevMonth = () => {
+            if ($scope.allowedPrevMonth()) {
+                const currentMonth = MONTHS.indexOf($scope.selectedMonth);
+                if (currentMonth === 0) {
+                    $scope.selectedMonth = MONTHS[11];
+                    $scope.selectedYear -= 1;
+                } else {
+                    $scope.selectedMonth = MONTHS[currentMonth - 1];
+                }
+                buildCalendar();
+            }
+        };
+
+        // Přechod na další měsíc
+        $scope.nextMonth = () => {
+            if ($scope.allowedNextMonth()) {
+                const currentMonth = MONTHS.indexOf($scope.selectedMonth);
+                if (currentMonth === 11) {
+                    $scope.selectedMonth = MONTHS[0];
+                    $scope.selectedYear += 1;
+                } else {
+                    $scope.selectedMonth = MONTHS[currentMonth + 1];
+                }
+                buildCalendar();
+            }
+        };
+
+        // Sestavení kalendáře
+        function buildCalendar() {
+            const monthIndex = MONTHS.indexOf($scope.selectedMonth);
+            const firstDay = new Date($scope.selectedYear, monthIndex, 1).getDay();
+            const totalDays = new Date($scope.selectedYear, monthIndex + 1, 0).getDate();
+
+            $scope.weeks = [];
+            let week = new Array(7).fill(null);
+
+            for (let day = 1; day <= totalDays; day++) {
+                const date = new Date($scope.selectedYear, monthIndex, day);
+                const dayIndex = ($scope.options.mondayIsFirstDay ? (date.getDay() + 6) % 7 : date.getDay());
+
+                week[dayIndex] = {
+                    year: date.getFullYear(),
+                    month: date.getMonth(),
+                    day: day,
+                    date: date,
+                    disabled: isDisabledDate(date),
+                    event: getEvents(date),
                 };
-            return a
+
+                if (dayIndex === 6 || day === totalDays) {
+                    $scope.weeks.push(week);
+                    week = new Array(7).fill(null);
+                }
+            }
         }
 
-        function t(e, t) {
-            function a() {
-                e.mappedDisabledDates = e.options.disabledDates.map(function(e) {
-                    return new Date(e)
-                })
-            }
-
-            function n() {
-                e.mappedEvents = e.events.map(function(e) {
-                    return e.date = new Date(e.date), e
-                })
-            }
-
-            function o(t, a, n) {
-                t && !t.disabled && (e.options.defaultDate = t.date, 0 != t.event.length ? e.options.eventClick(t, n) : e.options.dateClick(t, n))
-            }
-
-            function s(t) {
-                t && e.mappedEvents && (t.event = [], e.mappedEvents.forEach(function(e) {
-                    t.date.getFullYear() === e.date.getFullYear() && t.date.getMonth() === e.date.getMonth() && t.date.getDate() === e.date.getDate() && t.event.push(e)
-                }))
-            }
-
-            function i(t) {
-                if (!e.options.minDate && !e.options.maxDate) return !0;
-                var a = t.date;
-                return e.options.minDate && a < e.options.minDate ? !1 : e.options.maxDate && a > e.options.maxDate ? !1 : !0
-            }
-
-            function d(t) {
-                if (!e.mappedDisabledDates) return !1;
-                for (var a = 0; a < e.mappedDisabledDates.length; a++)
-                    if (t.year === e.mappedDisabledDates[a].getFullYear() && t.month === e.mappedDisabledDates[a].getMonth() && t.day === e.mappedDisabledDates[a].getDate()) return !0
-            }
-
-            function l() {
-                var t = null,
-                    a = null;
-                if (!e.options.minDate) return !0;
-                var n = M.indexOf(e.selectedMonth);
-                return 0 === n ? (t = e.selectedYear - 1, a = 11) : (t = e.selectedYear, a = n - 1), t < e.options.minDate.getFullYear() ? !1 : t === e.options.minDate.getFullYear() && a < e.options.minDate.getMonth() ? !1 : !0
-            }
-
-            function r() {
-                var t = null,
-                    a = null;
-                if (!e.options.maxDate) return !0;
-                var n = M.indexOf(e.selectedMonth);
-                return 11 === n ? (t = e.selectedYear + 1, a = 0) : (t = e.selectedYear, a = n + 1), t > e.options.maxDate.getFullYear() ? !1 : t === e.options.maxDate.getFullYear() && a > e.options.maxDate.getMonth() ? !1 : !0
-            }
-
-            function c() {
-                e.weeks = [];
-                for (var t = null, a = new Date(e.selectedYear, M.indexOf(e.selectedMonth) + 1, 0).getDate(), n = 1; a + 1 > n; n += 1) {
-                    var o = new Date(e.selectedYear, M.indexOf(e.selectedMonth), n),
-                        l = new Date(e.selectedYear, M.indexOf(e.selectedMonth), n).getDay();
-                    e.options.mondayIsFirstDay && (l = (l + 6) % 7), t = t || [null, null, null, null, null, null, null], t[l] = {
-                        year: e.selectedYear,
-                        month: M.indexOf(e.selectedMonth),
-                        day: n,
-                        date: o,
-                        _month: o.getMonth() + 1
-                    }, i(t[l]) ? e.mappedEvents && s(t[l]) : t[l].disabled = !0, t[l] && d(t[l]) && (t[l].disabled = !0), (6 === l || n === a) && (e.weeks.push(t), t = void 0)
-                }
-                e.arrowPrevClass = e.allowedPrevMonth() ? "visible" : "hidden", e.arrowNextClass = e.allowedNextMonth() ? "visible" : "hidden"
-            }
-
-            function D() {
-                e.options._defaultDate = e.options.defaultDate ? new Date(e.options.defaultDate) : new Date, e.selectedYear = e.options._defaultDate.getFullYear(), e.selectedMonth = M[e.options._defaultDate.getMonth()], e.selectedDay = e.options._defaultDate.getDate(), c()
-            }
-
-            function p() {
-                if (e.mappedDisabledDates && 0 !== e.mappedDisabledDates.length) {
-                    for (var t = 0; t < e.mappedDisabledDates.length; t++) e.mappedDisabledDates[t] = new Date(e.mappedDisabledDates[t]);
-                    c()
-                }
-            }
-
-            function u(e) {
-                return g.map(function(t) {
-                    return m(t).slice(0, e)
-                })
-            }
-
-            function v(t) {
-                if (t) {
-                    var a = t.year === e.options._defaultDate.getFullYear() && t.month === e.options._defaultDate.getMonth() && t.day === e.options._defaultDate.getDate();
-                    return a
-                }
-            }
-
-            function f() {
-                if (e.allowedPrevMonth()) {
-                    var t = M.indexOf(e.selectedMonth);
-                    0 === t ? (e.selectedYear -= 1, e.selectedMonth = M[11]) : e.selectedMonth = M[t - 1];
-                    var a = {
-                        name: e.selectedMonth,
-                        index: t - 1,
-                        _index: t + 2
-                    };
-                    e.options.changeMonth(a, e.selectedYear), c()
-                }
-            }
-
-            function h() {
-                if (e.allowedNextMonth()) {
-                    var t = M.indexOf(e.selectedMonth);
-                    11 === t ? (e.selectedYear += 1, e.selectedMonth = M[0]) : e.selectedMonth = M[t + 1];
-                    var a = {
-                        name: e.selectedMonth,
-                        index: t + 1,
-                        _index: t + 2
-                    };
-                    e.options.changeMonth(a, e.selectedYear), c()
-                }
-            }
-            e.days = [], e.options = e.options || {}, e.events = e.events || [], e.options.dayNamesLength = e.options.dayNamesLength || 1, e.options.mondayIsFirstDay = e.options.mondayIsFirstDay || !1, e.onClick = o, e.allowedPrevMonth = l, e.allowedNextMonth = r, e.weekDays = u, e.isDefaultDate = v, e.prevMonth = f, e.nextMonth = h, e.arrowPrevClass = "visible", e.arrowNextClass = "visible";
-            var m = t("translate"),
-                M = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAI", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"],
-                g = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-            if (e.options.mondayIsFirstDay) {
-                var y = g.shift();
-                g.push(y)
-            }
-            e.options.minDate && (e.options.minDate = new Date(e.options.minDate)), e.options.maxDate && (e.options.maxDate = new Date(e.options.maxDate)), e.options.disabledDates && a(), e.events && n(), e.$watch("options.defaultDate", function() {
-                D()
-            }), e.$watch("options.disabledDates", function() {
-                a(), p()
-            }), e.$watch("events", function() {
-                n(), c()
-            })
+        // Kontrola zakázaných dat
+        function isDisabledDate(date) {
+            const minDate = $scope.options.minDate ? new Date($scope.options.minDate) : null;
+            const maxDate = $scope.options.maxDate ? new Date($scope.options.maxDate) : null;
+            return (minDate && date < minDate) || (maxDate && date > maxDate);
         }
-        angular.module("flexcalendar", []).directive("flexCalendar", e), t.$inject = ["$scope", "$filter"]
-    }();
+
+        // Načtení událostí
+        function getEvents(date) {
+            return ($scope.events || []).filter(event =>
+                new Date(event.date).toDateString() === date.toDateString()
+            );
+        }
+
+        // Inicializace
+        $scope.selectedYear = new Date($scope.options.defaultDate).getFullYear();
+        $scope.selectedMonth = MONTHS[new Date($scope.options.defaultDate).getMonth()];
+        buildCalendar();
+    }
+
+    angular.module("flexcalendar", []).directive("flexCalendar", calendarDirective);
+}();

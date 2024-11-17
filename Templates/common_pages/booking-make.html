@@ -1,69 +1,80 @@
 <div class="container">
-
+    <!-- Informace o aktuální rezervaci -->
     <div class="row py-5 h5">
-        <p>You are currently trying to book This room:
+        <p>
+            Aktuálně se pokoušíte rezervovat tento pokoj:
             <br>
-            Between {{fd}} - {{ld}}
+            Období: {{ fd }} - {{ ld }}
             <br>
-            Room Number : {{ room.number }}
+            Číslo pokoje: {{ room.number }}
             <br>
-            Room capacity : {{ room.capacity }}
+            Kapacita pokoje: {{ room.capacity }}
             <br>
-            Number of beds in the room : {{ room.numberOfBeds }}
+            Počet postelí v pokoji: {{ room.numberOfBeds }}
             <br>
-            Room Type : {{ room.roomType }}
+            Typ pokoje: {{ room.roomType }}
             <br>
-            Room price : {{ room.price }}
+            Cena za pokoj: {{ room.price }}
             <br>
             <br>
-            Total price : {{total}}
+            Celková cena: {{ total }}
         </p>
     </div>
 
-
+    <!-- Formulář pro rezervaci pokoje -->
     <form action="" method="POST">
         {% csrf_token %}
-        <div class=row>
+        <div class="row">
+            <!-- Skryté vstupy pro předání dat -->
             <input type="hidden" value="{{ room }}" name="roomid">
-            <input type="date" value="{{ fd }}" name="fd" class="d-none">
-            <input type="date" value="{{ ld }}" name="ld" class="d-none">
+            <input type="hidden" value="{{ fd }}" name="fd">
+            <input type="hidden" value="{{ ld }}" name="ld">
+
+            <!-- Sekce pro přidání doprovodu, pokud kapacita pokoje je větší než 1 -->
             {% if room.capacity > 1 %}
             <div class="col-6">
-                <h4>Add Dependee</h4>
-                <input type="text" class="form-control d-inline" name="depName">
-                <button type="submit" name="add"
-                    class="form-control btn btn-sm btn-outline-success px-3 d-inline">Add</button>
+                <h4>Přidat doprovod</h4>
+                <input type="text" class="form-control d-inline" name="depName" placeholder="Jméno doprovodu">
+                <button type="submit" name="add" class="form-control btn btn-sm btn-outline-success px-3 d-inline">
+                    Přidat
+                </button>
             </div>
 
             <div class="col-6">
+                <h4>Seznam doprovodu</h4>
                 <ul id="myList" class="list-group">
-                    <h4>List Of Dependees</h4>
                     {% for n in names %}
-                    <li class="list-group-item">{{n}}<input type="hidden" name="name{{forloop.counter}}" value="{{n}}">
+                    <li class="list-group-item">
+                        {{ n }}
+                        <input type="hidden" name="name{{ forloop.counter }}" value="{{ n }}">
                     </li>
                     {% endfor %}
                 </ul>
             </div>
             {% endif %}
 
+            <!-- Výběr hosta pro recepční -->
             {% if role == "receptionist" %}
-
-            <label for="exampleFormControlSelect1">Select A Guest
-            </label>
-            <select class="form-control" name="guest" required="" id="id_guest">
-                {% for guest in guests %}
-                <option value="{{guest.id}}">{{guest.user.first_name}} {{guest.user.last_name}}</option>
-                {% endfor %}
-            </select>
+            <div class="col-12">
+                <label for="id_guest">Vyberte hosta</label>
+                <select class="form-control" name="guest" id="id_guest" required>
+                    {% for guest in guests %}
+                    <option value="{{ guest.id }}">
+                        {{ guest.user.first_name }} {{ guest.user.last_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
             {% endif %}
 
-            <button type="submit" class="btn btn-info w-100 mt-3" name="bookGuestButton">Book</button>
+            <!-- Tlačítko pro potvrzení rezervace -->
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-info w-100" name="bookGuestButton">Rezervovat</button>
+            </div>
         </div>
     </form>
 
-
     <div class="py-3">
-        &nbsp
+        &nbsp;
     </div>
-
 </div>

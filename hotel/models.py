@@ -1,92 +1,133 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser
-
 from accounts.models import Guest, Employee
 
-    
-# Create your models here.
+
 class Announcement(models.Model):
-    content = models.TextField()
-    sender = models.ForeignKey(Employee, null=True, on_delete=models.CASCADE)
-    date = models.DateField(default=timezone.now)
+    """
+    Model pro oznámení.
+    """
+    content = models.TextField(verbose_name="Obsah oznámení")
+    sender = models.ForeignKey(Employee, null=True, on_delete=models.CASCADE, verbose_name="Odesílatel")
+    date = models.DateField(default=timezone.now, verbose_name="Datum vytvoření")
 
     def __str__(self):
-        return str(self.sender)
+        return f"Oznámení od {self.sender.user.username} ({self.date})"
+
+    class Meta:
+        verbose_name = "Oznámení"
+        verbose_name_plural = "Oznámení"
 
 
 class Event(models.Model):
+    """
+    Model pro události.
+    """
     EVENT_TYPES = (
-        ('Movie', 'Movie'),
-        ('Theater', 'Theater'),
-        ('Conference', 'Conference'),
-        ('Concert', 'Concert'),
-        ('Entertainment', 'Entertainment'),
-        ('Live Music', 'Live Music'),
+        ('Movie', 'Film'),
+        ('Theater', 'Divadlo'),
+        ('Conference', 'Konference'),
+        ('Concert', 'Koncert'),
+        ('Entertainment', 'Zábava'),
+        ('Live Music', 'Živá hudba'),
     )
 
-    eventType = models.CharField(max_length=20, choices=EVENT_TYPES)
-    location = models.CharField(max_length=100)
-    startDate = models.DateField()
-    endDate = models.DateField()
-    explanation = models.TextField()
+    eventType = models.CharField(max_length=20, choices=EVENT_TYPES, verbose_name="Typ události")
+    location = models.CharField(max_length=100, verbose_name="Místo konání")
+    startDate = models.DateField(verbose_name="Datum začátku")
+    endDate = models.DateField(verbose_name="Datum konce")
+    explanation = models.TextField(verbose_name="Popis události")
 
     def __str__(self):
-        return str(self.eventType)
+        return f"{self.eventType} v {self.location} od {self.startDate} do {self.endDate}"
+
+    class Meta:
+        verbose_name = "Událost"
+        verbose_name_plural = "Události"
 
 
 class EventAttendees(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    numberOfDependees = models.IntegerField(default=0)
-    guest = models.ForeignKey(Guest,   null=True, on_delete=models.CASCADE)
+    """
+    Model pro účastníky událostí.
+    """
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name="Událost")
+    guest = models.ForeignKey(Guest, null=True, on_delete=models.CASCADE, verbose_name="Host")
+    numberOfDependees = models.IntegerField(default=0, verbose_name="Počet doprovodů")
 
     def __str__(self):
-        return str(self.event) + " " + str(self.guest)
+        return f"{self.guest.user.username} na {self.event.eventType}"
+
+    class Meta:
+        verbose_name = "Účastník události"
+        verbose_name_plural = "Účastníci událostí"
 
 
 class Bills(models.Model):
-    guest = models.ForeignKey(Guest,   null=True, on_delete=models.CASCADE)
-    totalAmount = models.FloatField()
-    summary = models.TextField()
-    date = models.DateTimeField(default=timezone.now)
+    """
+    Model pro faktury.
+    """
+    guest = models.ForeignKey(Guest, null=True, on_delete=models.CASCADE, verbose_name="Host")
+    totalAmount = models.FloatField(verbose_name="Celková částka")
+    summary = models.TextField(verbose_name="Souhrn")
+    date = models.DateTimeField(default=timezone.now, verbose_name="Datum vystavení")
 
     def __str__(self):
-        return str(self.guest) + " " + str(self.summary) + " " + str(self.totalAmount)
+        return f"Faktura pro {self.guest.user.username} ({self.totalAmount} Kč)"
+
+    class Meta:
+        verbose_name = "Faktura"
+        verbose_name_plural = "Faktury"
 
 
 class FoodMenu(models.Model):
-    startDate = models.DateField()
-    endDate = models.DateField()
-    menuItems = models.TextField()
+    """
+    Model pro jídelní menu.
+    """
+    startDate = models.DateField(verbose_name="Datum začátku")
+    endDate = models.DateField(verbose_name="Datum konce")
+    menuItems = models.TextField(verbose_name="Položky menu")
 
     def __str__(self):
-        return str(self.menuItems) + " " + str(self.startDate)
+        return f"Menu od {self.startDate} do {self.endDate}"
+
+    class Meta:
+        verbose_name = "Jídelní menu"
+        verbose_name_plural = "Jídelní menu"
 
 
 class Report(models.Model):
-    date = models.DateField(default=timezone.now)
-    content = models.TextField()
+    """
+    Model pro reporty.
+    """
+    date = models.DateField(default=timezone.now, verbose_name="Datum")
+    content = models.TextField(verbose_name="Obsah reportu")
 
     def __str__(self):
-        return str(self.content) + " " + str(self.date)
+        return f"Report z {self.date}"
+
+    class Meta:
+        verbose_name = "Report"
+        verbose_name_plural = "Reporty"
 
 
 class Storage(models.Model):
+    """
+    Model pro skladové položky.
+    """
     ITEM_TYPES = (
-        ('Kitchen', 'kitchen'),
-        ('Cleaning', 'cleaning'),
-        ('Electronic', 'Electronic'),
-        ('Textile ', 'textile '),
-        ('Other', 'other'),
+        ('Kitchen', 'Kuchyňské potřeby'),
+        ('Cleaning', 'Čisticí prostředky'),
+        ('Electronic', 'Elektronika'),
+        ('Textile', 'Textilie'),
+        ('Other', 'Ostatní'),
     )
-    itemName = models.CharField(max_length=100)
-    itemType = models.CharField(max_length=20, choices=ITEM_TYPES)
-    quantitiy = models.IntegerField()
+    itemName = models.CharField(max_length=100, verbose_name="Název položky")
+    itemType = models.CharField(max_length=20, choices=ITEM_TYPES, verbose_name="Typ položky")
+    quantitiy = models.IntegerField(verbose_name="Množství")
 
     def __str__(self):
-        return str(self.itemName)
-    
- 
-  
-  
+        return f"{self.itemName} ({self.quantitiy} ks)"
+
+    class Meta:
+        verbose_name = "Skladová položka"
+        verbose_name_plural = "Skladové položky"

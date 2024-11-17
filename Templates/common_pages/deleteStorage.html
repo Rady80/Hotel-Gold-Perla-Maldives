@@ -1,20 +1,25 @@
+<!--
+HTML kód pro potvrzení smazání položky ze skladu.
+Tento kód používá třídy Bootstrap pro zarovnání a stylování.
+-->
+
 <div class="row justify-content-center m-5">
-
+    <!-- Karta s červeným rámečkem a stínem pro vizuální upozornění -->
     <div class="card border-danger shadow-lg w-75">
-
         <div class="card-body">
+            <!-- Dotaz na uživatele, zda si je jistý smazáním dané položky -->
+            <p>Opravdu chcete smazat tuto položku skladu: "{{ storage }}"?</p>
 
-            <p>Are you sure you want to delete This Storage Item : "{{storage}}" ?</p>
-
+            <!-- Formulář pro odeslání požadavku na smazání -->
             <form action="{% url 'deleteStorage' storage.id %}" method="post">
-                {% csrf_token %}
-                <a class="btn btn-info" href="{% url 'storage' %}">Cancel</a>
-
-                <input class="btn btn-danger" type="submit" value="Confirm">
+                {% csrf_token %} <!-- Token CSRF pro zabezpečení proti podvržení formuláře -->
+                
+                <!-- Tlačítko pro zrušení akce, odkazuje zpět na seznam skladu -->
+                <a class="btn btn-info" href="{% url 'storage' %}">Zrušit</a>
+                
+                <!-- Tlačítko pro potvrzení akce, odesílá požadavek na smazání -->
+                <input class="btn btn-danger" type="submit" value="Potvrdit">
             </form>
-
         </div>
-
     </div>
-
 </div>

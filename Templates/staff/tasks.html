@@ -3,52 +3,108 @@
 {% block context %}
 
 <div class="container py-5">
-
+    <!-- Nadpis tabulky -->
     <div class="table-header row">
-
         <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-            <h2>My Tasks List</h2>
+            <h2>Seznam mých úkolů</h2> <!-- Překlad "My Tasks List" -->
         </div>
-
     </div>
+
+    <!-- Tabulka s filtry a seznamem úkolů -->
     <table class="table table-hover table-striped">
+        <!-- Hlavička tabulky -->
         <thead class="bg-secondary rounded">
             <tr>
+                <!-- Formulář pro filtrování -->
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <th>Task ID <input type="number" name="id" value="{{id}}"
-                            class="form-control border border-secondary"></th>
-                    <th>Description <input type="text" name="desc" value="{{desc}}"
-                            class="form-control border border-secondary"></th>
-                    <th>Start Time <input type="date" name="fd" value="{{fd}}"
-                            class="form-control border border-secondary"></th>
-                    <th>End Time <input type="date" name="ed" value="{{ed}}"
-                            class="form-control border border-secondary"></th>
-                    <th><button type="submit" name="filter" class="btn btn-warning w-100">Filter</button></th>
+                    <!-- Sloupec pro filtrování podle ID úkolu -->
+                    <th>
+                        ID úkolu
+                        <input 
+                            type="number" 
+                            name="id" 
+                            value="{{ id }}" 
+                            class="form-control border border-secondary">
+                    </th>
+
+                    <!-- Sloupec pro filtrování podle popisu -->
+                    <th>
+                        Popis
+                        <input 
+                            type="text" 
+                            name="desc" 
+                            value="{{ desc }}" 
+                            class="form-control border border-secondary">
+                    </th>
+
+                    <!-- Sloupec pro filtrování podle počátečního času -->
+                    <th>
+                        Počáteční čas
+                        <input 
+                            type="date" 
+                            name="fd" 
+                            value="{{ fd }}" 
+                            class="form-control border border-secondary">
+                    </th>
+
+                    <!-- Sloupec pro filtrování podle koncového času -->
+                    <th>
+                        Konečný čas
+                        <input 
+                            type="date" 
+                            name="ed" 
+                            value="{{ ed }}" 
+                            class="form-control border border-secondary">
+                    </th>
+
+                    <!-- Tlačítko pro odeslání filtru -->
+                    <th>
+                        <button 
+                            type="submit" 
+                            name="filter" 
+                            class="btn btn-warning w-100">
+                            Filtrovat
+                        </button>
+                    </th>
                 </form>
             </tr>
         </thead>
+
+        <!-- Tělo tabulky s úkoly -->
         <tbody>
             {% for t in tasks %}
             <tr>
-                <td>{{t.id}}</td>
-                <td>{{t.description}}</td>
-                <td>{{t.startTime}}</td>
-                <td>{{t.endTime}}</td>
+                <!-- Zobrazení ID úkolu -->
+                <td>{{ t.id }}</td>
+
+                <!-- Zobrazení popisu úkolu -->
+                <td>{{ t.description }}</td>
+
+                <!-- Zobrazení počátečního času -->
+                <td>{{ t.startTime }}</td>
+
+                <!-- Zobrazení koncového času -->
+                <td>{{ t.endTime }}</td>
+
+                <!-- Formulář pro označení úkolu jako dokončený -->
                 <form action="" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="tid" value="{{ t.id }}">
-                    <td><a type="submit" name="markAsComplete" class="btn btn-sm btn-success w-100"
-                            href="{% url 'completeTask' t.id %}">Mark&nbsp;As&nbsp;Complete</a></td>
-
+                    <td>
+                        <a 
+                            type="submit" 
+                            name="markAsComplete" 
+                            class="btn btn-sm btn-success w-100" 
+                            href="{% url 'completeTask' t.id %}">
+                            Označit&nbsp;jako&nbsp;dokončený
+                        </a>
+                    </td>
                 </form>
             </tr>
             {% endfor %}
         </tbody>
-
     </table>
-
-
-
 </div>
+
 {% endblock %}

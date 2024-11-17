@@ -1,40 +1,54 @@
 <div class="container clearfix shadow-lg p-5 my-5">
+    <!-- Formulář pro přidání pokoje -->
     <form action="" method="POST" class="my-5">
         {% csrf_token %}
 
         <div class="row mt-5">
+            <!-- Levý sloupec -->
             <div class="col-6">
+                <!-- Číslo pokoje -->
                 <div class="form-group pt-3">
-                    <label for="item-type"><b>Room Number: </b></label>
-                    <input type="number" class="form-control border border-secondary" id="item-type" name="number" />
+                    <label for="room-number"><b>Číslo pokoje: </b></label>
+                    <input type="number" class="form-control border border-secondary" id="room-number" name="number" required placeholder="Např. 101" />
                 </div>
 
+                <!-- Počet lůžek -->
                 <div class="form-group">
-                    <label for="item-quantity"><b>Number Of Beds: </b></label>
-                    <input type="number" class="form-control border border-secondary" id="item-quantity" name="beds" />
+                    <label for="number-of-beds"><b>Počet lůžek: </b></label>
+                    <input type="number" class="form-control border border-secondary" id="number-of-beds" name="beds" required placeholder="Např. 2" />
                 </div>
 
+                <!-- Cena -->
                 <div class="form-group">
-                    <label for="item-quantity"><b>Price: </b></label>
-                    <input type="number" class="form-control border border-secondary" id="item-quantity" name="price" />
+                    <label for="room-price"><b>Cena: </b></label>
+                    <input type="number" class="form-control border border-secondary" id="room-price" name="price" required placeholder="Např. 1000 Kč" />
                 </div>
             </div>
 
+            <!-- Pravý sloupec -->
             <div class="col-6">
+                <!-- Kapacita pokoje -->
                 <div class="form-group pt-3">
-                    <label for="item-type"><b>Capacity: </b></label>
-                    <input type="number" min="0" class="form-control border border-secondary" id="item-type"
-                        name="capacity" />
+                    <label for="room-capacity"><b>Kapacita: </b></label>
+                    <input type="number" min="1" class="form-control border border-secondary" id="room-capacity" name="capacity" required placeholder="Např. 4 osoby" />
                 </div>
 
+                <!-- Typ pokoje -->
                 <div class="form-group">
-                    <label for="item-quantity"><b>Room Type:</b></label>
-                    <input type="int" class="form-control border border-secondary" id="item-quantity" name="type" />
+                    <label for="room-type"><b>Typ pokoje:</b></label>
+                    <select class="form-control border border-secondary" id="room-type" name="type" required>
+                        <option value="" disabled selected>Vyberte typ pokoje</option>
+                        <option value="King">King</option>
+                        <option value="Luxury">Luxury</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Economic">Economic</option>
+                    </select>
                 </div>
             </div>
         </div>
+        <!-- Tlačítko pro přidání pokoje -->
         <button type="submit" class="btn btn-success px-4 float-right">
-            Add Room
+            Přidat pokoj
         </button>
     </form>
 </div>

@@ -1,7 +1,32 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Sekce pro úpravu rezervace -->
+    <h2>Upravit rezervaci</h2>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="startDate">Datum začátku:</label>
+            <input type="date" name="startDate" id="startDate" value="{{ booking.startDate }}" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="endDate">Datum konce:</label>
+            <input type="date" name="endDate" id="endDate" value="{{ booking.endDate }}" required class="form-control">
+        </div>
 
-{% include '../common_pages/booking-edit.html' %}
+        <div class="form-group">
+            <label for="roomNumber">Pokoj:</label>
+            <select name="roomNumber" id="roomNumber" class="form-control">
+                {% for room in rooms %}
+                    <option value="{{ room.number }}" {% if room.number == booking.roomNumber.number %}selected{% endif %}>
+                        {{ room.name }} - Kapacita: {{ room.capacity }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
+        <button type="submit" class="btn btn-primary">Uložit změny</button>
+    </form>
 {% endblock %}

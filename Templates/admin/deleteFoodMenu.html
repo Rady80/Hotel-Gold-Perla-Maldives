@@ -1,7 +1,27 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Sekce pro smazání jídelního menu -->
+    <div class="container mt-4">
+        <h2 class="text-danger">Smazat jídelní menu</h2>
+        <p>Opravdu chcete smazat toto jídelní menu?</p>
 
-{% include '../common_pages/deleteFoodMenu.html' %}
+        <!-- Detail jídelního menu -->
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title"><strong>Platnost od:</strong> {{ food_menu.startDate }}</h5>
+                <h5 class="card-title"><strong>Platnost do:</strong> {{ food_menu.endDate }}</h5>
+                <p class="card-text"><strong>Položky menu:</strong> {{ food_menu.menuItems }}</p>
+            </div>
+        </div>
 
+        <!-- Formulář pro potvrzení nebo zrušení akce -->
+        <form method="POST">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-danger">Smazat</button>
+                <a href="{% url 'food-menu' %}" class="btn btn-secondary">Zrušit</a>
+            </div>
+        </form>
+    </div>
 {% endblock %}

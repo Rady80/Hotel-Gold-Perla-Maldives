@@ -1,17 +1,106 @@
-<h1>{{ room.name }}</h1>
-<p>{{ room.description }}</p>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="room-images">
-    {% for image in room.images.all %}
-        <div class="room-image">
-            <img src="{{ image.image.url }}" alt="{{ image.caption }}">
-            {% if image.caption %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ room.name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .room-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .room-image {
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #f8f8f8;
+        }
+
+        .room-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .room-image p {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        #messages {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            border-radius: 5px;
+        }
+
+        #messages p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Room Title -->
+        <h1>{{ room.name }}</h1>
+        <p>{{ room.description }}</p>
+
+        <!-- Room Images -->
+        <div class="room-images">
+            {% for image in room.images.all %}
+            <div class="room-image">
+                <img src="{{ image.image.url }}" alt="{{ image.caption }}">
+                {% if image.caption %}
                 <p>{{ image.caption }}</p>
-            {% endif %}
-
-    {% for message in messages %}
-<p id="messages">{{ message }}</p>
-{% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
+
+        <!-- Messages Section -->
+        <div id="messages">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>

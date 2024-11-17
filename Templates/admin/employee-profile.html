@@ -1,7 +1,34 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Profil zaměstnance -->
+    <div class="container mt-4">
+        <h2 class="text-primary">Profil zaměstnance</h2>
+        
+        <!-- Základní informace o zaměstnanci -->
+        <div class="card my-4">
+            <div class="card-header bg-primary text-white">
+                <h5>{{ employee.user.first_name }} {{ employee.user.last_name }}</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Uživatelské jméno:</strong> {{ employee.user.username }}</p>
+                <p><strong>Email:</strong> {{ employee.user.email }}</p>
+                <p><strong>Telefonní číslo:</strong> {{ employee.phoneNumber }}</p>
+                <p><strong>Plat:</strong> {{ employee.salary }} Kč</p>
+                <p><strong>Role:</strong> 
+                    {% if employee.user.groups.exists %}
+                        {{ employee.user.groups.first.name|title }}
+                    {% else %}
+                        Role není přiřazena
+                    {% endif %}
+                </p>
+            </div>
+        </div>
 
-{% include '../common_pages/employee-profile.html' %}
-
+        <!-- Akce -->
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-primary">Upravit</a>
+            <a href="{% url 'employees' %}" class="btn btn-secondary">Zpět na seznam</a>
+        </div>
+    </div>
 {% endblock %}

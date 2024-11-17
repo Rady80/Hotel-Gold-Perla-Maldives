@@ -1,121 +1,118 @@
+<!-- 
+Hlavní kontejner pro zobrazení detailů o pokoji.
+Obsahuje informace o pokoji, možnost uzamčení/odemčení a seznam rezervací.
+-->
+
 <div class="container">
     <div class="shadow-lg p-5">
-
+        <!-- Řádek pro zobrazení detailů pokoje -->
         <div class="row mt-5">
-
+            <!-- Levý sloupec: Detaily pokoje -->
             <div class="col-6">
-
+                <!-- Číslo pokoje -->
                 <div class="p-2 h4">
-                    <span>Room Number:</span>
-                    <span class="font-weight-normal">{{room.number}}</span>
+                    <span>Číslo pokoje:</span>
+                    <span class="font-weight-normal">{{ room.number }}</span>
                 </div>
 
+                <!-- Počet postelí -->
                 <div class="p-2 h4">
-                    <span>Number Of Beds:</span>
-                    <span class="font-weight-normal">{{room.numberOfBeds}}</span>
+                    <span>Počet postelí:</span>
+                    <span class="font-weight-normal">{{ room.numberOfBeds }}</span>
                 </div>
 
+                <!-- Cena -->
                 <div class="p-2 h4">
-                    <span>Price:</span>
-                    <span class="font-weight-normal">{{room.price}}</span>
+                    <span>Cena za noc:</span>
+                    <span class="font-weight-normal">{{ room.price }} Kč</span>
                 </div>
 
+                <!-- Typ pokoje -->
                 <div class="p-2 h4">
-                    <span>Room Type:</span>
+                    <span>Typ pokoje:</span>
                     <span class="font-weight-normal">{{ room.roomType }}</span>
-
                 </div>
 
+                <!-- Kapacita pokoje -->
                 <div class="p-2 h4">
-                    <span>Capacity: </span>
-                    <span class="font-weight-normal">{{room.capacity}}</span>
-
+                    <span>Kapacita:</span>
+                    <span class="font-weight-normal">{{ room.capacity }} osoby</span>
                 </div>
-
             </div>
 
+            <!-- Pravý sloupec: Možnosti pro správu pokoje -->
             <div class="col-6">
-
-
-
                 {% if role == "manager" or role == "admin" %}
-                <div class="p-2 h4 ">
+                <div class="p-2 h4">
+                    <!-- Formulář pro uzamčení pokoje -->
                     <form action="" method="POST">
                         {% csrf_token %}
-                        <input type="date" placeholder="Enter Start Date" name="bsd" required
+                        <input type="date" name="bsd" placeholder="Začátek uzamčení" required
                             class="form-control w-50 mb-2">
-                        <input type="date" placeholder="Enter End Date" name="bed" required
+                        <input type="date" name="bed" placeholder="Konec uzamčení" required
                             class="form-control w-50 mb-2">
-                        <button name="lockRoom" type="submit" class="btn btn-info w-50">Lock This Room</button>
-                        <br>
-
+                        <button name="lockRoom" type="submit" class="btn btn-info w-50">Uzamknout pokoj</button>
                     </form>
-                    <form action="" method="POST">
+
+                    <!-- Formulář pro odemčení pokoje -->
+                    <form action="" method="POST" class="mt-3">
                         {% csrf_token %}
+                        {% if room.statusStartDate %}
                         <hr>
-                        {% if room.statusStartDate != None %}
                         <div>
-                            This room is closed in between: <br>
-                            from {{room.statusStartDate}} <br>
-                            to {{room.statusEndDate}}
-                            <br>
-                            <hr>
-                            <button name="unlockRoom" type="submit" class="btn btn-info w-50">Unlock This Room</button>
+                            Tento pokoj je aktuálně uzamčen: <br>
+                            <b>Od:</b> {{ room.statusStartDate }} <br>
+                            <b>Do:</b> {{ room.statusEndDate }} <br>
+                            <button name="unlockRoom" type="submit" class="btn btn-info w-50 mt-2">Odemknout pokoj</button>
                         </div>
+                        <hr>
                         {% endif %}
-
-                        <div id="messages">
-                            {% for m in messages %}
-
-                            <div class="alert alert-danger">{{m}}</div>
-
-                            {% endfor %}
-                        </div>
                     </form>
                 </div>
                 {% endif %}
-                <br>
 
-
-
+                <!-- Zobrazení zpráv -->
+                <div id="messages">
+                    {% for m in messages %}
+                    <div class="alert alert-danger">{{ m }}</div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
+
         <br>
 
+        <!-- Tabulka rezervací pokoje -->
         <div class="table-responsive table-striped my-5">
             <div class="table-header row">
-
                 <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-                    <h5>This room has these reservations</h5>
+                    <h5>Seznam rezervací tohoto pokoje</h5>
                 </div>
-
             </div>
-
             <table class="table table-hover table-striped">
-                <thead class="bg-secondary rounded">
+                <thead class="bg-secondary text-white">
                     <tr>
-                        {% if role != 'guest' %} <th>Guest Name</th> {% endif %}
-                        <th>From </th>
-                        <th>To</th>
+                        {% if role != 'guest' %}<th>Jméno hosta</th>{% endif %}
+                        <th>Od</th>
+                        <th>Do</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {% for bo in bookings %}
                     <tr>
-                        {% if role != 'guest' %} <td><a href="{% url 'guest-profile' bo.guest.user.id %}">
-                                {{bo.guest.user.first_name}}
-                                {{bo.guest.user.last_name}}</a></td>
-                        {%endif %}
-                        <td>{{bo.startDate}}</td>
-                        <td>{{bo.endDate}}</td>
+                        {% if role != 'guest' %}
+                        <td>
+                            <a href="{% url 'guest-profile' bo.guest.user.id %}">
+                                {{ bo.guest.user.first_name }} {{ bo.guest.user.last_name }}
+                            </a>
+                        </td>
+                        {% endif %}
+                        <td>{{ bo.startDate }}</td>
+                        <td>{{ bo.endDate }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
 </div>

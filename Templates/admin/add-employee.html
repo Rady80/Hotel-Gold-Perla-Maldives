@@ -1,7 +1,27 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Vložení šablony pro přidání zaměstnance -->
+    {% include '../common_pages/add-employee.html' %}
 
-{% include '../common_pages/add-employee.html' %}
-
+    <!-- Formulář pro přidání zaměstnance -->
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="username">Uživatelské jméno:</label>
+            <input type="text" name="username" id="username" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" required>
+        </div>
+        <div>
+            <label for="role">Role:</label>
+            <select name="role" id="role">
+                <option value="manager">Manager</option>
+                <option value="staff">Zaměstnanec</option>
+            </select>
+        </div>
+        <button type="submit">Přidat zaměstnance</button>
+    </form>
 {% endblock %}

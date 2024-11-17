@@ -1,77 +1,84 @@
+<!-- 
+Hlavní kontejner pro zobrazení detailů události.
+Obsahuje informace o události, seznam účastníků a vysvětlení.
+-->
+
 <div class="container">
 
-
+    <!-- Řádek s informacemi o události -->
     <div class="row mt-5">
+        <!-- Levý sloupec: Typ události a datum začátku -->
         <div class="col-6">
-
+            <!-- Typ události -->
             <div class="p-2 h4">
-                <span>Event Type: </span>
-                <span class="font-weight-normal">{{event.eventType}}</span>
+                <span>Typ události: </span>
+                <span class="font-weight-normal">{{ event.eventType }}</span>
             </div>
-
             <br>
-
+            <!-- Datum začátku -->
             <div class="p-2 h4">
-                <span>Start Date:</span>
-                <span class="font-weight-normal">{{event.startDate}}</span>
+                <span>Datum začátku:</span>
+                <span class="font-weight-normal">{{ event.startDate }}</span>
             </div>
-
         </div>
 
+        <!-- Pravý sloupec: Místo a datum konce -->
         <div class="col-6">
-
+            <!-- Místo -->
             <div class="p-2 h4">
-                <span>Location:</span>
-                <span class="font-weight-normal">{{event.location}}</span>
+                <span>Místo:</span>
+                <span class="font-weight-normal">{{ event.location }}</span>
             </div>
-
             <br>
-
+            <!-- Datum konce -->
             <div class="p-2 h4">
-                <span>End Date:</span>
-                <span class="font-weight-normal">{{event.endDate}}</span>
+                <span>Datum konce:</span>
+                <span class="font-weight-normal">{{ event.endDate }}</span>
             </div>
-
         </div>
     </div>
 
     <br>
 
+    <!-- Sekce s tabulkou účastníků -->
     <div class="table-responsive my-5 border-top border-secondary pt-5">
         <div class="table-header row">
-
+            <!-- Nadpis sekce -->
             <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-                <h2>Atendees</h2>
+                <h2>Účastníci</h2>
             </div>
-
         </div>
 
+        <!-- Tabulka účastníků -->
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Name Surname</th>
-                    <th>Number of Dependees</th>
+                    <th>Jméno a příjmení</th>
+                    <th>Počet doprovodu</th>
                 </tr>
             </thead>
-
             <tbody>
+                <!-- Iterace přes seznam účastníků -->
                 {% for attendee in attendees %}
                 <tr>
-                    <td>{{attendee.guest.user.first_name}} {{attendee.guest.user.last_name}}</td>
-                    <td>{{attendee.numberOfDependees}}</td>
+                    <!-- Jméno a příjmení účastníka -->
+                    <td>{{ attendee.guest.user.first_name }} {{ attendee.guest.user.last_name }}</td>
+                    <!-- Počet doprovodu -->
+                    <td>{{ attendee.numberOfDependees }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
-
         </table>
-
     </div>
 
-    <div class="explanation  pb-5">
-        <div class="header h2 border rounded p-4">Explanation</div>
+    <!-- Sekce s vysvětlením události -->
+    <div class="explanation pb-5">
+        <div class="header h2 border rounded p-4">Vysvětlení</div>
         <div class="content">
-            <p class="border rounded p-4">{{event.explanation}}</p>
+            <!-- Zobrazení vysvětlení -->
+            <p class="border rounded p-4">{{ event.explanation }}</p>
         </div>
     </div>
 
 </div>
+Co bylo vyl

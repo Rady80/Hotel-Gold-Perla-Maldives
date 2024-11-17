@@ -1,33 +1,89 @@
-<div class="container clear-fix">
+<!-- 
+Formulář pro úpravu nebo vytvoření jídelního lístku.
+Obsahuje sekci s aktuálními položkami, seznamem existujících lístků a možností resetování.
+-->
+
+<div class="container clearfix">
+    <!-- Formulář pro odeslání dat -->
     <form action="" method="POST">
-        {% csrf_token %}
-        <div class="row mt-5 clear-fix">
+        {% csrf_token %} <!-- Token CSRF pro ochranu formuláře proti podvržení -->
+
+        <!-- Řádek formuláře -->
+        <div class="row mt-5 clearfix">
+            <!-- Levý sloupec: Informace o jídelním lístku -->
             <div class="col-6 pr-3 border-right">
-
+                <!-- Pole pro zadání položek menu -->
                 <div class="form-group pt-3">
-                    <label for="menu_items"><b>Menu Items</b></label>
-                    <input type="text" class="form-control border border-secondary" id="id_menu_items"
-                        value="{{food_menu.menuItems}}" name="menuItems">
+                    <label for="menu_items"><b>Položky menu</b></label>
+                    <textarea class="form-control border border-secondary" id="id_menu_items" name="menuItems" rows="4" placeholder="Zadejte položky jídelního lístku">{{ food_menu.menuItems }}</textarea>
                 </div>
 
+                <!-- Pole pro zadání data začátku platnosti -->
                 <div class="form-group pt-3">
-                    <label for="start_date"><b>Start Date</b></label>
+                    <label for="start_date"><b>Datum začátku</b></label>
                     <input type="date" class="form-control border border-secondary" id="id_start_date" name="startDate"
-                        value="{{food_menu.startDate|date:'Y-m-d'}}">
+                        value="{{ food_menu.startDate|date:'Y-m-d' }}" required>
                 </div>
 
+                <!-- Pole pro zadání data konce platnosti -->
                 <div class="form-group">
-                    <label for="end_date"><b>End Date</b></label>
-                    <input type="date" class="form-control border border-secondary" id="id_endDate"
-                        value="{{food_menu.endDate|date:'Y-m-d'}}" name="endDate">
+                    <label for="end_date"><b>Datum konce</b></label>
+                    <input type="date" class="form-control border border-secondary" id="id_endDate" name="endDate"
+                        value="{{ food_menu.endDate|date:'Y-m-d' }}" required>
                 </div>
             </div>
 
+            <!-- Pravý sloupec: Náhled jídelního lístku -->
+            <div class="col-6 pl-3">
+                <div class="pt-3">
+                    <h4 class="border-bottom pb-2">Náhled jídelního lístku</h4>
+                    <p class="mt-3">
+                        {{ food_menu.menuItems|default:"Žádné položky zatím nejsou zadány." }}
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="clear-fix mb-5 pb-5">
 
-            <button type="submit" name="submit" class="btn btn-success float-right">Save Changes</button>
+        <!-- Tlačítka pro odeslání a resetování -->
+        <div class="clearfix mb-5 pb-5">
+            <button type="submit" name="submit" class="btn btn-success float-right">Uložit změny</button>
+            <button type="reset" class="btn btn-secondary float-left">Resetovat</button>
         </div>
     </form>
 
+    <!-- Sekce s přehledem existujících jídelních lístků -->
+    <div class="table-responsive my-5 border-top pt-5">
+        <h4>Existující jídelní lístky</h4>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Název jídelního lístku</th>
+                    <th>Datum začátku</th>
+                    <th>Datum konce</th>
+                    <th>Akce</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterace přes seznam jídelních lístků -->
+                {% for menu in existing_menus %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ menu.menuItems|truncatechars:50 }}</td>
+                    <td>{{ menu.startDate|date:'Y-m-d' }}</td>
+                    <td>{{ menu.endDate|date:'Y-m-d' }}</td>
+                    <td>
+                        <!-- Akce: úprava nebo smazání -->
+                        <a href="{% url 'edit_menu' menu.id %}" class="btn btn-primary btn-sm">Upravit</a>
+                        <a href="{% url 'delete_menu' menu.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Opravdu chcete tento jídelní lístek smazat?')">Smazat</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Žádné jídelní lístky zatím nebyly vytvořeny.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>

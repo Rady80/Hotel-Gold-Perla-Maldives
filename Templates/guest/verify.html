@@ -1,31 +1,43 @@
 {% extends '../index.html' %}
 
 {% block context %}
+<!-- Zobrazení zpráv (např. chybových nebo informačních zpráv) -->
 {% for message in messages %}
 <div class="alert alert-danger" role="alert">
-    {{message}}
+    {{ message }}
 </div>
 {% endfor %}
+
+<!-- Hlavní kontejner pro formulář ověření kódu -->
 <div class="container py-5">
     <div class="row justify-content-center">
+        <!-- Formulář pro zadání ověřovacího kódu -->
         <form action="" method="POST">
-            {% csrf_token %}
+            {% csrf_token %} <!-- CSRF token pro zabezpečení formuláře -->
+
+            <!-- Nadpis s instrukcemi pro zadání kódu -->
             <div class="row justify-content-center py-5">
-                <label class="input-group-lg" for="verification">Please Enter The Code We Sent to your Email</label>
+                <label class="input-group-lg text-center" for="verification">
+                    Zadejte kód, který jsme vám poslali na váš e-mail
+                </label>
             </div>
-            <div class="row justify-content-center py-5">
-                <input class="form-control form-control-lg" type="hidden" placeholder="Verification" id="verification"
-                    name="tempCode" value="{{code}}">
-                <input class="form-control form-control-lg" type="text" placeholder="Verification" id="verification"
-                    name="realCode">
+
+            <!-- Skryté pole pro dočasný kód (hodnota z backendu) -->
+            <div class="row justify-content-center">
+                <input type="hidden" class="form-control form-control-lg" id="verification" name="tempCode" value="{{ code }}">
             </div>
+
+            <!-- Pole pro zadání ověřovacího kódu uživatelem -->
             <div class="row justify-content-center py-5">
-                <button class="btn btn-lg btn-success py-2" name="verify" type="submit">Verify</button>
+                <input class="form-control form-control-lg text-center" type="text" placeholder="Ověřovací kód"
+                    id="verification" name="realCode" required>
+            </div>
+
+            <!-- Tlačítko pro odeslání ověřovacího kódu -->
+            <div class="row justify-content-center py-5">
+                <button class="btn btn-lg btn-success py-2" name="verify" type="submit">Ověřit</button>
             </div>
         </form>
     </div>
 </div>
-
-
-
 {% endblock %}

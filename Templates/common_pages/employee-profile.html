@@ -1,120 +1,130 @@
+<!--
+Hlavní kontejner formuláře a seznamu úkolů pro zobrazení informací o zaměstnanci.
+-->
+
 <div class="container">
 
+    <!-- Formulář pro úpravu uživatelských informací -->
     <form action="" method="POST">
-        {% csrf_token %}
+        {% csrf_token %} <!-- Token CSRF pro zabezpečení formuláře -->
+
+        <!-- Rozdělení formuláře do dvou sloupců -->
         <div class="row mt-5 clearfix">
+            
+            <!-- Levý sloupec: Osobní údaje -->
             <div class="col-6">
-
-
+                <!-- Jméno -->
                 <div class="p-2 h4">
-                    <span>Name:</span>
+                    <span>Jméno:</span>
                     {% if employee.user.id != request.user.id %}
-                    <span class="font-weight-normal">{{employee.user.first_name}} </span>
+                    <span class="font-weight-normal">{{ employee.user.first_name }}</span>
                     {% else %}
                     <input type="text" class="form-control border border-secondary" id="id_first_name"
-                        value="{{employee.user.first_name}}" name="first_name">
+                        value="{{ employee.user.first_name }}" name="first_name">
                     {% endif %}
                 </div>
 
+                <!-- Příjmení -->
                 <div class="p-2 h4">
-                    <span>Surname:</span>
+                    <span>Příjmení:</span>
                     {% if employee.user.id != request.user.id %}
-                    <span class="font-weight-normal"> {{employee.user.last_name}}</span>
+                    <span class="font-weight-normal">{{ employee.user.last_name }}</span>
                     {% else %}
                     <input type="text" class="form-control border border-secondary" id="id_last_name"
-                        value="{{employee.user.last_name}}" name="last_name">
+                        value="{{ employee.user.last_name }}" name="last_name">
                     {% endif %}
                 </div>
 
-
-
                 <br>
 
+                <!-- Email -->
                 <div class="p-2 h4">
-                    <span>Email :</span>
-                    <span class="font-weight-normal">{{employee.user.email}}</span>
+                    <span>Email:</span>
+                    <span class="font-weight-normal">{{ employee.user.email }}</span>
                 </div>
 
                 <br>
 
+                <!-- Datum vytvoření -->
                 <div class="p-2 h4">
-                    <span>Creation Date:</span>
-                    <span class="font-weight-normal">{{employee.user.date_joined}}</span>
+                    <span>Datum vytvoření:</span>
+                    <span class="font-weight-normal">{{ employee.user.date_joined }}</span>
                 </div>
-
             </div>
 
+            <!-- Pravý sloupec: Informace o zaměstnanci -->
             <div class="col-6">
-
+                <!-- Telefonní číslo -->
                 <div class="p-2 h4">
-                    <span>Phone Number: </span>
+                    <span>Telefonní číslo:</span>
                     {% if employee.user.id != request.user.id %}
-
-                    <span class="font-weight-normal">{{employee.phoneNumber}}</span>
+                    <span class="font-weight-normal">{{ employee.phoneNumber }}</span>
                     {% else %}
                     <input type="text" class="form-control border border-secondary" id="id_phoneNumber"
-                        value="{{employee.phoneNumber}}" name="phoneNumber">
+                        value="{{ employee.phoneNumber }}" name="phoneNumber">
                     {% endif %}
                 </div>
 
                 <br>
 
+                <!-- Role -->
                 <div class="p-2 h4">
-                    <span>Role :</span>
-                    <span class="font-weight-normal">{{employee.user.groups.first}}</span>
+                    <span>Role:</span>
+                    <span class="font-weight-normal">{{ employee.user.groups.first }}</span>
                 </div>
 
                 <br>
 
+                <!-- Plat -->
                 <div class="p-2 h4">
-                    <span>Salary:</span>
-                    <span class="font-weight-normal">{{employee.salary}}</span>
+                    <span>Plat:</span>
+                    <span class="font-weight-normal">{{ employee.salary }}</span>
                 </div>
-
             </div>
         </div>
+
+        <!-- Tlačítko pro uložení změn (zobrazí se pouze, pokud upravovaný uživatel je aktuální uživatel) -->
         {% if employee.user.id == request.user.id %}
-        <button type="submit" name="submit" class="btn btn-success float-right">Save Changes</button>
+        <button type="submit" name="submit" class="btn btn-success float-right">Uložit změny</button>
         {% endif %}
         <br>
     </form>
+
     <br>
 
+    <!-- Tabulka seznamu úkolů (zobrazuje se jen pro zaměstnance s rolí staff nebo pro jiné uživatele než aktuální) -->
     {% if role == 'staff' or request.user != employee.user %}
     <div class="table-responsive my-5">
+        <!-- Hlavička tabulky -->
         <div class="table-header row">
-
             <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-                <h2>Task List</h2>
+                <h2>Seznam úkolů</h2>
             </div>
-
         </div>
 
+        <!-- Tabulka s úkoly -->
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Task ID</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Description</th>
+                    <th>ID úkolu</th>
+                    <th>Datum zahájení</th>
+                    <th>Datum dokončení</th>
+                    <th>Popis</th>
                 </tr>
             </thead>
 
             <tbody>
+                <!-- Iterace přes seznam úkolů -->
                 {% for tasks in tasks %}
                 <tr>
-                    <td>{{tasks.id}}</td>
-                    <td>{{tasks.startTime}}</td>
-                    <td>{{tasks.endTime}}</td>
-                    <td>{{tasks.description}}</td>
+                    <td>{{ tasks.id }}</td>
+                    <td>{{ tasks.startTime }}</td>
+                    <td>{{ tasks.endTime }}</td>
+                    <td>{{ tasks.description }}</td>
                 </tr>
                 {% endfor %}
-
             </tbody>
-
         </table>
-
     </div>
     {% endif %}
-
 </div>

@@ -1,21 +1,22 @@
 <div class="row justify-content-center m-5">
-
+    <!-- Karta pro potvrzení smazání -->
     <div class="card border-danger shadow-lg w-75">
-
         <div class="card-body">
+            <!-- Text pro potvrzení smazání -->
+            <p class="text-center h5 text-danger">
+                Opravdu chcete smazat vybrané oznámení?
+            </p>
 
-            <p>Are you sure you want to delete The selected Announcement ?</p>
-
-            <form action="{% url 'deleteAnnouncement' announcement.id %}" method="POST">
+            <!-- Formulář pro smazání oznámení -->
+            <form action="{% url 'deleteAnnouncement' announcement.id %}" method="POST" class="text-center">
                 {% csrf_token %}
-                <a class="btn btn-info" href="{% url 'announcements' %}">Cancel</a>
-
-                <input class="btn btn-danger" type="submit" value="Confirm">
+                
+                <!-- Tlačítko pro zrušení -->
+                <a class="btn btn-secondary mx-2" href="{% url 'announcements' %}">Zrušit</a>
+                
+                <!-- Tlačítko pro potvrzení -->
+                <input class="btn btn-danger mx-2" type="submit" value="Potvrdit">
             </form>
-
         </div>
-
     </div>
-
 </div>
-&nbsp

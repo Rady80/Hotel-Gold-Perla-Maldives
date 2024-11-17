@@ -1,32 +1,55 @@
+/* Reset stylů */
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box; /* Lepší správa velikosti prvků */
     -webkit-font-smoothing: antialiased;
 }
 
+/* Vyčištění přetékajícího obsahu */
 .clearfix {
     overflow: auto;
 }
 
+/* Základní nastavení těla stránky */
 body {
     position: relative;
+    font-family: Arial, sans-serif; /* Nastavení výchozího fontu */
+    line-height: 1.6; /* Lepší čitelnost textu */
+    background-color: #f9f9f9; /* Jemné pozadí */
 }
 
-/*Navbar*/
+/* Navigace */
 nav .nav-item {
     font-size: 20px;
+    font-weight: 500; /* Zvýraznění textu navigace */
+    color: #333; /* Kontrastní barva textu */
 }
 
+nav .nav-item:hover {
+    color: #007bff; /* Zvýraznění při najetí myší */
+    cursor: pointer;
+    text-decoration: underline; /* Zvýraznění odkazu */
+}
 
-/*Footer*/
+/* Patička */
 .footer {
-    position: absolute;
+    position: fixed; /* Patička je pevná dole */
     bottom: 0;
     width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 60px;
-    line-height: 60px;
-    /* Vertically center the text there */
-    background-color: #e2dada;
-    margin-top: 30px;
+    height: 60px; /* Pevná výška */
+    line-height: 60px; /* Vertikální zarovnání textu */
+    background-color: #e2dada; /* Světlá barva pozadí */
+    text-align: center; /* Text na střed */
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Jemný stín pro oddělení */
+}
+
+.footer a {
+    color: #007bff; /* Barva odkazů v patičce */
+    text-decoration: none; /* Odstranění podtržení */
+}
+
+.footer a:hover {
+    text-decoration: underline; /* Podtržení při najetí */
+    color: #0056b3; /* Tmavší barva při najetí myší */
 }

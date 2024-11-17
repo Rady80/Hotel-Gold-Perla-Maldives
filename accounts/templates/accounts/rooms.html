@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+Seznam pokojů
+{% endblock %}
+
+{% block content %}
+<h1>Seznam pokojů</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Číslo</th>
+            <th>Kapacita</th>
+            <th>Počet postelí</th>
+            <th>Typ</th>
+            <th>Cena</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for room in rooms %}
+        <tr>
+            <td>{{ room.number }}</td>
+            <td>{{ room.capacity }}</td>
+            <td>{{ room.numberOfBeds }}</td>
+            <td>{{ room.roomType }}</td>
+            <td>{{ room.price }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

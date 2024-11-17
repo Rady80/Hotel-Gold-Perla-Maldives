@@ -1,7 +1,75 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Seznam autorizovaných zaměstnanců -->
+    <div class="container mt-4">
+        <h2 class="text-primary">Seznam zaměstnanců</h2>
 
-{% include '../common_pages/authorized-employees.html' %}
+        <!-- Filtrační formulář -->
+        <form method="POST" class="mb-4">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="username" class="form-label">Uživatelské jméno:</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Vyhledat uživatele">
+                </div>
+                <div class="col-md-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Vyhledat email">
+                </div>
+                <div class="col-md-3">
+                    <label for="role" class="form-label">Role:</label>
+                    <select id="role" name="role" class="form-select">
+                        <option value="">Všechny role</option>
+                        <option value="manager">Manager</option>
+                        <option value="staff">Zaměstnanec</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filtruj</button>
+                </div>
+            </div>
+        </form>
 
+        <!-- Tabulka zaměstnanců -->
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Jméno</th>
+                    <th>Email</th>
+                    <th>Telefonní číslo</th>
+                    <th>Plat</th>
+                    <th>Role</th>
+                    <th>Akce</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ employee.user.first_name }} {{ employee.user.last_name }}</td>
+                        <td>{{ employee.user.email }}</td>
+                        <td>{{ employee.phoneNumber }}</td>
+                        <td>{{ employee.salary }} Kč</td>
+                        <td>
+                            {% if employee.user.groups.exists %}
+                                {{ employee.user.groups.first.name|title }}
+                            {% else %}
+                                Není přiřazena
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'employee-profile' employee.id %}" class="btn btn-info btn-sm">Profil</a>
+                            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-warning btn-sm">Upravit</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">Žádní zaměstnanci k zobrazení.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

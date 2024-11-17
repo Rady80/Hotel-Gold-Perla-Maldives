@@ -1,85 +1,83 @@
+<!--
+Formulář pro úpravu nebo vytvoření události.
+Používá Bootstrap pro zarovnání, stylování a responsivitu.
+-->
+
 <div class="container">
+    <!-- Hlavní formulář -->
     <form action="" method="POST">
-        {% csrf_token %}
+        {% csrf_token %} <!-- Token CSRF pro ochranu formuláře proti podvržení -->
+
+        <!-- První řádek formuláře -->
         <div class="row mt-5">
-            <div class="col-6  border-right pr-5">
-
+            <!-- Levý sloupec: Typ události a začátek -->
+            <div class="col-6 border-right pr-5">
+                <!-- Výběr typu události -->
                 <div class="form-group row">
-                    <label for="item-type" class="col-sm-3 col-form-label h4">Event Type:</label>
+                    <label for="item-type" class="col-sm-3 col-form-label h4">Typ události:</label>
                     <div class="col-sm-9">
-                        <select name="eventType" required="" id="id_eventType" class="form-control">
-                            <option value="Movie" {% if event.eventType == 'Movie' %} selected="" {% endif %}>Movie
-                            </option>
-
-                            <option value="Theater" {% if event.eventType == 'Theater' %} selected="" {% endif %}>
-                                Theater
-                            </option>
-
-                            <option value="Conference" {% if event.eventType == 'Conference' %} selected="" {% endif %}>
-                                Conference</option>
-
-                            <option value="Concert" {% if event.eventType == 'Concert' %} selected="" {% endif %}>
-                                Concert
-                            </option>
-
-                            <option value="Entertainment" {% if event.eventType == 'Entertainment' %} selected=""
-                                {% endif %}>Entertainment</option>
-
-                            <option value="Live Music" {% if event.eventType == 'Live Music' %} selected="" {% endif %}>
-                                Live Music</option>
-
+                        <select name="eventType" required id="id_eventType" class="form-control">
+                            <!-- Možnosti s předvybranou hodnotou -->
+                            <option value="Movie" {% if event.eventType == 'Movie' %} selected {% endif %}>Film</option>
+                            <option value="Theater" {% if event.eventType == 'Theater' %} selected {% endif %}>Divadlo</option>
+                            <option value="Conference" {% if event.eventType == 'Conference' %} selected {% endif %}>Konference</option>
+                            <option value="Concert" {% if event.eventType == 'Concert' %} selected {% endif %}>Koncert</option>
+                            <option value="Entertainment" {% if event.eventType == 'Entertainment' %} selected {% endif %}>Zábava</option>
+                            <option value="Live Music" {% if event.eventType == 'Live Music' %} selected {% endif %}>Živá hudba</option>
                         </select>
                     </div>
                 </div>
 
                 <br>
 
+                <!-- Datum začátku -->
                 <div class="form-group row">
-                    <label for="item-type" class="col-sm-3 col-form-label h4">Start Date:</label>
+                    <label for="id_startDate" class="col-sm-3 col-form-label h4">Začátek:</label>
                     <div class="col-sm-9">
                         <input type="date" class="form-control" id="id_startDate" name="startDate"
-                            value="{{ event.startDate|date:'Y-m-d'}}">
+                            value="{{ event.startDate|date:'Y-m-d' }}">
                     </div>
                 </div>
-
             </div>
 
+            <!-- Pravý sloupec: Umístění a konec -->
             <div class="col-6 pl-5">
-
+                <!-- Umístění události -->
                 <div class="form-group row">
-                    <label for="item-type" class="col-sm-3 col-form-label h4">Location:</label>
+                    <label for="id_location" class="col-sm-3 col-form-label h4">Místo:</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="id_location" name="location"
-                            value="{{event.location}}">
+                            value="{{ event.location }}">
                     </div>
                 </div>
 
                 <br>
 
+                <!-- Datum konce -->
                 <div class="form-group row">
-                    <label for="item-type" class="col-sm-3 col-form-label h4">End Date:</label>
+                    <label for="id_endDate" class="col-sm-3 col-form-label h4">Konec:</label>
                     <div class="col-sm-9">
                         <input type="date" class="form-control" id="id_endDate" name="endDate"
                             value="{{ event.endDate|date:'Y-m-d' }}">
                     </div>
                 </div>
-
             </div>
         </div>
 
         <br>
 
+        <!-- Sekce pro vysvětlení -->
         <div class="explanation py-5 border-top border-secondary">
-            <div class="header h2 border rounded p-4">Explanation</div>
+            <div class="header h2 border rounded p-4">Vysvětlení</div>
             <div class="content">
+                <!-- Pole pro zadání vysvětlení -->
                 <div class="form-group">
-                    <textarea class="form-control" id="id_explanation" name="explanation" rows="8">
-                    {{ event.explanation }}
-                    </textarea>
+                    <textarea class="form-control" id="id_explanation" name="explanation" rows="8">{{ event.explanation }}</textarea>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success btn-lg px-5 float-right">Save</button>
-        </div>
 
+            <!-- Tlačítko pro uložení -->
+            <button type="submit" class="btn btn-success btn-lg px-5 float-right">Uložit</button>
+        </div>
     </form>
 </div>

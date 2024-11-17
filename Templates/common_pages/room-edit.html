@@ -1,58 +1,79 @@
+<!-- 
+Hlavní kontejner pro úpravu údajů o pokojích v hotelu.
+Obsahuje formulář pro zadání informací o pokoji a popis vybavení dle typu pokoje.
+-->
+
 <div class="container">
     <div class="shadow-lg p-5">
+        <!-- Formulář pro úpravu informací o pokoji -->
         <form action="" method="POST">
             {% csrf_token %}
             <div class="row mt-5">
+                <!-- Levá část: Počet postelí a cena -->
                 <div class="col-6">
-
+                    <!-- Pole pro počet postelí -->
                     <div class="form-group">
-                        <label for="item-quantity"><b>Number Of Beds: </b></label>
+                        <label for="id_numberOfBeds"><b>Počet postelí:</b></label>
                         <input type="number" min="0" class="form-control border border-secondary"
-                            value="{{room.numberOfBeds}}" id="id_numberOfBeds" name="numberOfBeds">
+                            value="{{ room.numberOfBeds }}" id="id_numberOfBeds" name="numberOfBeds" required>
                     </div>
 
+                    <!-- Pole pro cenu -->
                     <div class="form-group">
-                        <label for="item-quantity"><b>Price: </b></label>
+                        <label for="id_price"><b>Cena za noc (Kč):</b></label>
                         <input type="number" min="0" step="0.01" class="form-control border border-secondary"
-                            value="{{room.price}}" id="id_price" name="price">
+                            value="{{ room.price }}" id="id_price" name="price" required>
                     </div>
-
                 </div>
 
+                <!-- Pravá část: Kapacita a typ pokoje -->
                 <div class="col-6">
-
-                    <div class="form-group ">
-                        <label for="item-type"><b>Capacity : </b></label>
+                    <!-- Pole pro kapacitu -->
+                    <div class="form-group">
+                        <label for="id_capacity"><b>Kapacita (osoby):</b></label>
                         <input type="number" min="1" class="form-control border border-secondary"
-                            value="{{room.capacity}}" id="id_capacity" name="capacity">
+                            value="{{ room.capacity }}" id="id_capacity" name="capacity" required>
                     </div>
 
+                    <!-- Výběr typu pokoje -->
                     <div class="form-group">
-                        <label for="item-quantity"><b>Room Type</b></label>
-                        <select name="roomType" required="" id="id_roomType"
-                            class="form-control border border-secondary">
-
+                        <label for="id_roomType"><b>Typ pokoje:</b></label>
+                        <select name="roomType" id="id_roomType" class="form-control border border-secondary" required>
                             <option value="King" {% if room.roomType == 'King' %} selected {% endif %}>King</option>
-
-                            <option value="Luxury" {% if room.roomType == 'Luxury' %} selected {% endif %}>Luxury
-                            </option>
-
-                            <option value="Normal" {% if room.roomType == 'Normal' %} selected {% endif %}>Normal
-                            </option>
-
-                            <option value="Economic" {% if room.roomType == 'Economic' %} selected {% endif %}>Economic
-                            </option>
-
+                            <option value="Luxury" {% if room.roomType == 'Luxury' %} selected {% endif %}>Luxury</option>
+                            <option value="Normal" {% if room.roomType == 'Normal' %} selected {% endif %}>Normal</option>
+                            <option value="Economic" {% if room.roomType == 'Economic' %} selected {% endif %}>Economic</option>
                         </select>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-outline-success float-right">Save
-                        Changes</button>
-                </div>
 
+                    <!-- Tlačítko pro uložení změn -->
+                    <button type="submit" name="submit" class="btn btn-outline-success float-right">Uložit změny</button>
+                </div>
             </div>
         </form>
+
         <br>
 
-
+        <!-- Sekce s popisem vybavení dle typu pokoje -->
+        <div class="room-description mt-5">
+            <h3>Popis vybavení dle typu pokoje</h3>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <b>King:</b> Velká manželská postel, klimatizace, televizor, minibar, vlastní koupelna s vanou,
+                    pracovní stůl.
+                </li>
+                <li class="list-group-item">
+                    <b>Luxury:</b> Dvě oddělené postele, klimatizace, televizor, minibar, vlastní koupelna se sprchou,
+                    kávovar.
+                </li>
+                <li class="list-group-item">
+                    <b>Normal:</b> Manželská postel nebo dvě oddělené postele, televizor, základní koupelna se sprchou,
+                    šatní skříň.
+                </li>
+                <li class="list-group-item">
+                    <b>Economic:</b> Jednolůžko, společná koupelna na chodbě, stůl, šatní skříň.
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

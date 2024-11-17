@@ -1,24 +1,26 @@
 <div class="row justify-content-center m-5">
-
+    <!-- Karta pro potvrzení smazání rezervace -->
     <div class="card border-danger shadow-lg w-75">
-
         <div class="card-body">
+            <!-- Nadpis a informace o rezervaci -->
+            <p class="text-center h5 text-danger">
+                Opravdu chcete smazat tuto rezervaci?
+            </p>
+            <br>
+            <p><strong>Číslo pokoje:</strong> {{ booking.roomNumber.number }}</p>
+            <p><strong>Jméno hosta:</strong> {{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }}</p>
+            <p><strong>Období rezervace:</strong> od {{ booking.startDate }} do {{ booking.endDate }}</p>
 
-            <p>Are you sure you want to delete This Booking : ?</p> <br>
-            <p>Room number : {{ booking.roomNumber.number }} </p> <br>
-            <p>Guest name : {{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }}</p><br>
-            <p>from {{ booking.startDate }} to {{ booking.endDate }}</p>
-
-            <form action="{% url 'deleteBooking' booking.id %}" method="post">
+            <!-- Formulář pro potvrzení nebo zrušení -->
+            <form action="{% url 'deleteBooking' booking.id %}" method="POST" class="text-center mt-4">
                 {% csrf_token %}
-                <a class="btn btn-info" href="{% url 'bookings' %}">Cancel</a>
+                
+                <!-- Tlačítko pro zrušení -->
+                <a class="btn btn-secondary mx-2" href="{% url 'bookings' %}">Zrušit</a>
 
-                <input class="btn btn-danger" type="submit" value="Confirm">
+                <!-- Tlačítko pro potvrzení -->
+                <input class="btn btn-danger mx-2" type="submit" value="Potvrdit">
             </form>
-
         </div>
-
     </div>
-
 </div>
-&nbsp

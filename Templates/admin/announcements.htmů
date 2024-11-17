@@ -1,7 +1,55 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Vložení šablony pro autorizovaná oznámení -->
+    {% include '../common_pages/authorized-announcements.html' %}
 
-{% include '../common_pages/authorized-announcements.html' %}
+    <!-- Seznam oznámení -->
+    <section>
+        <h2>Autorizovaná Oznámení</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Obsah</th>
+                    <th>Datum</th>
+                    <th>Odesílatel</th>
+                    <th>Akce</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for announcement in announcements %}
+                <tr>
+                    <td>{{ announcement.id }}</td>
+                    <td>{{ announcement.content }}</td>
+                    <td>{{ announcement.date }}</td>
+                    <td>{{ announcement.sender.user.username }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'delete-announcement' announcement.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Smazat</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">Žádná oznámení k zobrazení.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 
+    <!-- Formulář pro přidání oznámení -->
+    <section>
+        <h2>Přidat Nové Oznámení</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                <label for="content">Obsah Oznámení:</label>
+                <textarea name="content" id="content" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Odeslat</button>
+        </form>
+    </section>
 {% endblock %}
