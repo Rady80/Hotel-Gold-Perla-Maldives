@@ -123,10 +123,10 @@ class Storage(models.Model):
     )
     itemName = models.CharField(max_length=100, verbose_name="Název položky")
     itemType = models.CharField(max_length=20, choices=ITEM_TYPES, verbose_name="Typ položky")
-    quantitiy = models.IntegerField(verbose_name="Množství")
+    quantity = models.IntegerField(verbose_name="Množství")  # Opraven překlep
 
     def __str__(self):
-        return f"{self.itemName} ({self.quantitiy} ks)"
+        return f"{self.itemName} ({self.quantity} ks)"
 
     class Meta:
         verbose_name = "Skladová položka"

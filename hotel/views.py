@@ -1,15 +1,10 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
-from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.models import Group
-from django.db.models import Q
-from datetime import datetime, date, timedelta
-from .forms import *
-from accounts.models import Guest, Employee
+from .models import FoodMenu
+from .forms import EditFoodMenuForm
 from hotel.models import *
+from accounts.models import Guest, Employee
 from room.models import *
 
 # Domovská stránka
@@ -22,24 +17,23 @@ def home(request):
     context = {"role": role}
     return render(request, "home.html", context)
 
-
 # Události
 @login_required(login_url='login')
 def events(request):
     """
     Správa událostí - filtrování a správa účasti na událostech.
     """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
+    role = str(request.user.groups.first())  # Získání role přihlášeného uživatele
+    path = f"{role}/"  # Nastavení cesty šablony na základě role
 
-    events = Event.objects.all()
+    events = Event.objects.all()  # Načtení všech událostí
     attended_events = None
 
     if role == 'guest':
         attended_events = EventAttendees.objects.filter(guest=request.user.guest)
 
     if request.method == "POST":
-        # Filtrování událostí
+        # Filtrování událostí podle kritérií
         if "filter" in request.POST:
             filters = {
                 "eventType__contains": request.POST.get("type"),
@@ -57,7 +51,7 @@ def events(request):
                 EventAttendees.objects.create(event=temp_event, guest=request.user.guest)
             return redirect('events')
 
-        # Odebrání účasti
+        # Odebrání účasti na události
         if 'remove' in request.POST:
             temp_event = events.get(id=request.POST.get('id'))
             EventAttendees.objects.filter(event=temp_event, guest=request.user.guest).delete()
@@ -71,15 +65,14 @@ def events(request):
     }
     return render(request, f"{path}events.html", context)
 
-
 # Vytvoření události
 @login_required(login_url='login')
 def create_event(request):
     """
     Umožňuje vytvoření nové události.
     """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
+    role = str(request.user.groups.first())  # Získání role přihlášeného uživatele
+    path = f"{role}/"  # Nastavení cesty šablony na základě role
 
     form = CreateEventForm()
     if request.method == "POST":
@@ -90,6 +83,21 @@ def create_event(request):
 
     return render(request, f"{path}create_event.html", {'form': form, "role": role})
 
+# Editace jídelního menu
+@login_required(login_url='login')
+def edit_food_menu(request, menu_id):
+    """
+    View pro úpravu jídelního menu.
+    """
+    menu = get_object_or_404(FoodMenu, id=menu_id)  # Načtení konkrétního menu
+    if request.method == "POST":
+        form = EditFoodMenuForm(request.POST, instance=menu)
+        if form.is_valid():
+            form.save()
+            return redirect("menu_list")  # Přesměrování na seznam menu po uložení
+    else:
+        form = EditFoodMenuForm(instance=menu)
+    return render(request, "hotel/edit_food_menu.html", {"form": form, "menu": menu})
 
 # Smazání události
 @login_required(login_url='login')
@@ -97,8 +105,8 @@ def delete_event(request, pk):
     """
     Smazání vybrané události.
     """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
+    role = str(request.user.groups.first())  # Získání role přihlášeného uživatele
+    path = f"{role}/"  # Nastavení cesty šablony na základě role
 
     event = Event.objects.get(id=pk)
     if request.method == "POST":
@@ -107,76 +115,23 @@ def delete_event(request, pk):
 
     return render(request, f"{path}delete_event.html", {"event": event, "role": role})
 
-
-# Oznámení
-@login_required(login_url='login')
-def announcements(request):
-    """
-    Správa oznámení - filtrování a přidávání nových oznámení.
-    """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
-
-    announcements = Announcement.objects.all()
-    if request.method == "POST":
-        # Filtrování oznámení
-        if "filter" in request.POST:
-            filters = {
-                "content__icontains": request.POST.get("content"),
-                "date": request.POST.get("date"),
-            }
-            filters = {key: value for key, value in filters.items() if value}
-            announcements = announcements.filter(**filters)
-
-        # Přidání oznámení
-        if "sendAnnouncement" in request.POST:
-            Announcement.objects.create(
-                sender=request.user.employee,
-                content=request.POST.get('textid')
-            )
-            return redirect('announcements')
-
-    return render(request, f"{path}announcements.html", {
-        "role": role,
-        "announcements": announcements,
-        "filters": request.POST,
-    })
-
-
-# Smazání oznámení
-@login_required(login_url='login')
-def delete_announcement(request, pk):
-    """
-    Smazání vybraného oznámení.
-    """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
-
-    announcement = Announcement.objects.get(id=pk)
-    if request.method == "POST":
-        announcement.delete()
-        return redirect('announcements')
-
-    return render(request, f"{path}delete_announcement.html", {"announcement": announcement, "role": role})
-
-
 # Sklad
 @login_required(login_url='login')
 def storage(request):
     """
     Správa skladových položek.
     """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
+    role = str(request.user.groups.first())  # Získání role přihlášeného uživatele
+    path = f"{role}/"  # Nastavení cesty šablony na základě role
 
-    storage_items = Storage.objects.all()
+    storage_items = Storage.objects.all()  # Načtení všech skladových položek
     if request.method == "POST":
         # Přidání položky do skladu
         if "add" in request.POST:
             Storage.objects.create(
                 itemName=request.POST.get("itemName"),
                 itemType=request.POST.get("itemType"),
-                quantitiy=request.POST.get("quantitiy"),
+                quantity=request.POST.get("quantity"),
             )
         # Filtrování skladu
         elif "filter" in request.POST:
@@ -193,19 +148,11 @@ def storage(request):
         "filters": request.POST,
     })
 
+# hotel/views.py
+from django.shortcuts import render
 
-# Smazání skladové položky
-@login_required(login_url='login')
-def delete_storage(request, pk):
+def pearl_view(request):
     """
-    Smazání položky ze skladu.
+    View pro zobrazení Zlaté Perly.
     """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
-
-    storage_item = Storage.objects.get(id=pk)
-    if request.method == "POST":
-        storage_item.delete()
-        return redirect('storage')
-
-    return render(request, f"{path}delete_storage.html", {"storage_item": storage_item, "role": role})
+    return render(request, 'pearl.html')
