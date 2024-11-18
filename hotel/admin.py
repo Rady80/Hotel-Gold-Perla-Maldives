@@ -4,19 +4,23 @@ from .models import (
 )
 
 
-# Registrace modelu Announcement
+# ------------------------------
+# Administrace oznámení (Announcement)
+# ------------------------------
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     """
     Konfigurace zobrazení oznámení v administraci.
     """
-    list_display = ('content', 'sender', 'date')  # Sloupce zobrazené v seznamu
-    search_fields = ('content',)  # Pole, ve kterých lze vyhledávat
+    list_display = ('content', 'sender', 'date')  # Zobrazené sloupce v přehledu
+    search_fields = ('content', 'sender__username')  # Vyhledávací pole
     list_filter = ('date', 'sender')  # Filtry na bočním panelu
-    ordering = ('-date',)  # Výchozí řazení (od nejnovějšího)
+    ordering = ('-date',)  # Výchozí řazení (od nejnovějších oznámení)
 
 
-# Registrace modelu Event
+# ------------------------------
+# Administrace událostí (Event)
+# ------------------------------
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     """
@@ -24,11 +28,13 @@ class EventAdmin(admin.ModelAdmin):
     """
     list_display = ('eventType', 'location', 'startDate', 'endDate')  # Zobrazené sloupce
     search_fields = ('eventType', 'location')  # Pole pro vyhledávání
-    list_filter = ('startDate', 'endDate')  # Filtry na postranním panelu
-    ordering = ('-startDate',)  # Výchozí řazení
+    list_filter = ('startDate', 'endDate')  # Filtry na bočním panelu
+    ordering = ('-startDate',)  # Výchozí řazení podle začátku události
 
 
-# Registrace modelu EventAttendees
+# ------------------------------
+# Administrace účastníků událostí (EventAttendees)
+# ------------------------------
 @admin.register(EventAttendees)
 class EventAttendeesAdmin(admin.ModelAdmin):
     """
@@ -36,10 +42,12 @@ class EventAttendeesAdmin(admin.ModelAdmin):
     """
     list_display = ('event', 'guest', 'numberOfDependees')  # Zobrazené sloupce
     search_fields = ('event__eventType', 'guest__user__username')  # Vyhledávací pole
-    list_filter = ('event',)  # Filtry na postranním panelu
+    list_filter = ('event',)  # Filtry na bočním panelu
 
 
-# Registrace modelu Bills
+# ------------------------------
+# Administrace faktur (Bills)
+# ------------------------------
 @admin.register(Bills)
 class BillsAdmin(admin.ModelAdmin):
     """
@@ -47,11 +55,13 @@ class BillsAdmin(admin.ModelAdmin):
     """
     list_display = ('guest', 'totalAmount', 'date')  # Zobrazené sloupce
     search_fields = ('guest__user__username', 'totalAmount')  # Vyhledávací pole
-    list_filter = ('date',)  # Filtry na postranním panelu
-    ordering = ('-date',)  # Výchozí řazení (od nejnovějšího)
+    list_filter = ('date',)  # Filtry na bočním panelu
+    ordering = ('-date',)  # Výchozí řazení podle data (od nejnovějších)
 
 
-# Registrace modelu FoodMenu
+# ------------------------------
+# Administrace jídelního menu (FoodMenu)
+# ------------------------------
 @admin.register(FoodMenu)
 class FoodMenuAdmin(admin.ModelAdmin):
     """
@@ -59,10 +69,12 @@ class FoodMenuAdmin(admin.ModelAdmin):
     """
     list_display = ('startDate', 'endDate', 'menuItems')  # Zobrazené sloupce
     search_fields = ('menuItems',)  # Vyhledávací pole
-    ordering = ('-startDate',)  # Výchozí řazení
+    ordering = ('-startDate',)  # Výchozí řazení podle začátku platnosti menu
 
 
-# Registrace modelu Report
+# ------------------------------
+# Administrace reportů (Report)
+# ------------------------------
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     """
@@ -70,11 +82,13 @@ class ReportAdmin(admin.ModelAdmin):
     """
     list_display = ('date', 'content')  # Zobrazené sloupce
     search_fields = ('content',)  # Vyhledávací pole
-    list_filter = ('date',)  # Filtry na postranním panelu
-    ordering = ('-date',)  # Výchozí řazení (od nejnovějšího)
+    list_filter = ('date',)  # Filtry na bočním panelu
+    ordering = ('-date',)  # Výchozí řazení (od nejnovějších reportů)
 
 
-# Registrace modelu Storage
+# ------------------------------
+# Administrace skladu (Storage)
+# ------------------------------
 @admin.register(Storage)
 class StorageAdmin(admin.ModelAdmin):
     """
@@ -82,5 +96,5 @@ class StorageAdmin(admin.ModelAdmin):
     """
     list_display = ('itemName', 'itemType', 'quantity')  # Zobrazené sloupce
     search_fields = ('itemName',)  # Vyhledávací pole
-    list_filter = ('itemType',)  # Filtry na postranním panelu
-    ordering = ('itemName',)  # Výchozí řazení
+    list_filter = ('itemType',)  # Filtry na bočním panelu
+    ordering = ('itemName',)  # Výchozí řazení podle názvu položky

@@ -24,12 +24,8 @@ class Guest(models.Model):
         """
         Vrací celkový počet dní všech rezervací hosta.
         """
-        total_days = 0
         bookings = Booking.objects.filter(guest=self)
-        for booking in bookings:
-            day_count = booking.endDate - booking.startDate
-            total_days += day_count.days
-        return total_days
+        return sum((booking.endDate - booking.startDate).days for booking in bookings)
 
     def numOfLastBookingDays(self):
         """
@@ -37,9 +33,7 @@ class Guest(models.Model):
         Pokud není žádná rezervace, vrátí 0.
         """
         last_booking = Booking.objects.filter(guest=self).last()
-        if last_booking:
-            return (last_booking.endDate - last_booking.startDate).days
-        return 0
+        return (last_booking.endDate - last_booking.startDate).days if last_booking else 0
 
     def currentRoom(self):
         """
@@ -59,10 +53,11 @@ class Employee(models.Model):
     Model pro zaměstnance.
     Každý zaměstnanec je propojen s uživatelem a obsahuje informace o telefonním čísle a platu.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Uživatel")
     phoneNumber = PhoneNumberField(unique=True, verbose_name="Telefonní číslo")
-    salary = models.FloatField(verbose_name="Plat")
-    salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Povolení prázdných hodnot
+    salary = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Plat"
+    )
 
     def __str__(self):
         return f"{self.user.username} (Zaměstnanec)"
@@ -86,7 +81,10 @@ class Task(models.Model):
     description = models.TextField(verbose_name="Popis úkolu")
 
     def __str__(self):
-        return f"Úkol pro {self.employee.user.username} ({self.startTime.strftime('%d.%m.%Y %H:%M')} - {self.endTime.strftime('%d.%m.%Y %H:%M')})"
+        return (
+            f"Úkol pro {self.employee.user.username} "
+            f"({self.startTime.strftime('%d.%m.%Y %H:%M')} - {self.endTime.strftime('%d.%m.%Y %H:%M')})"
+        )
 
     class Meta:
         verbose_name = "Úkol"

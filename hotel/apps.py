@@ -6,16 +6,21 @@ class HotelConfig(AppConfig):
     """
     Konfigurace aplikace 'hotel'.
     """
-    default_auto_field = 'django.db.models.BigAutoField'  # Nastavení výchozího pole ID pro modely
-    name = 'hotel'  # Název aplikace
-    verbose_name = _('Správa hotelu')  # Přátelský název aplikace pro administraci (s lokalizací)
+    default_auto_field = 'django.db.models.BigAutoField'  # Výchozí pole ID pro modely
+    name = 'hotel'  # Název aplikace (musí odpovídat názvu složky aplikace)
+    verbose_name = _('Správa hotelu')  # Přátelský název aplikace pro administraci (s podporou lokalizace)
 
     def ready(self):
         """
-        Inicializace aplikace při startu Django, například registrace signálů.
+        Inicializace aplikace při startu Django.
+
+        Tato metoda se používá například pro:
+        - Registraci signálů
+        - Nastavení specifických procesů při spuštění aplikace
         """
         try:
-            import hotel.signals  # Registrace signálů
-        except ImportError:
-            # Pokud signály nejsou potřeba nebo soubor neexistuje, chyba je ignorována
+            import hotel.signals  # Registrace signálů (pokud existují)
+        except ImportError as e:
+            # Pokud soubor se signály neexistuje, chyba je ignorována
+            # Můžete přidat logování chyby, pokud je to vhodné pro ladění
             pass

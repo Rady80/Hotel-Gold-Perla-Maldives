@@ -1,8 +1,13 @@
-{% extends "admin/base.html" %}
+{% extends "admin/base.html" %} 
+<!-- Šablona dědí základní šablonu admin rozhraní Django -->
 
-{% block title %}Administrace{% endblock %}
+{% block title %}
+    Administrace
+    <!-- Nastavení vlastního titulu stránky, který se zobrazí v prohlížeči -->
+{% endblock %}
 
 {% block extrastyle %}
-    <!-- Přidání vlastního CSS -->
+    <!-- Vložený blok pro přidání vlastního CSS -->
     <link rel="stylesheet" href="{% static 'css/custom_admin.css' %}">
+    <!-- Vložení vlastního souboru CSS pomocí tagu `static`, který načítá soubor ze složky STATIC -->
 {% endblock %}

@@ -1,0 +1,140 @@
+{% load static %}
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="video-background">
+    <!-- Video na pozadí -->
+    <video autoplay loop muted playsinline>
+        <source src="{% static 'videos/background.mp4' %}" type="video/mp4">
+        Váš prohlížeč nepodporuje přehrávání videí.
+    </video>
+    
+    <!-- Poloprůhledný překryvný obsah -->
+    <div class="overlay">
+        <div class="home-content">
+            <h1>Vítejte v našem hotelu!</h1>
+            <p>Prohlédněte si kalendář nadcházejících událostí vpravo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Kalendář na pravé straně -->
+<div class="calendar-container">
+    <h2>Kalendář</h2>
+    <div id="calendar"></div>
+</div>
+
+<!-- CSS pro stylování -->
+<style>
+    /* Video na pozadí */
+    .video-background {
+        position: relative;
+        overflow: hidden;
+        height: 100vh;
+        width: 100%;
+    }
+
+    .video-background video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Překryvný obsah na videu */
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        text-align: center;
+        z-index: 2;
+    }
+
+    .home-content h1 {
+        font-size: 3em;
+        margin-bottom: 0.5em;
+    }
+
+    .home-content p {
+        font-size: 1.2em;
+    }
+
+    /* Kalendář */
+    .calendar-container {
+        position: absolute;
+        top: 10%;
+        right: 5%;
+        width: 300px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 3;
+    }
+
+    .calendar-container h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    #calendar {
+        text-align: center;
+    }
+
+    #calendar table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #calendar th,
+    #calendar td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    #calendar th {
+        background-color: #f4f4f4;
+    }
+</style>
+
+<!-- JavaScript pro generování kalendáře -->
+<script>
+    const calendarDiv = document.getElementById('calendar');
+    const date = new Date();
+
+    // Nastavení názvu měsíce a roku
+    calendarDiv.innerHTML = `<h3>${date.toLocaleString('cs-CZ', { month: 'long', year: 'numeric' })}</h3>`;
+
+    // Vytvoření tabulky kalendáře
+    let table = '<table>';
+    const daysOfWeek = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
+    table += '<tr>';
+    daysOfWeek.forEach(day => table += `<th>${day}</th>`);
+    table += '</tr><tr>';
+
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay() || 7;
+    const lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+    for (let i = 1; i < firstDay; i++) table += '<td></td>';
+    for (let day = 1; day <= lastDate; day++) {
+        if ((firstDay + day - 2) % 7 === 0 && day > 1) table += '</tr><tr>';
+        table += `<td>${day}</td>`;
+    }
+    table += '</tr></table>';
+
+    // Přidání tabulky do kalendáře
+    calendarDiv.innerHTML += table;
+</script>
+{% endblock %}

@@ -1,6 +1,7 @@
 from django import forms
 from .models import Room, Booking, Dependees
 
+
 # Formulář pro úpravu pokojů
 class EditRoomForm(forms.ModelForm):
     """
@@ -13,30 +14,41 @@ class EditRoomForm(forms.ModelForm):
             'capacity': 'Kapacita pokoje',  # Popis pro pole kapacity
             'numberOfBeds': 'Počet postelí',  # Popis pro pole počtu postelí
             'roomType': 'Typ pokoje',  # Popis pro pole typu pokoje
-            'price': 'Cena za noc',  # Popis pro pole ceny
+            'price': 'Cena za noc (Kč)',  # Popis pro pole ceny
         }
         widgets = {
             'capacity': forms.NumberInput(attrs={
-                'class': 'form-control', 'placeholder': 'Zadejte kapacitu'
-            }),  # Vstupní pole pro kapacitu
+                'class': 'form-control', 'placeholder': 'Zadejte kapacitu pokoje'
+            }),
             'numberOfBeds': forms.NumberInput(attrs={
-                'class': 'form-control', 'placeholder': 'Počet postelí'
-            }),  # Vstupní pole pro počet postelí
+                'class': 'form-control', 'placeholder': 'Zadejte počet postelí'
+            }),
             'roomType': forms.TextInput(attrs={
-                'class': 'form-control', 'placeholder': 'Např. Deluxe'
-            }),  # Textové pole pro typ pokoje
+                'class': 'form-control', 'placeholder': 'Např. Deluxe, Standard'
+            }),
             'price': forms.NumberInput(attrs={
-                'class': 'form-control', 'placeholder': 'Cena v Kč'
-            }),  # Vstupní pole pro cenu
+                'class': 'form-control', 'placeholder': 'Cena v Kč za noc'
+            }),
         }
 
-    def clean(self):
+    def clean_capacity(self):
         """
-        Dodatečná validace formuláře.
+        Validace kapacity pokoje.
         """
-        from .validators import validate_room_capacity  # Lazy import validátoru pro kapacitu
-        validate_room_capacity(self.cleaned_data.get("capacity"))  # Validace kapacity pokoje
-        return self.cleaned_data  # Vrací vyčištěná data
+        capacity = self.cleaned_data.get("capacity")
+        if capacity < 1:
+            raise forms.ValidationError("Kapacita pokoje musí být alespoň 1.")
+        return capacity
+
+    def clean_price(self):
+        """
+        Validace ceny pokoje.
+        """
+        price = self.cleaned_data.get("price")
+        if price <= 0:
+            raise forms.ValidationError("Cena musí být kladné číslo.")
+        return price
+
 
 # Formulář pro rezervace
 class EditBookingForm(forms.ModelForm):
@@ -47,17 +59,30 @@ class EditBookingForm(forms.ModelForm):
         model = Booking  # Model rezervací
         fields = ["startDate", "endDate"]  # Pole, která lze upravovat
         labels = {
-            'startDate': 'Datum začátku',  # Popis pro pole začátku rezervace
-            'endDate': 'Datum konce',  # Popis pro pole konce rezervace
+            'startDate': 'Datum začátku rezervace',
+            'endDate': 'Datum konce rezervace',
         }
         widgets = {
             'startDate': forms.DateInput(attrs={
                 'class': 'form-control', 'type': 'date'
-            }),  # Datumový vstup pro začátek
+            }),
             'endDate': forms.DateInput(attrs={
                 'class': 'form-control', 'type': 'date'
-            }),  # Datumový vstup pro konec
+            }),
         }
+
+    def clean(self):
+        """
+        Dodatečná validace pro začátek a konec rezervace.
+        """
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get("startDate")
+        end_date = cleaned_data.get("endDate")
+
+        if start_date and end_date and start_date >= end_date:
+            raise forms.ValidationError("Datum konce rezervace musí být později než datum začátku.")
+        return cleaned_data
+
 
 # Formulář pro správu závislých osob
 class EditDependeesForm(forms.ModelForm):
@@ -66,16 +91,29 @@ class EditDependeesForm(forms.ModelForm):
     """
     class Meta:
         model = Dependees  # Model závislých osob
-        fields = ["booking", "name"]  # Pole, která lze upravovat
+        fields = ["booking", "name", "relation"]  # Pole, která lze upravovat
         labels = {
-            'booking': 'Rezervace',  # Popis pro pole rezervace
-            'name': 'Jméno osoby',  # Popis pro pole jména osoby
+            'booking': 'Rezervace',
+            'name': 'Jméno osoby',
+            'relation': 'Vztah k hostovi',
         }
         widgets = {
             'booking': forms.Select(attrs={
                 'class': 'form-control'
-            }),  # Výběrové pole pro rezervaci
+            }),
             'name': forms.TextInput(attrs={
-                'class': 'form-control', 'placeholder': 'Zadejte jméno'
-            }),  # Textové pole pro jméno osoby
+                'class': 'form-control', 'placeholder': 'Zadejte jméno osoby'
+            }),
+            'relation': forms.TextInput(attrs={
+                'class': 'form-control', 'placeholder': 'Např. Manžel, Dcera, Syn'
+            }),
         }
+
+    def clean_name(self):
+        """
+        Validace jména osoby.
+        """
+        name = self.cleaned_data.get("name")
+        if len(name) < 2:
+            raise forms.ValidationError("Jméno musí mít alespoň 2 znaky.")
+        return name

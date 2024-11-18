@@ -1,63 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="cs"> <!-- Nastavení jazyka na češtinu -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Nenalezeno</title>
+    <meta charset="UTF-8"> <!-- Kódování znaků -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Nastavení pro responzivní design -->
+    <title>404 - Nenalezeno</title> <!-- Titulek stránky -->
     <style>
+        /* Globální nastavení stylů */
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #343a40;
-            display: flex;
+            font-family: Arial, sans-serif; /* Výchozí font */
+            background-color: #f8f9fa; /* Světle šedé pozadí */
+            color: #343a40; /* Tmavě šedý text */
+            display: flex; /* Flexbox pro středění obsahu */
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            text-align: center;
+            height: 100vh; /* Celá výška okna */
+            text-align: center; /* Zarovnání textu na střed */
         }
 
+        /* Kontejner pro obsah */
         .container {
-            max-width: 600px;
+            max-width: 600px; /* Maximální šířka obsahu */
         }
 
+        /* Styl pro nadpis */
         h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #dc3545; /* Červená barva pro výrazné zvýraznění chyby */
+            font-size: 3rem; /* Velikost textu nadpisu */
+            margin-bottom: 1rem; /* Mezery pod nadpisem */
+            color: #dc3545; /* Červená barva pro zvýraznění chyby */
         }
 
+        /* Styl pro text */
         p {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.2rem; /* Velikost textu */
+            margin-bottom: 1.5rem; /* Mezery pod odstavcem */
         }
 
+        /* Styl pro odkaz */
         a {
-            display: inline-block;
-            text-decoration: none;
-            color: #ffffff;
-            background-color: #007bff;
-            padding: 0.75rem 1.5rem;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: background-color 0.3s ease-in-out;
+            display: inline-block; /* Odkaz jako blok */
+            text-decoration: none; /* Odstranění podtržení */
+            color: #ffffff; /* Barva textu odkazu */
+            background-color: #007bff; /* Modrá barva tlačítka */
+            padding: 0.75rem 1.5rem; /* Vnitřní okraje tlačítka */
+            border-radius: 5px; /* Zaoblení rohů */
+            font-size: 1rem; /* Velikost textu */
+            transition: background-color 0.3s ease-in-out; /* Přechod pro efekt hover */
         }
 
+        /* Styl pro hover efekt na tlačítku */
         a:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Tmavší modrá při najetí myší */
         }
     </style>
 </head>
-
 <body>
     <div class="container">
-        <h1>404 - Nenalezeno</h1>
-        <p>Stránka, kterou hledáte, nebyla nalezena.</p>
-        <p>{{ error }}</p>
-        <a href="/">Vrátit se na hlavní stránku</a>
+        <h1>404 - Nenalezeno</h1> <!-- Nadpis chyby -->
+        <p>Stránka, kterou hledáte, nebyla nalezena.</p> <!-- Popis chyby -->
+        <!-- Proměnná {{ error }} pro dynamické zobrazení chybové zprávy -->
+        <p>{{ error }}</p> 
+        <a href="/">Vrátit se na hlavní stránku</a> <!-- Tlačítko zpět na domovskou stránku -->
     </div>
 </body>
-
 </html>

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from accounts.models import Guest
 
+
 # Model pro pokoje
 class Room(models.Model):
     """
@@ -13,20 +14,24 @@ class Room(models.Model):
         ('Normal', 'Normal'),
         ('Economic', 'Economic'),
     )
+    ROOM_STATUS = (
+        ('Available', 'Dostupné'),
+        ('Occupied', 'Obsazené'),
+        ('Maintenance', 'Údržba'),
+    )
+    
     number = models.IntegerField(primary_key=True, verbose_name="Číslo pokoje")  # Unikátní číslo pokoje
-    capacity = models.SmallIntegerField(verbose_name="Kapacita")  # Kapacita pokoje
-    numberOfBeds = models.SmallIntegerField(verbose_name="Počet postelí")  # Počet postelí
+    capacity = models.PositiveSmallIntegerField(verbose_name="Kapacita")  # Kapacita pokoje
+    numberOfBeds = models.PositiveSmallIntegerField(verbose_name="Počet postelí")  # Počet postelí
     roomType = models.CharField(max_length=20, choices=ROOM_TYPES, verbose_name="Typ pokoje")  # Typ pokoje
-    price = models.FloatField(verbose_name="Cena za noc")  # Cena za noc
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Cena za noc")  # Cena za noc
     statusStartDate = models.DateField(null=True, blank=True, verbose_name="Začátek rezervace")  # Začátek rezervace
     statusEndDate = models.DateField(null=True, blank=True, verbose_name="Konec rezervace")  # Konec rezervace
     name = models.CharField(max_length=100, verbose_name="Název pokoje")  # Název pokoje
-    description = models.TextField(verbose_name="Popis pokoje")  # Popis pokoje
-    room_number = models.CharField(max_length=10, verbose_name="Číslo pokoje", unique=True, null=True, blank=True)  # Číslo pokoje
-    description = models.TextField(null=True, blank=True)  # Povolení prázdných hodnot
+    description = models.TextField(null=True, blank=True, verbose_name="Popis pokoje")  # Popis pokoje
     status = models.CharField(
         max_length=20,
-        choices=[('Available', 'Dostupné'), ('Occupied', 'Obsazené'), ('Maintenance', 'Údržba')],
+        choices=ROOM_STATUS,
         verbose_name="Stav pokoje",
         default='Available'
     )  # Stav pokoje
@@ -76,6 +81,7 @@ class Dependees(models.Model):
     """
     booking = models.ForeignKey(Booking, null=True, on_delete=models.CASCADE, verbose_name="Rezervace")  # Odkaz na rezervaci
     name = models.CharField(max_length=100, verbose_name="Jméno osoby")  # Jméno závislé osoby
+    relation = models.CharField(max_length=50, null=True, blank=True, verbose_name="Vztah k hostovi")  # Vztah k hostovi
 
     def __str__(self):
         return f"{self.name} (Rezervace: {self.booking})"
@@ -89,6 +95,7 @@ class Refund(models.Model):
     guest = models.ForeignKey(Guest, null=True, on_delete=models.CASCADE, verbose_name="Host")  # Odkaz na hosta
     reservation = models.ForeignKey(Booking, on_delete=models.CASCADE, verbose_name="Rezervace")  # Odkaz na rezervaci
     reason = models.TextField(verbose_name="Důvod refundace")  # Důvod refundace
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Částka refundace")  # Částka refundace
 
     def __str__(self):
         return f"Refundace pro {self.guest}"
@@ -100,15 +107,16 @@ class RoomServices(models.Model):
     Model pro správu služeb pokojů.
     """
     SERVICES_TYPES = (
-        ('Food', 'Food'),
-        ('Cleaning', 'Cleaning'),
-        ('Technical', 'Technical'),
+        ('Food', 'Jídlo'),
+        ('Cleaning', 'Úklid'),
+        ('Technical', 'Technická podpora'),
     )
     curBooking = models.ForeignKey(Booking, null=True, on_delete=models.CASCADE, verbose_name="Rezervace")  # Odkaz na rezervaci
     room = models.ForeignKey(Room, on_delete=models.CASCADE, verbose_name="Pokoj")  # Odkaz na pokoj
     createdDate = models.DateField(default=timezone.now, verbose_name="Datum vytvoření")  # Datum vytvoření služby
     servicesType = models.CharField(max_length=20, choices=SERVICES_TYPES, verbose_name="Typ služby")  # Typ služby
-    price = models.FloatField(verbose_name="Cena služby")  # Cena služby
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Cena služby")  # Cena služby
+    description = models.TextField(null=True, blank=True, verbose_name="Popis služby")  # Popis služby
 
     def __str__(self):
         return f"Služba: {self.servicesType} (Pokoj: {self.room})"

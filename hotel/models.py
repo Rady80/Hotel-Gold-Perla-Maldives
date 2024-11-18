@@ -12,7 +12,7 @@ class Announcement(models.Model):
     date = models.DateField(default=timezone.now, verbose_name="Datum vytvoření")
 
     def __str__(self):
-        return f"Oznámení od {self.sender.user.username} ({self.date})"
+        return f"Oznámení od {self.sender.user.username if self.sender else 'Neznámý'} ({self.date})"
 
     class Meta:
         verbose_name = "Oznámení"
@@ -55,7 +55,7 @@ class EventAttendees(models.Model):
     numberOfDependees = models.IntegerField(default=0, verbose_name="Počet doprovodů")
 
     def __str__(self):
-        return f"{self.guest.user.username} na {self.event.eventType}"
+        return f"{self.guest.user.username if self.guest else 'Neznámý'} na {self.event.eventType}"
 
     class Meta:
         verbose_name = "Účastník události"
@@ -67,12 +67,12 @@ class Bills(models.Model):
     Model pro faktury.
     """
     guest = models.ForeignKey(Guest, null=True, on_delete=models.CASCADE, verbose_name="Host")
-    totalAmount = models.FloatField(verbose_name="Celková částka")
+    totalAmount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Celková částka")
     summary = models.TextField(verbose_name="Souhrn")
     date = models.DateTimeField(default=timezone.now, verbose_name="Datum vystavení")
 
     def __str__(self):
-        return f"Faktura pro {self.guest.user.username} ({self.totalAmount} Kč)"
+        return f"Faktura pro {self.guest.user.username if self.guest else 'Neznámý'} ({self.totalAmount} Kč)"
 
     class Meta:
         verbose_name = "Faktura"
@@ -123,7 +123,7 @@ class Storage(models.Model):
     )
     itemName = models.CharField(max_length=100, verbose_name="Název položky")
     itemType = models.CharField(max_length=20, choices=ITEM_TYPES, verbose_name="Typ položky")
-    quantity = models.IntegerField(verbose_name="Množství")  # Opraven překlep
+    quantity = models.IntegerField(verbose_name="Množství")
 
     def __str__(self):
         return f"{self.itemName} ({self.quantity} ks)"

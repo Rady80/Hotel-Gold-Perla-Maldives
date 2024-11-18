@@ -1,55 +1,128 @@
-/* Reset stylů */
+/* Reset stylů pro konzistentní vzhled napříč prohlížeči */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box; /* Lepší správa velikosti prvků */
-    -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased; /* Lepší vykreslení písma */
 }
 
 /* Vyčištění přetékajícího obsahu */
 .clearfix {
-    overflow: auto;
+    overflow: auto; /* Zajistí, že plovoucí prvky budou správně zarovnány */
 }
 
 /* Základní nastavení těla stránky */
 body {
-    position: relative;
-    font-family: Arial, sans-serif; /* Nastavení výchozího fontu */
+    position: relative; /* Relativní pozice pro další prvky */
+    font-family: Arial, sans-serif; /* Výchozí font pro web */
     line-height: 1.6; /* Lepší čitelnost textu */
-    background-color: #f9f9f9; /* Jemné pozadí */
+    background-color: #f9f9f9; /* Jemné pozadí pro obsah */
+    color: #333; /* Výchozí barva textu */
 }
 
-/* Navigace */
+/* Navigační lišta */
+nav {
+    background-color: #fff; /* Bílá barva pozadí */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Jemný stín pro oddělení */
+    padding: 10px 20px; /* Polstrování uvnitř navigace */
+}
+
 nav .nav-item {
-    font-size: 20px;
-    font-weight: 500; /* Zvýraznění textu navigace */
+    font-size: 18px; /* Velikost písma v navigaci */
+    font-weight: 500; /* Zvýrazněné písmo */
     color: #333; /* Kontrastní barva textu */
+    margin-right: 15px; /* Mezera mezi položkami */
+    display: inline-block; /* Všechny položky jsou vedle sebe */
+    transition: color 0.3s ease, text-decoration 0.3s ease; /* Animace při hoveru */
 }
 
 nav .nav-item:hover {
-    color: #007bff; /* Zvýraznění při najetí myší */
-    cursor: pointer;
-    text-decoration: underline; /* Zvýraznění odkazu */
+    color: #007bff; /* Modrá barva při hoveru */
+    text-decoration: underline; /* Podtržení při najetí myší */
+    cursor: pointer; /* Ukazatel myši se změní na ruku */
 }
 
-/* Patička */
+/* Patička stránky */
 .footer {
-    position: fixed; /* Patička je pevná dole */
+    position: fixed; /* Patička zůstává pevná dole */
     bottom: 0;
-    width: 100%;
+    width: 100%; /* Patička pokrývá celou šířku stránky */
     height: 60px; /* Pevná výška */
     line-height: 60px; /* Vertikální zarovnání textu */
     background-color: #e2dada; /* Světlá barva pozadí */
-    text-align: center; /* Text na střed */
-    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Jemný stín pro oddělení */
+    text-align: center; /* Zarovnání textu na střed */
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Jemný stín pro oddělení od obsahu */
+    font-size: 14px; /* Menší text v patičce */
 }
 
 .footer a {
-    color: #007bff; /* Barva odkazů v patičce */
-    text-decoration: none; /* Odstranění podtržení */
+    color: #007bff; /* Modrá barva odkazů v patičce */
+    text-decoration: none; /* Odstranění podtržení odkazů */
+    transition: color 0.3s ease, text-decoration 0.3s ease; /* Animace při hoveru */
 }
 
 .footer a:hover {
-    text-decoration: underline; /* Podtržení při najetí */
-    color: #0056b3; /* Tmavší barva při najetí myší */
+    text-decoration: underline; /* Podtržení odkazu při hoveru */
+    color: #0056b3; /* Tmavší modrá při hoveru */
+}
+
+/* Obecné prvky */
+.container {
+    max-width: 1200px; /* Maximální šířka kontejneru */
+    margin: 0 auto; /* Zarovnání kontejneru na střed */
+    padding: 20px; /* Polstrování obsahu */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 20px; /* Vzdálenost pod nadpisem */
+    font-weight: 600; /* Zvýrazněné nadpisy */
+    color: #333; /* Kontrastní barva nadpisu */
+}
+
+/* Odkazy obecně */
+a {
+    color: #007bff; /* Modrá barva odkazů */
+    text-decoration: none; /* Odstranění podtržení odkazů */
+    transition: color 0.3s ease, text-decoration 0.3s ease; /* Animace při hoveru */
+}
+
+a:hover {
+    text-decoration: underline; /* Podtržení odkazu při hoveru */
+    color: #0056b3; /* Tmavší modrá při hoveru */
+}
+
+/* Tlačítka */
+button, input[type="submit"] {
+    background-color: #007bff; /* Modrá barva tlačítka */
+    border: none; /* Bez okraje */
+    color: white; /* Bílý text tlačítka */
+    padding: 10px 20px; /* Polstrování tlačítka */
+    border-radius: 5px; /* Kulaté rohy */
+    cursor: pointer; /* Ukazatel myši se změní na ruku */
+    font-size: 16px; /* Velikost textu tlačítka */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Animace při hoveru */
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #0056b3; /* Tmavší modrá při hoveru */
+    transform: scale(1.05); /* Mírné zvětšení tlačítka */
+}
+
+/* Responsivní design pro menší obrazovky */
+@media (max-width: 768px) {
+    nav .nav-item {
+        display: block; /* Položky navigace pod sebou */
+        margin: 10px 0; /* Větší mezera mezi položkami */
+        text-align: center; /* Zarovnání textu na střed */
+    }
+
+    .container {
+        padding: 10px; /* Menší polstrování pro malé obrazovky */
+    }
+
+    .footer {
+        font-size: 12px; /* Menší text v patičce */
+        height: 50px; /* Nižší výška patičky */
+        line-height: 50px; /* Vertikální zarovnání textu */
+    }
 }

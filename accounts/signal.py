@@ -6,5 +6,8 @@ from .models import Employee
 
 @receiver(post_save, sender=User)
 def create_employee_profile(sender, instance, created, **kwargs):
-    if created:
-        Employee.objects.create(user=instance, salary=0.00)  # Přidání výchozí hodnoty
+    """
+    Signál pro vytvoření profilu zaměstnance.
+    Při vytvoření nového uživatele (User) automaticky vytvoří záznam zaměstnance (Employee)
+    s výchozí hodnotou platu 0.00.
+    """

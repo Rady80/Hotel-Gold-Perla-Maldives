@@ -2,24 +2,23 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from .models import Room, CleaningRecord, Booking  # Import relevantních modelů
 
-# Signál pro logování vytvoření nebo aktualizace pokoje
+
 @receiver(post_save, sender=Room)
 def log_room_update(sender, instance, created, **kwargs):
     """
-    Logování, když je pokoj vytvořen nebo aktualizován.
+    Logování událostí spojených s pokoji (vytvoření nebo aktualizace).
     
     Parametry:
     - sender: Model, který spustil signál (v tomto případě Room).
-    - instance: Konkrétní instance modelu Room.
+    - instance: Instance modelu Room, která byla vytvořena nebo aktualizována.
     - created: Boolean označující, zda byla instance nově vytvořena.
     """
     if created:
-        print(f"Nový pokoj vytvořen: {instance.name}")  # Log zpráva při vytvoření
+        print(f"Nový pokoj vytvořen: {instance.name} (číslo: {instance.number})")
     else:
-        print(f"Pokoj {instance.name} byl aktualizován.")  # Log zpráva při aktualizaci
+        print(f"Pokoj {instance.name} (číslo: {instance.number}) byl aktualizován.")
 
 
-# Signál pro vytvoření výchozího záznamu úklidu při vytvoření pokoje
 @receiver(post_save, sender=Room)
 def create_cleaning_record(sender, instance, created, **kwargs):
     """
@@ -27,14 +26,14 @@ def create_cleaning_record(sender, instance, created, **kwargs):
     
     Parametry:
     - sender: Model, který spustil signál (v tomto případě Room).
-    - instance: Konkrétní instance modelu Room.
+    - instance: Instance modelu Room, která byla vytvořena.
     - created: Boolean označující, zda byla instance nově vytvořena.
     """
-    if created:  # Kontrola, zda byl pokoj právě vytvořen
-        CleaningRecord.objects.create(room=instance, status="Ready")  # Vytvoření záznamu úklidu
+    if created:  # Pokud je pokoj nově vytvořen
+        CleaningRecord.objects.create(room=instance, status="Ready")
+        print(f"Byl vytvořen výchozí záznam úklidu pro pokoj {instance.name}.")
 
 
-# Signál pro odstranění rezervací spojených s pokojem při jeho smazání
 @receiver(post_delete, sender=Room)
 def delete_related_bookings(sender, instance, **kwargs):
     """
@@ -42,6 +41,9 @@ def delete_related_bookings(sender, instance, **kwargs):
     
     Parametry:
     - sender: Model, který spustil signál (v tomto případě Room).
-    - instance: Konkrétní instance modelu Room.
+    - instance: Instance modelu Room, která byla smazána.
     """
-    Booking.objects.filter(room=instance).delete()  # Odstranění všech rezervací souvisejících s daným pokojem
+    related_bookings = Booking.objects.filter(room=instance)
+    count = related_bookings.count()
+    related_bookings.delete()
+    print(f"Bylo odstraněno {count} rezervací spojených s pokojem {instance.name} (číslo:  {instance.number}).")
