@@ -1,37 +1,98 @@
 {% extends '../index.html' %}
 
 {% block content %}
-    <!-- Vložení šablony pro přidání pokoje -->
+    <!-- Vložení sdílené části šablony pro přidání pokoje -->
     {% include '../common_pages/add-room.html' %}
 
     <!-- Formulář pro přidání pokoje -->
-    <form method="POST">
+    <form method="POST" class="add-room-form">
+        <!-- Zajištění ochrany proti CSRF útokům -->
         {% csrf_token %}
-        <div>
+
+        <!-- Číslo pokoje -->
+        <div class="form-group">
             <label for="number">Číslo pokoje:</label>
-            <input type="number" name="number" id="number" required>
+            <input type="number" name="number" id="number" class="form-control" placeholder="Zadejte číslo pokoje" required>
         </div>
-        <div>
+
+        <!-- Kapacita pokoje -->
+        <div class="form-group">
             <label for="capacity">Kapacita:</label>
-            <input type="number" name="capacity" id="capacity" required>
+            <input type="number" name="capacity" id="capacity" class="form-control" placeholder="Zadejte kapacitu pokoje" required>
         </div>
-        <div>
+
+        <!-- Počet postelí -->
+        <div class="form-group">
             <label for="numberOfBeds">Počet postelí:</label>
-            <input type="number" name="numberOfBeds" id="numberOfBeds" required>
+            <input type="number" name="numberOfBeds" id="numberOfBeds" class="form-control" placeholder="Zadejte počet postelí" required>
         </div>
-        <div>
+
+        <!-- Typ pokoje -->
+        <div class="form-group">
             <label for="roomType">Typ pokoje:</label>
-            <select name="roomType" id="roomType" required>
+            <select name="roomType" id="roomType" class="form-control" required>
                 <option value="King">King</option>
                 <option value="Luxury">Luxury</option>
                 <option value="Normal">Normal</option>
                 <option value="Economic">Economic</option>
             </select>
         </div>
-        <div>
+
+        <!-- Cena za noc -->
+        <div class="form-group">
             <label for="price">Cena za noc:</label>
-            <input type="number" name="price" id="price" step="0.01" required>
+            <input type="number" name="price" id="price" step="0.01" class="form-control" placeholder="Zadejte cenu za noc" required>
         </div>
-        <button type="submit">Přidat pokoj</button>
+
+        <!-- Tlačítko pro odeslání formuláře -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Přidat pokoj</button>
+        </div>
     </form>
 {% endblock %}
+
+<!-- CSS pro stylování formuláře -->
+<style>
+    .add-room-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>

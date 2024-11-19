@@ -1,6 +1,81 @@
 {% extends '../index.html' %}
-{% block context %}
 
-{% include '../common_pages/room-edit.html' %}
+{% block content %}
+    <!-- Sekce pro úpravu pokoje -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Úprava pokoje</h1>
+        
+        <!-- Formulář pro úpravu pokoje -->
+        <form method="POST" class="mt-4">
+            {% csrf_token %}
+            <div class="form-group">
+                <!-- Číslo pokoje -->
+                <label for="number">Číslo pokoje</label>
+                <input 
+                    type="number" 
+                    id="number" 
+                    name="number" 
+                    class="form-control" 
+                    value="{{ room.number }}" 
+                    readonly>
+                <small class="form-text text-muted">Číslo pokoje nelze změnit.</small>
+            </div>
 
+            <div class="form-group">
+                <!-- Kapacita pokoje -->
+                <label for="capacity">Kapacita</label>
+                <input 
+                    type="number" 
+                    id="capacity" 
+                    name="capacity" 
+                    class="form-control" 
+                    value="{{ room.capacity }}" 
+                    required>
+                <small class="form-text text-muted">Maximální počet osob v pokoji.</small>
+            </div>
+
+            <div class="form-group">
+                <!-- Počet postelí -->
+                <label for="numberOfBeds">Počet postelí</label>
+                <input 
+                    type="number" 
+                    id="numberOfBeds" 
+                    name="numberOfBeds" 
+                    class="form-control" 
+                    value="{{ room.numberOfBeds }}" 
+                    required>
+                <small class="form-text text-muted">Počet dostupných postelí v pokoji.</small>
+            </div>
+
+            <div class="form-group">
+                <!-- Typ pokoje -->
+                <label for="roomType">Typ pokoje</label>
+                <select id="roomType" name="roomType" class="form-select">
+                    <option value="King" {% if room.roomType == "King" %}selected{% endif %}>King</option>
+                    <option value="Luxury" {% if room.roomType == "Luxury" %}selected{% endif %}>Luxury</option>
+                    <option value="Normal" {% if room.roomType == "Normal" %}selected{% endif %}>Normal</option>
+                    <option value="Economic" {% if room.roomType == "Economic" %}selected{% endif %}>Economic</option>
+                </select>
+                <small class="form-text text-muted">Vyberte typ pokoje.</small>
+            </div>
+
+            <div class="form-group">
+                <!-- Cena za noc -->
+                <label for="price">Cena za noc (Kč)</label>
+                <input 
+                    type="number" 
+                    id="price" 
+                    name="price" 
+                    class="form-control" 
+                    value="{{ room.price }}" 
+                    step="0.01" 
+                    required>
+                <small class="form-text text-muted">Cena za noc v pokoji v Kč.</small>
+            </div>
+
+            <!-- Tlačítka -->
+            <button type="submit" class="btn btn-success mt-3">Uložit změny</button>
+            <a href="{% url 'rooms' %}" class="btn btn-secondary mt-3">Zpět na seznam pokojů</a>
+        </form>
+    </div>
 {% endblock %}

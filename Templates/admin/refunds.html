@@ -1,7 +1,12 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Sekce refundací -->
+    <div class="container mt-5">
+        <!-- Nadpis stránky -->
+        <h1 class="text-primary text-center">Refundace</h1>
 
-{% include '../common_pages/refunds.html' %}
-
+        <!-- Vložení šablony refundací -->
+        {% include '../common_pages/refunds.html' %}
+    </div>
 {% endblock %}

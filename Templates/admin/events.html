@@ -1,7 +1,12 @@
 {% extends '../index.html' %}
 
-{% block context %}
-
-{% include '../common_pages/authorized-events.html' %}
-
+{% block content %}
+    <!-- Sekce autorizovaných událostí -->
+    <div class="container mt-5">
+        <!-- Nadpis stránky -->
+        <h1 class="text-primary text-center">Autorizované Události</h1>
+        
+        <!-- Vložení šablony s autorizovanými událostmi -->
+        {% include '../common_pages/authorized-events.html' %}
+    </div>
 {% endblock %}

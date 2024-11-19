@@ -1,0 +1,53 @@
+<div class="container mt-4">
+    <h2 class="text-primary">Profil události</h2>
+    <div class="card my-4">
+        <div class="card-header bg-primary text-white">
+            <h4>{{ event.eventType }}</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Místo konání:</strong> {{ event.location }}</p>
+            <p><strong>Začátek:</strong> {{ event.startDate }}</p>
+            <p><strong>Konec:</strong> {{ event.endDate }}</p>
+            <p><strong>Popis:</strong></p>
+            <p>{{ event.explanation }}</p>
+        </div>
+    </div>
+
+    <!-- Ovládací prvky -->
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'event-edit' event.id %}" class="btn btn-warning">Upravit</a>
+        <a href="{% url 'events' %}" class="btn btn-secondary">Zpět na seznam událostí</a>
+    </div>
+</div>
+
+<!-- authorized-events.html -->
+<table class="table table-striped mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Typ události</th>
+            <th>Místo</th>
+            <th>Začátek</th>
+            <th>Konec</th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ event.eventType }}</td>
+            <td>{{ event.location }}</td>
+            <td>{{ event.startDate }}</td>
+            <td>{{ event.endDate }}</td>
+            <td>
+                <a href="{% url 'event-profile' event.id %}" class="btn btn-info btn-sm">Detail</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">Žádné události k zobrazení.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

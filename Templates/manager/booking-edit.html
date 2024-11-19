@@ -1,7 +1,43 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro úpravu rezervace -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Úprava rezervace</h1>
 
-{% include '../common_pages/booking-edit.html' %}
+    <!-- Formulář pro úpravu rezervace -->
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Výběr data začátku rezervace -->
+        <div class="form-group">
+            <label for="startDate">Datum začátku:</label>
+            <input type="date" id="startDate" name="startDate" class="form-control" value="{{ booking.startDate }}" required>
+        </div>
 
+        <!-- Výběr data konce rezervace -->
+        <div class="form-group">
+            <label for="endDate">Datum konce:</label>
+            <input type="date" id="endDate" name="endDate" class="form-control" value="{{ booking.endDate }}" required>
+        </div>
+
+        <!-- Výběr pokoje -->
+        <div class="form-group">
+            <label for="roomNumber">Pokoj:</label>
+            <select id="roomNumber" name="roomNumber" class="form-select">
+                {% for room in rooms %}
+                <option value="{{ room.number }}" {% if room.number == booking.roomNumber.number %}selected{% endif %}>
+                    {{ room.name }} (Číslo: {{ room.number }}) - Kapacita: {{ room.capacity }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Tlačítka akce -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Uložit změny</button>
+            <a href="{% url 'bookings' %}" class="btn btn-secondary">Zpět na seznam rezervací</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

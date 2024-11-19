@@ -1,70 +1,108 @@
 {% extends '../index.html' %}
 
 {% block content %}
-    <!-- Seznam autorizovaných zaměstnanců -->
+    <!-- Sekce seznamu zaměstnanců -->
     <div class="container mt-4">
+        <!-- Nadpis -->
         <h2 class="text-primary">Seznam zaměstnanců</h2>
 
         <!-- Filtrační formulář -->
         <form method="POST" class="mb-4">
-            {% csrf_token %}
+            {% csrf_token %} <!-- CSRF ochrana -->
             <div class="row">
+                <!-- Vyhledávání podle uživatelského jména -->
                 <div class="col-md-3">
                     <label for="username" class="form-label">Uživatelské jméno:</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Vyhledat uživatele">
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-control" 
+                        placeholder="Vyhledat uživatele">
                 </div>
+
+                <!-- Vyhledávání podle emailu -->
                 <div class="col-md-3">
                     <label for="email" class="form-label">Email:</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Vyhledat email">
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-control" 
+                        placeholder="Vyhledat email">
                 </div>
+
+                <!-- Filtr podle role -->
                 <div class="col-md-3">
                     <label for="role" class="form-label">Role:</label>
-                    <select id="role" name="role" class="form-select">
+                    <select 
+                        id="role" 
+                        name="role" 
+                        class="form-select">
                         <option value="">Všechny role</option>
                         <option value="manager">Manager</option>
                         <option value="staff">Zaměstnanec</option>
                     </select>
                 </div>
+
+                <!-- Tlačítko pro filtrování -->
                 <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Filtruj</button>
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary w-100">
+                        Filtruj
+                    </button>
                 </div>
             </div>
         </form>
 
         <!-- Tabulka zaměstnanců -->
         <table class="table table-striped">
+            <!-- Hlavička tabulky -->
             <thead class="table-dark">
                 <tr>
-                    <th>#</th>
-                    <th>Jméno</th>
-                    <th>Email</th>
-                    <th>Telefonní číslo</th>
-                    <th>Plat</th>
-                    <th>Role</th>
-                    <th>Akce</th>
+                    <th>#</th> <!-- Pořadové číslo -->
+                    <th>Jméno</th> <!-- Celé jméno -->
+                    <th>Email</th> <!-- Email zaměstnance -->
+                    <th>Telefonní číslo</th> <!-- Telefonní číslo -->
+                    <th>Plat</th> <!-- Plat zaměstnance -->
+                    <th>Role</th> <!-- Role zaměstnance -->
+                    <th>Akce</th> <!-- Sloupec pro akce -->
                 </tr>
             </thead>
+
+            <!-- Tělo tabulky -->
             <tbody>
-                {% for employee in employees %}
+                {% for employee in employees %} <!-- Iterace přes seznam zaměstnanců -->
                     <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ employee.user.first_name }} {{ employee.user.last_name }}</td>
-                        <td>{{ employee.user.email }}</td>
-                        <td>{{ employee.phoneNumber }}</td>
-                        <td>{{ employee.salary }} Kč</td>
+                        <td>{{ forloop.counter }}</td> <!-- Pořadí zaměstnance -->
+                        <td>{{ employee.user.first_name }} {{ employee.user.last_name }}</td> <!-- Celé jméno -->
+                        <td>{{ employee.user.email }}</td> <!-- Email -->
+                        <td>{{ employee.phoneNumber }}</td> <!-- Telefonní číslo -->
+                        <td>{{ employee.salary }} Kč</td> <!-- Plat -->
                         <td>
-                            {% if employee.user.groups.exists %}
+                            {% if employee.user.groups.exists %} <!-- Kontrola existence přiřazené role -->
                                 {{ employee.user.groups.first.name|title }}
                             {% else %}
-                                Není přiřazena
+                                Není přiřazena <!-- Text, pokud není role nastavena -->
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{% url 'employee-profile' employee.id %}" class="btn btn-info btn-sm">Profil</a>
-                            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-warning btn-sm">Upravit</a>
+                            <!-- Odkaz na profil zaměstnance -->
+                            <a 
+                                href="{% url 'employee-profile' employee.id %}" 
+                                class="btn btn-info btn-sm">
+                                Profil
+                            </a>
+                            <!-- Odkaz na úpravu zaměstnance -->
+                            <a 
+                                href="{% url 'employee-edit' employee.id %}" 
+                                class="btn btn-warning btn-sm">
+                                Upravit
+                            </a>
                         </td>
                     </tr>
-                {% empty %}
+                {% empty %} <!-- Pokud seznam zaměstnanců neobsahuje žádné položky -->
                     <tr>
                         <td colspan="7" class="text-center">Žádní zaměstnanci k zobrazení.</td>
                     </tr>

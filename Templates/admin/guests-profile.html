@@ -1,7 +1,12 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Sekce profilu hosta -->
+    <div class="container mt-5">
+        <!-- Nadpis stránky -->
+        <h1 class="text-primary text-center">Profil Hosta</h1>
 
-{% include '../common_pages/guest-profile.html' %}
-
+        <!-- Vložení šablony profilu hosta -->
+        {% include '../common_pages/guest-profile.html' %}
+    </div>
 {% endblock %}

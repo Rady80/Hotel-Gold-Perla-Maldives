@@ -1,7 +1,26 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšíření hlavní šablony projektu -->
 
 {% block context %}
+<!-- Blok pro specifický obsah stránky -->
 
-{% include '../common_pages/storage.html' %}
+    <!-- Kontejner pro správu skladu -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Správa skladu</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro zobrazení skladu -->
+        {% include '../common_pages/storage.html' %}
+        <!-- 
+            Šablona `storage.html` by měla obsahovat:
+            - Tabulku skladových položek s detaily:
+              - Název položky.
+              - Typ položky (např. jídlo, nápoje, úklidové potřeby).
+              - Počet (množství položek ve skladu).
+              - Datum přidání nebo aktualizace položky.
+            - Formulář pro:
+              - Přidání nové položky do skladu.
+              - Filtrování položek podle názvu nebo typu.
+              - Možnost upravit nebo odstranit položky.
+        -->
+    </div>
 
 {% endblock %}

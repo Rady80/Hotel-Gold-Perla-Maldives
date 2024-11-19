@@ -9,21 +9,21 @@ class GuestModelTest(TestCase):
     """
     def setUp(self):
         """
-        Příprava testovacích dat.
+        Příprava testovacích dat: vytvoření uživatele a hosta.
         """
         self.user = User.objects.create_user(username="testuser", email="test@example.com", password="password123")
         self.guest = Guest.objects.create(user=self.user, phoneNumber="+123456789")
 
     def test_guest_creation(self):
         """
-        Test vytvoření hosta.
+        Ověření správného vytvoření hosta.
         """
         self.assertEqual(self.guest.user.username, "testuser")
         self.assertEqual(self.guest.phoneNumber, "+123456789")
 
     def test_guest_str_method(self):
         """
-        Test metody __str__ modelu Guest.
+        Ověření správného fungování metody __str__ u modelu Guest.
         """
         self.assertEqual(str(self.guest), "testuser (Guest)")
 
@@ -34,14 +34,14 @@ class EmployeeModelTest(TestCase):
     """
     def setUp(self):
         """
-        Příprava testovacích dat.
+        Příprava testovacích dat: vytvoření uživatele a zaměstnance.
         """
         self.user = User.objects.create_user(username="employee1", email="employee@example.com", password="password123")
         self.employee = Employee.objects.create(user=self.user, phoneNumber="+987654321", salary=5000.0)
 
     def test_employee_creation(self):
         """
-        Test vytvoření zaměstnance.
+        Ověření správného vytvoření zaměstnance.
         """
         self.assertEqual(self.employee.user.username, "employee1")
         self.assertEqual(self.employee.phoneNumber, "+987654321")
@@ -49,7 +49,7 @@ class EmployeeModelTest(TestCase):
 
     def test_employee_str_method(self):
         """
-        Test metody __str__ modelu Employee.
+        Ověření správného fungování metody __str__ u modelu Employee.
         """
         self.assertEqual(str(self.employee), "employee1 (Employee)")
 
@@ -60,7 +60,7 @@ class EventModelTest(TestCase):
     """
     def setUp(self):
         """
-        Příprava testovacích dat.
+        Příprava testovacích dat: vytvoření události.
         """
         self.event = Event.objects.create(
             eventType="Conference",
@@ -72,7 +72,7 @@ class EventModelTest(TestCase):
 
     def test_event_creation(self):
         """
-        Test vytvoření události.
+        Ověření správného vytvoření události.
         """
         self.assertEqual(self.event.eventType, "Conference")
         self.assertEqual(self.event.location, "Main Hall")
@@ -81,7 +81,7 @@ class EventModelTest(TestCase):
 
     def test_event_str_method(self):
         """
-        Test metody __str__ modelu Event.
+        Ověření správného fungování metody __str__ u modelu Event.
         """
         self.assertEqual(
             str(self.event),
@@ -95,7 +95,7 @@ class BillsModelTest(TestCase):
     """
     def setUp(self):
         """
-        Příprava testovacích dat.
+        Příprava testovacích dat: vytvoření hosta a faktury.
         """
         self.user = User.objects.create_user(username="guest1", email="guest@example.com", password="password123")
         self.guest = Guest.objects.create(user=self.user, phoneNumber="+123456789")
@@ -108,7 +108,7 @@ class BillsModelTest(TestCase):
 
     def test_bill_creation(self):
         """
-        Test vytvoření faktury.
+        Ověření správného vytvoření faktury.
         """
         self.assertEqual(self.bill.guest.user.username, "guest1")
         self.assertEqual(self.bill.totalAmount, 1200.50)
@@ -116,7 +116,7 @@ class BillsModelTest(TestCase):
 
     def test_bill_str_method(self):
         """
-        Test metody __str__ modelu Bills.
+        Ověření správného fungování metody __str__ u modelu Bills.
         """
         self.assertEqual(str(self.bill), "Faktura pro guest1 (1200.5 Kč)")
 
@@ -127,13 +127,13 @@ class StorageModelTest(TestCase):
     """
     def setUp(self):
         """
-        Příprava testovacích dat.
+        Příprava testovacích dat: vytvoření skladové položky.
         """
         self.item = Storage.objects.create(itemName="Toilet Paper", itemType="Cleaning", quantity=50)
 
     def test_storage_creation(self):
         """
-        Test vytvoření skladové položky.
+        Ověření správného vytvoření skladové položky.
         """
         self.assertEqual(self.item.itemName, "Toilet Paper")
         self.assertEqual(self.item.itemType, "Cleaning")
@@ -141,6 +141,6 @@ class StorageModelTest(TestCase):
 
     def test_storage_str_method(self):
         """
-        Test metody __str__ modelu Storage.
+        Ověření správného fungování metody __str__ u modelu Storage.
         """
         self.assertEqual(str(self.item), "Toilet Paper (50 ks)")

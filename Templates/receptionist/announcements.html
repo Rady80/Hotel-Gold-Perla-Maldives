@@ -1,7 +1,27 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšíření hlavní šablony projektu -->
 
 {% block context %}
+<!-- Blok specifického obsahu stránky -->
 
-{% include '../common_pages/authorized-announcements.html' %}
+    <!-- Kontejner pro autorizovaná oznámení -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Autorizovaná oznámení</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro autorizovaná oznámení -->
+        {% include '../common_pages/authorized-announcements.html' %}
+        <!-- 
+            Šablona `authorized-announcements.html` by měla obsahovat:
+            - Tabulku všech oznámení s informacemi:
+              - Obsah oznámení (text zprávy).
+              - Datum vytvoření oznámení.
+              - Autor (osoba, která oznámení přidala).
+            - Akce pro každé oznámení:
+              - Možnost smazat oznámení (pro oprávněné uživatele).
+              - Možnost zobrazit detail oznámení (pokud je relevantní).
+            - Formulář pro přidání nového oznámení:
+              - Pole pro obsah oznámení (textový vstup nebo textarea).
+              - Odesílací tlačítko.
+        -->
+    </div>
 
 {% endblock %}

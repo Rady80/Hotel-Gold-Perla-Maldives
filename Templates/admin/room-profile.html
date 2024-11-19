@@ -1,6 +1,30 @@
 {% extends '../index.html' %}
-{% block context %}
 
-{% include '../common_pages/room-profile.html' %}
+{% block content %}
+    <!-- Sekce: Profil pokoje -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Profil pokoje</h1>
 
+        <!-- Karta s detaily pokoje -->
+        <div class="card shadow mt-4">
+            <div class="card-header bg-primary text-white">
+                <!-- Název pokoje a jeho číslo -->
+                <h3>{{ room.name }} (Číslo: {{ room.number }})</h3>
+            </div>
+            <div class="card-body">
+                <!-- Informace o pokoji -->
+                <p><strong>Kapacita:</strong> {{ room.capacity }}</p>
+                <p><strong>Počet postelí:</strong> {{ room.numberOfBeds }}</p>
+                <p><strong>Typ pokoje:</strong> {{ room.roomType }}</p>
+                <p><strong>Cena za noc:</strong> {{ room.price }} Kč</p>
+                <p><strong>Popis:</strong> {{ room.description }}</p>
+                <p><strong>Stav:</strong> {{ room.status }}</p>
+            </div>
+            <div class="card-footer text-end">
+                <!-- Akční tlačítka -->
+                <a href="{% url 'room-edit' room.number %}" class="btn btn-warning">Upravit</a>
+                <a href="{% url 'rooms' %}" class="btn btn-secondary">Zpět na seznam pokojů</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

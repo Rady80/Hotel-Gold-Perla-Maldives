@@ -1,7 +1,18 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšiřuje hlavní šablonu projektu -->
 
 {% block context %}
+<!-- Blok pro zobrazení autorizovaných událostí -->
 
-{% include '../common_pages/authorized-events.html' %}
+    <!-- Kontejner pro seznam autorizovaných událostí -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Autorizované Události</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony s autorizovanými událostmi -->
+        {% include '../common_pages/authorized-events.html' %}
+        <!-- 
+            Tímto způsobem znovupoužijeme šablonu `authorized-events.html`,
+            která obsahuje seznam událostí, na které má uživatel přístup.
+        -->
+    </div>
 
 {% endblock %}

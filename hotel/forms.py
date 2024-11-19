@@ -6,6 +6,7 @@ from .models import FoodMenu, Event, Announcement, Storage
 class EditFoodMenuForm(ModelForm):
     """
     Formulář pro úpravu jídelního menu.
+    Umožňuje editovat položky menu a nastavit období platnosti.
     """
     class Meta:
         model = FoodMenu
@@ -25,6 +26,7 @@ class EditFoodMenuForm(ModelForm):
 class EditEventForm(ModelForm):
     """
     Formulář pro úpravu událostí.
+    Umožňuje upravit typ, místo, období a další detaily události.
     """
     class Meta:
         model = Event
@@ -48,6 +50,7 @@ class EditEventForm(ModelForm):
 class CreateEventForm(ModelForm):
     """
     Formulář pro vytvoření nové události.
+    Zahrnuje typ, místo, datumy a vysvětlení.
     """
     class Meta:
         model = Event
@@ -71,6 +74,7 @@ class CreateEventForm(ModelForm):
 class CreateAnnouncementForm(ModelForm):
     """
     Formulář pro vytvoření oznámení.
+    Obsahuje nadpis, obsah a datum vytvoření.
     """
     class Meta:
         model = Announcement
@@ -90,6 +94,7 @@ class CreateAnnouncementForm(ModelForm):
 class CreateItemForm(ModelForm):
     """
     Formulář pro vytvoření položky ve skladu.
+    Umožňuje zadat název, typ a množství položky.
     """
     class Meta:
         model = Storage
@@ -101,6 +106,6 @@ class CreateItemForm(ModelForm):
         }
         widgets = {
             "itemName": forms.TextInput(attrs={"class": "form-control"}),
-            "itemType": forms.Select(attrs={"class": "form-control"}),
-            "quantity": forms.NumberInput(attrs={"class": "form-control"}),
+            "itemType": forms.Select(attrs={"class": "form-control"}),  # Použití výběrového seznamu
+            "quantity": forms.NumberInput(attrs={"class": "form-control"}),  # Číselný vstup
         }

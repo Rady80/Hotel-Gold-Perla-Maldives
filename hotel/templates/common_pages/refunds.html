@@ -1,0 +1,50 @@
+<div class="container mt-4">
+    <!-- Nadpis sekce -->
+    <h2 class="text-center text-primary">Seznam Refundací</h2>
+
+    <!-- Tabulka s refundacemi -->
+    <table class="table table-striped table-hover mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Host</th>
+                <th>Částka</th>
+                <th>Důvod</th>
+                <th>Datum</th>
+                <th>Stav</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for refund in refunds %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> <!-- Pořadí refundace -->
+                    <td>{{ refund.guest.user.first_name }} {{ refund.guest.user.last_name }}</td> <!-- Jméno hosta -->
+                    <td>{{ refund.amount }} Kč</td> <!-- Částka refundace -->
+                    <td>{{ refund.reason }}</td> <!-- Důvod refundace -->
+                    <td>{{ refund.date | date:"d.m.Y" }}</td> <!-- Datum refundace -->
+                    <td>
+                        {% if refund.status == 'pending' %}
+                            <span class="badge bg-warning">Čeká na schválení</span>
+                        {% elif refund.status == 'approved' %}
+                            <span class="badge bg-success">Schváleno</span>
+                        {% else %}
+                            <span class="badge bg-danger">Zamítnuto</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'refund-detail' refund.id %}" class="btn btn-info btn-sm">Detail</a>
+                        <form method="POST" action="{% url 'refund-delete' refund.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Smazat</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">Žádné refundace k zobrazení.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

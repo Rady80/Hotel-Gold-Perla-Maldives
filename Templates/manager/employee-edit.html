@@ -1,7 +1,64 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro úpravu zaměstnance -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Úprava zaměstnance</h1>
 
-{% include '../common_pages/employee-edit.html' %}
-
+    <!-- Vložení obsahu šablony pro úpravu zaměstnance -->
+    {% include '../common_pages/employee-edit.html' %}
+</div>
 {% endblock %}
+
+<!-- Obsah šablony employee-edit.html -->
+<div class="card my-5">
+    <div class="card-header bg-info">
+        <h3 class="text-center">Detail zaměstnance</h3>
+    </div>
+    <div class="card-body">
+        <!-- Formulář pro úpravu zaměstnance -->
+        <form method="POST">
+            {% csrf_token %} <!-- CSRF token pro zabezpečení formuláře -->
+
+            <!-- Uživatelské jméno (nelze měnit) -->
+            <div class="form-group">
+                <label for="username">Uživatelské jméno</label>
+                <input type="text" id="username" name="username" class="form-control" value="{{ employee.user.username }}" readonly>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" value="{{ employee.user.email }}" required>
+            </div>
+
+            <!-- Telefonní číslo -->
+            <div class="form-group">
+                <label for="phoneNumber">Telefonní číslo</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" value="{{ employee.phoneNumber }}" required>
+            </div>
+
+            <!-- Plat -->
+            <div class="form-group">
+                <label for="salary">Plat (Kč)</label>
+                <input type="number" id="salary" name="salary" class="form-control" value="{{ employee.salary }}" required>
+            </div>
+
+            <!-- Role zaměstnance -->
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" class="form-select">
+                    <option value="manager" {% if employee.user.groups.first.name == "manager" %}selected{% endif %}>Manažer</option>
+                    <option value="receptionist" {% if employee.user.groups.first.name == "receptionist" %}selected{% endif %}>Recepční</option>
+                    <option value="staff" {% if employee.user.groups.first.name == "staff" %}selected{% endif %}>Zaměstnanec</option>
+                </select>
+            </div>
+
+            <!-- Tlačítka pro akce -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success">Uložit změny</button>
+                <a href="{% url 'employees' %}" class="btn btn-secondary">Zpět na seznam</a>
+            </div>
+        </form>
+    </div>
+</div>

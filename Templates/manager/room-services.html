@@ -1,6 +1,20 @@
-{% extends '../index.html' %}
-{% block context %}
+{% extends '../index.html' %} <!-- Rozšiřuje hlavní šablonu projektu -->
 
-{% include '../common_pages/room-services.html' %}
+{% block context %}
+<!-- Blok pro specifický obsah stránky -->
+
+    <!-- Kontejner pro seznam pokojových služeb -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Pokojové služby</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro zobrazení pokojových služeb -->
+        {% include '../common_pages/room-services.html' %}
+        <!-- 
+            Šablona `room-services.html` by měla obsahovat informace o:
+            - Aktuálních službách poskytovaných v pokoji.
+            - Možnosti objednat nové služby (např. jídlo, úklid, technickou podporu).
+            - Přehled cen a dostupnosti služeb.
+        -->
+    </div>
 
 {% endblock %}

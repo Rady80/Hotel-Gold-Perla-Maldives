@@ -1,22 +1,32 @@
 from django.apps import AppConfig
-
+from django.core.exceptions import ImproperlyConfigured
 
 class RoomConfig(AppConfig):
     """
-    Konfigurace aplikace 'room'.
-    Obsahuje nastavení pro správu aplikace a její inicializaci.
+    Konfigurace aplikace 'room' pro Django projekt.
+
+    Tento soubor definuje nastavení pro aplikaci 'room', včetně inicializace aplikace a
+    registrace signálů během spuštění.
     """
-    default_auto_field = 'django.db.models.BigAutoField'  # Výchozí typ primárního klíče pro modely
-    name = 'room'  # Název aplikace registrované v Django projektu
-    verbose_name = "Pokoje a správa"  # Čitelný název aplikace v administraci
+    default_auto_field = 'django.db.models.BigAutoField'  # Výchozí typ primárního klíče pro modely (automaticky generovaný)
+    name = 'room'  # Název aplikace, jak je registrován v Django projektu
+    verbose_name = "Pokoje a správa"  # Přátelský název aplikace pro administraci
 
     def ready(self):
         """
-        Provádí inicializační kroky při spuštění aplikace, jako je registrace signálů.
+        Inicializační logika aplikace při jejím spuštění.
+
+        Tato metoda je volána automaticky během startu Django aplikace. Slouží k registraci
+        signálů aplikace, které umožňují provádět určité akce při událostech, jako je
+        vytvoření nebo smazání objektů.
+
+        Pokud dojde k chybě při importu signálů, vyvoláme výjimku s popisem chyby.
         """
         try:
-            import room.signals  # Importuje signály z room/signals.py
+            # Pokus o importování signálů aplikace z `room/signals.py`
+            import room.signals  # Tento soubor je zodpovědný za registraci signálů
         except ImportError as e:
-            # Pokud signály neexistují nebo obsahují chybu, zaloguje chybu
-            from django.core.exceptions import ImproperlyConfigured
-            raise ImproperlyConfigured(f"Chyba při načítání signálů aplikace 'room': {e}")
+            # Pokud dojde k chybě při načítání signálů, vyvoláme výjimku a poskytneme detailní informaci
+            raise ImproperlyConfigured(
+                f"Chyba při načítání signálů aplikace 'room': {e}"  # Poskytuje podrobnosti o chybě
+            )

@@ -1,55 +1,98 @@
 {% extends '../index.html' %}
 
 {% block content %}
-    <!-- Vložení šablony pro autorizovaná oznámení -->
-    {% include '../common_pages/authorized-announcements.html' %}
+    <!-- Vložení sdílené části šablony pro přidání pokoje -->
+    {% include '../common_pages/add-room.html' %}
 
-    <!-- Seznam oznámení -->
-    <section>
-        <h2>Autorizovaná Oznámení</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Obsah</th>
-                    <th>Datum</th>
-                    <th>Odesílatel</th>
-                    <th>Akce</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for announcement in announcements %}
-                <tr>
-                    <td>{{ announcement.id }}</td>
-                    <td>{{ announcement.content }}</td>
-                    <td>{{ announcement.date }}</td>
-                    <td>{{ announcement.sender.user.username }}</td>
-                    <td>
-                        <form method="POST" action="{% url 'delete-announcement' announcement.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Smazat</button>
-                        </form>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5">Žádná oznámení k zobrazení.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
+    <!-- Formulář pro přidání pokoje -->
+    <form method="POST" class="add-room-form">
+        <!-- Zajištění ochrany proti CSRF útokům -->
+        {% csrf_token %}
 
-    <!-- Formulář pro přidání oznámení -->
-    <section>
-        <h2>Přidat Nové Oznámení</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <div>
-                <label for="content">Obsah Oznámení:</label>
-                <textarea name="content" id="content" rows="4" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Odeslat</button>
-        </form>
-    </section>
+        <!-- Číslo pokoje -->
+        <div class="form-group">
+            <label for="number">Číslo pokoje:</label>
+            <input type="number" name="number" id="number" class="form-control" placeholder="Zadejte číslo pokoje" required>
+        </div>
+
+        <!-- Kapacita pokoje -->
+        <div class="form-group">
+            <label for="capacity">Kapacita:</label>
+            <input type="number" name="capacity" id="capacity" class="form-control" placeholder="Zadejte kapacitu pokoje" required>
+        </div>
+
+        <!-- Počet postelí -->
+        <div class="form-group">
+            <label for="numberOfBeds">Počet postelí:</label>
+            <input type="number" name="numberOfBeds" id="numberOfBeds" class="form-control" placeholder="Zadejte počet postelí" required>
+        </div>
+
+        <!-- Typ pokoje -->
+        <div class="form-group">
+            <label for="roomType">Typ pokoje:</label>
+            <select name="roomType" id="roomType" class="form-control" required>
+                <option value="King">King</option>
+                <option value="Luxury">Luxury</option>
+                <option value="Normal">Normal</option>
+                <option value="Economic">Economic</option>
+            </select>
+        </div>
+
+        <!-- Cena za noc -->
+        <div class="form-group">
+            <label for="price">Cena za noc:</label>
+            <input type="number" name="price" id="price" step="0.01" class="form-control" placeholder="Zadejte cenu za noc" required>
+        </div>
+
+        <!-- Tlačítko pro odeslání formuláře -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Přidat pokoj</button>
+        </div>
+    </form>
 {% endblock %}
+
+<!-- CSS pro stylování formuláře -->
+<style>
+    .add-room-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>

@@ -1,6 +1,11 @@
 {% extends '../index.html' %}
-{% block context %}
 
-{% include '../common_pages/room-profile.html' %}
+{% block content %}
+    <!-- Sekce pro profil pokoje -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Profil pokoje</h1>
 
+        <!-- Vložení obsahu šablony pro profil pokoje -->
+        {% include '../common_pages/room-profile.html' %}
+    </div>
 {% endblock %}

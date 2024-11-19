@@ -2,19 +2,21 @@ from django import forms
 from .models import Room, Booking, Dependees
 
 
+# ------------------------------
 # Formulář pro úpravu pokojů
+# ------------------------------
 class EditRoomForm(forms.ModelForm):
     """
     Formulář pro úpravu údajů o pokojích.
     """
     class Meta:
-        model = Room  # Model, který tento formulář reprezentuje
-        fields = ["capacity", "numberOfBeds", "roomType", "price"]  # Pole, která lze upravovat
+        model = Room  # Model reprezentující pokoje
+        fields = ["capacity", "numberOfBeds", "roomType", "price"]  # Pole, která lze editovat
         labels = {
-            'capacity': 'Kapacita pokoje',  # Popis pro pole kapacity
-            'numberOfBeds': 'Počet postelí',  # Popis pro pole počtu postelí
-            'roomType': 'Typ pokoje',  # Popis pro pole typu pokoje
-            'price': 'Cena za noc (Kč)',  # Popis pro pole ceny
+            'capacity': 'Kapacita pokoje',  # Popis pole kapacity
+            'numberOfBeds': 'Počet postelí',  # Popis pole počtu postelí
+            'roomType': 'Typ pokoje',  # Popis pole typu pokoje
+            'price': 'Cena za noc (Kč)',  # Popis pole ceny
         }
         widgets = {
             'capacity': forms.NumberInput(attrs={
@@ -50,14 +52,16 @@ class EditRoomForm(forms.ModelForm):
         return price
 
 
-# Formulář pro rezervace
+# ------------------------------
+# Formulář pro úpravu rezervací
+# ------------------------------
 class EditBookingForm(forms.ModelForm):
     """
     Formulář pro úpravu rezervací.
     """
     class Meta:
-        model = Booking  # Model rezervací
-        fields = ["startDate", "endDate"]  # Pole, která lze upravovat
+        model = Booking  # Model reprezentující rezervace
+        fields = ["startDate", "endDate"]  # Pole, která lze editovat
         labels = {
             'startDate': 'Datum začátku rezervace',
             'endDate': 'Datum konce rezervace',
@@ -84,14 +88,16 @@ class EditBookingForm(forms.ModelForm):
         return cleaned_data
 
 
+# ------------------------------
 # Formulář pro správu závislých osob
+# ------------------------------
 class EditDependeesForm(forms.ModelForm):
     """
     Formulář pro úpravu údajů o závislých osobách.
     """
     class Meta:
-        model = Dependees  # Model závislých osob
-        fields = ["booking", "name", "relation"]  # Pole, která lze upravovat
+        model = Dependees  # Model reprezentující závislé osoby
+        fields = ["booking", "name", "relation"]  # Pole, která lze editovat
         labels = {
             'booking': 'Rezervace',
             'name': 'Jméno osoby',

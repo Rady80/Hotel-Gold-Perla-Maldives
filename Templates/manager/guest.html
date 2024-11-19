@@ -1,7 +1,18 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšiřuje hlavní šablonu projektu -->
 
 {% block context %}
+<!-- Blok obsahu specifického pro zobrazení seznamu hostů -->
 
-{% include '../common_pages/guests.html' %}
+    <!-- Kontejner pro zobrazení seznamu hostů -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Seznam hostů</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony s tabulkou hostů -->
+        {% include '../common_pages/guests.html' %}
+        <!-- 
+            Znovu využívá šablonu `guests.html`, která obsahuje design a logiku 
+            pro zobrazení seznamu hostů, jejich informací a případné akce (např. úprava).
+        -->
+    </div>
 
 {% endblock %}

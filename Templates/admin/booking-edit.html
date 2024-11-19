@@ -3,30 +3,53 @@
 {% block content %}
     <!-- Sekce pro úpravu rezervace -->
     <h2>Upravit rezervaci</h2>
+    
+    <!-- Formulář pro úpravu údajů rezervace -->
     <form method="POST">
-        {% csrf_token %}
-        
+        {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
+
+        <!-- Pole pro zadání začátku rezervace -->
         <div class="form-group">
             <label for="startDate">Datum začátku:</label>
-            <input type="date" name="startDate" id="startDate" value="{{ booking.startDate }}" required class="form-control">
+            <input 
+                type="date" 
+                name="startDate" 
+                id="startDate" 
+                value="{{ booking.startDate }}" 
+                required 
+                class="form-control">
         </div>
         
+        <!-- Pole pro zadání konce rezervace -->
         <div class="form-group">
             <label for="endDate">Datum konce:</label>
-            <input type="date" name="endDate" id="endDate" value="{{ booking.endDate }}" required class="form-control">
+            <input 
+                type="date" 
+                name="endDate" 
+                id="endDate" 
+                value="{{ booking.endDate }}" 
+                required 
+                class="form-control">
         </div>
 
+        <!-- Výběr pokoje z dostupných možností -->
         <div class="form-group">
             <label for="roomNumber">Pokoj:</label>
-            <select name="roomNumber" id="roomNumber" class="form-control">
-                {% for room in rooms %}
-                    <option value="{{ room.number }}" {% if room.number == booking.roomNumber.number %}selected{% endif %}>
+            <select 
+                name="roomNumber" 
+                id="roomNumber" 
+                class="form-control">
+                {% for room in rooms %} <!-- Iterace přes dostupné pokoje -->
+                    <option 
+                        value="{{ room.number }}" 
+                        {% if room.number == booking.roomNumber.number %}selected{% endif %}>
                         {{ room.name }} - Kapacita: {{ room.capacity }}
                     </option>
                 {% endfor %}
             </select>
         </div>
 
+        <!-- Tlačítko pro uložení změn -->
         <button type="submit" class="btn btn-primary">Uložit změny</button>
     </form>
 {% endblock %}

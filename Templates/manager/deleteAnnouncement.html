@@ -1,4 +1,33 @@
 {% extends '../index.html' %}
-{% block context %}
-{% include '../common_pages/deleteAnnouncement.html' %}
+
+{% block content %}
+<!-- Sekce pro smazání oznámení -->
+<div class="container mt-5">
+    <h1 class="text-danger text-center">Smazat oznámení</h1>
+
+    <!-- Vložení obsahu šablony pro smazání oznámení -->
+    {% include '../common_pages/deleteAnnouncement.html' %}
+</div>
 {% endblock %}
+
+<!-- Obsah šablony deleteAnnouncement.html -->
+<div class="card my-5">
+    <div class="card-header bg-warning">
+        <h3 class="text-center">Opravdu chcete smazat toto oznámení?</h3>
+    </div>
+    <div class="card-body">
+        <!-- Zobrazení detailů oznámení -->
+        <p><strong>Autor:</strong> {{ announcement.sender.user.first_name }} {{ announcement.sender.user.last_name }}</p>
+        <p><strong>Obsah oznámení:</strong> {{ announcement.content }}</p>
+        <p><strong>Datum vytvoření:</strong> {{ announcement.date }}</p>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <!-- Formulář pro potvrzení smazání -->
+        <form method="POST">
+            {% csrf_token %} <!-- CSRF token pro zabezpečení -->
+            <button type="submit" class="btn btn-danger">Smazat</button>
+        </form>
+        <!-- Tlačítko pro zrušení akce -->
+        <a href="{% url 'announcements' %}" class="btn btn-secondary">Zrušit</a>
+    </div>
+</div>

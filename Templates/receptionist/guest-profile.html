@@ -1,7 +1,13 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšiřuje základní šablonu projektu -->
 
 {% block context %}
+<!-- Blok pro zobrazení konkrétního obsahu stránky -->
 
-{% include '../common_pages/guest-profile.html' %}
+    <!-- Zahrnutí šablony profilu hosta -->
+    {% include '../common_pages/guest-profile.html' %}
+    <!-- 
+        Tato část zahrnuje šablonu `guest-profile.html`, která obsahuje informace o konkrétním hostovi.
+        Zahrnutí pomocí `{% include %}` zajišťuje snadnou opětovnou použitelnost této části kódu.
+    -->
 
 {% endblock %}

@@ -1,7 +1,33 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro odstranění skladové položky -->
+<div class="container mt-5">
+    <h1 class="text-danger text-center">Smazat položku skladu</h1>
 
-{% include '../common_pages/deleteStorage.html' %}
-
+    <!-- Vložení obsahu šablony pro odstranění položky skladu -->
+    {% include '../common_pages/deleteStorage.html' %}
+</div>
 {% endblock %}
+
+<!-- Obsah šablony deleteStorage.html -->
+<div class="card my-5">
+    <div class="card-header bg-warning">
+        <h3 class="text-center">Opravdu chcete smazat tuto položku skladu?</h3>
+    </div>
+    <div class="card-body">
+        <!-- Zobrazení detailů skladové položky -->
+        <p><strong>Název položky:</strong> {{ storage_item.itemName }}</p>
+        <p><strong>Typ položky:</strong> {{ storage_item.itemType }}</p>
+        <p><strong>Množství:</strong> {{ storage_item.quantity }}</p>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <!-- Formulář pro potvrzení smazání -->
+        <form method="POST">
+            {% csrf_token %} <!-- CSRF token pro zabezpečení -->
+            <button type="submit" class="btn btn-danger">Smazat</button>
+        </form>
+        <!-- Tlačítko pro zrušení akce -->
+        <a href="{% url 'storage' %}" class="btn btn-secondary">Zrušit</a>
+    </div>
+</div>

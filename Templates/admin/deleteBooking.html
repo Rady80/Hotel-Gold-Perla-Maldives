@@ -3,25 +3,35 @@
 {% block content %}
     <!-- Sekce pro smazání rezervace -->
     <div class="container mt-4">
+        <!-- Nadpis sekce -->
         <h2 class="text-danger">Smazat rezervaci</h2>
-        <p>Opravdu chcete smazat tuto rezervaci?</p>
+        <p>Opravdu chcete smazat tuto rezervaci? Tato akce je nevratná.</p>
 
-        <!-- Detail rezervace -->
+        <!-- Zobrazení detailů rezervace -->
         <div class="card my-3">
             <div class="card-body">
-                <h5 class="card-title">Host: {{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }}</h5>
+                <!-- Jméno hosta -->
+                <h5 class="card-title">
+                    Host: {{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }}
+                </h5>
+                <!-- Číslo pokoje -->
                 <p class="card-text"><strong>Pokoj:</strong> {{ booking.roomNumber.number }}</p>
+                <!-- Datum vytvoření rezervace -->
                 <p class="card-text"><strong>Datum rezervace:</strong> {{ booking.dateOfReservation }}</p>
+                <!-- Datum začátku pobytu -->
                 <p class="card-text"><strong>Začátek pobytu:</strong> {{ booking.startDate }}</p>
+                <!-- Datum konce pobytu -->
                 <p class="card-text"><strong>Konec pobytu:</strong> {{ booking.endDate }}</p>
             </div>
         </div>
 
-        <!-- Formulář pro potvrzení nebo zrušení akce -->
+        <!-- Formulář pro potvrzení nebo zrušení smazání rezervace -->
         <form method="POST">
-            {% csrf_token %}
+            {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
             <div class="d-flex justify-content-between">
+                <!-- Tlačítko pro potvrzení smazání -->
                 <button type="submit" class="btn btn-danger">Smazat</button>
+                <!-- Tlačítko pro návrat na stránku s rezervacemi -->
                 <a href="{% url 'bookings' %}" class="btn btn-secondary">Zrušit</a>
             </div>
         </form>

@@ -1,6 +1,24 @@
-{% extends '../index.html' %}
-{% block context %}
+{% extends '../index.html' %} <!-- Rozšiřuje hlavní šablonu projektu -->
 
-{% include '../common_pages/room-profile.html' %}
+{% block context %}
+<!-- Blok pro specifický obsah stránky -->
+
+    <!-- Kontejner pro profil pokoje -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Profil pokoje</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro zobrazení profilu pokoje -->
+        {% include '../common_pages/room-profile.html' %}
+        <!-- 
+            Šablona `room-profile.html` obsahuje informace o pokoji, jako jsou:
+            - Číslo pokoje.
+            - Kapacita (např. počet osob).
+            - Počet postelí.
+            - Typ pokoje (např. King, Luxury, Normal).
+            - Cena za noc.
+            - Stav pokoje (volný, obsazený apod.).
+            - Další popis pokoje, pokud je k dispozici.
+        -->
+    </div>
 
 {% endblock %}

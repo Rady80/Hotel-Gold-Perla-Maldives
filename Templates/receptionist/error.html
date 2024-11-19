@@ -1,7 +1,21 @@
-{% extends '../index.html' %}
-{% load static %}
-{% block context %}
+{% extends '../index.html' %} <!-- Rozšíření hlavní šablony projektu -->
+{% load static %} <!-- Načtení tagu static pro statické soubory -->
 
-{% include '../common_pages/error.html' %}
+{% block context %}
+<!-- Blok specifického obsahu stránky -->
+
+    <!-- Kontejner pro zobrazení chybové zprávy -->
+    <div class="container mt-5">
+        <div class="alert alert-danger text-center py-4">
+            <!-- Vložení šablony s obsahem chybové zprávy -->
+            {% include '../common_pages/error.html' %}
+            <!-- 
+                Šablona `error.html` by měla obsahovat:
+                - Nadpis s textem jako "Chyba!".
+                - Podrobnosti o chybě nebo instrukce pro uživatele.
+                - Možnost návratu na domovskou stránku nebo jinou relevantní akci.
+            -->
+        </div>
+    </div>
 
 {% endblock %}

@@ -1,7 +1,18 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšiřuje hlavní šablonu projektu -->
 
 {% block context %}
+<!-- Blok obsahu specifického pro zobrazení profilu hosta -->
 
-{% include '../common_pages/guest-profile.html' %}
+    <!-- Kontejner pro zobrazení informací o hostu -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Profil hosta</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony s profilem hosta -->
+        {% include '../common_pages/guest-profile.html' %}
+        <!-- 
+            Tímto se znovupoužívá šablona `guest-profile.html`, 
+            která obsahuje design a logiku pro zobrazení podrobných informací o hostu.
+        -->
+    </div>
 
 {% endblock %}

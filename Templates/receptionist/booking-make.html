@@ -1,7 +1,24 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšíření hlavní šablony projektu -->
 
 {% block context %}
+<!-- Blok specifického obsahu stránky -->
 
-{% include '../common_pages/booking-make.html' %}
+    <!-- Kontejner pro vytvoření rezervace -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Vytvoření rezervace</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro vytvoření rezervace -->
+        {% include '../common_pages/booking-make.html' %}
+        <!-- 
+            Šablona `booking-make.html` by měla obsahovat:
+            - Formulář pro zadání detailů rezervace:
+              - Výběr pokoje (select box).
+              - Výběr hosta (select box).
+              - Datum začátku a konce rezervace (input type="date").
+              - Volitelná pole (např. další hosté, poznámky).
+            - Tlačítko pro odeslání formuláře.
+            - Validace a zobrazování chybových zpráv (pokud existují chyby).
+        -->
+    </div>
 
 {% endblock %}

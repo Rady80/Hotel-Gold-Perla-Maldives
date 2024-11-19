@@ -1,7 +1,83 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro přidání zaměstnance -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Přidat nového zaměstnance</h1>
+    
+    <!-- Formulář pro přidání zaměstnance -->
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row mt-4">
+            <!-- Levý sloupec formuláře -->
+            <div class="col-md-6">
+                <!-- Uživatelské jméno -->
+                <div class="form-group">
+                    <label for="username">Uživatelské jméno</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Zadejte uživatelské jméno" required>
+                </div>
+                <!-- Jméno -->
+                <div class="form-group">
+                    <label for="first_name">Jméno</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Zadejte jméno" required>
+                </div>
+                <!-- Příjmení -->
+                <div class="form-group">
+                    <label for="last_name">Příjmení</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Zadejte příjmení" required>
+                </div>
+                <!-- E-mail -->
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Zadejte e-mail" required>
+                </div>
+            </div>
 
-{% include '../common_pages/add-room.html' %}
+            <!-- Pravý sloupec formuláře -->
+            <div class="col-md-6">
+                <!-- Telefonní číslo -->
+                <div class="form-group">
+                    <label for="phoneNumber">Telefonní číslo</label>
+                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" pattern="[0-9]{9,10}" placeholder="Zadejte telefonní číslo" required>
+                </div>
+                <!-- Plat -->
+                <div class="form-group">
+                    <label for="salary">Plat</label>
+                    <input type="number" class="form-control" id="salary" name="salary" placeholder="Zadejte plat (v Kč)" required>
+                </div>
+                <!-- Heslo -->
+                <div class="form-group">
+                    <label for="password1">Heslo</label>
+                    <input type="password" class="form-control" id="password1" name="password1" placeholder="Zadejte heslo" required>
+                </div>
+                <!-- Potvrzení hesla -->
+                <div class="form-group">
+                    <label for="password2">Potvrzení hesla</label>
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="Znovu zadejte heslo" required>
+                </div>
+            </div>
+        </div>
 
+        <!-- Výběr role zaměstnance -->
+        <div class="form-group mt-4">
+            <label>Role</label>
+            <div>
+                <label class="radio-inline mr-3">
+                    <input type="radio" name="role" value="manager" required> Manager
+                </label>
+                <label class="radio-inline mr-3">
+                    <input type="radio" name="role" value="receptionist" required> Recepční
+                </label>
+                <label class="radio-inline mr-3">
+                    <input type="radio" name="role" value="staff" required> Zaměstnanec
+                </label>
+            </div>
+        </div>
+
+        <!-- Odeslání formuláře -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Přidat zaměstnance</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

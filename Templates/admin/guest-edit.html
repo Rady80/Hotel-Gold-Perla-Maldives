@@ -1,7 +1,12 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Sekce pro úpravu hosta -->
+    <div class="container mt-5">
+        <!-- Nadpis stránky -->
+        <h1 class="text-primary text-center">Upravit informace o hostovi</h1>
 
-{% include '../common_pages/guest-edit.html' %}
-
+        <!-- Vložení šablony pro úpravu hosta -->
+        {% include '../common_pages/guest-edit.html' %}
+    </div>
 {% endblock %}

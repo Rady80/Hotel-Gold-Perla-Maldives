@@ -1,7 +1,14 @@
 {% extends '../index.html' %}
 {% load static %}
-{% block context %}
 
-{% include '../common_pages/error.html' %}
-
+{% block content %}
+<!-- Sekce pro zobrazení chybové zprávy -->
+<div class="container mt-5">
+    <div class="alert alert-danger text-center py-4">
+        <h1 class="display-4 text-danger">Chyba!</h1> <!-- Nadpis chyby -->
+        <p class="lead">Něco se pokazilo. Zkuste to prosím znovu později.</p> <!-- Popis chyby -->
+        <!-- Odkaz zpět na domovskou stránku -->
+        <a href="{% url 'home' %}" class="btn btn-primary btn-lg mt-3">Zpět na domovskou stránku</a>
+    </div>
+</div>
 {% endblock %}

@@ -1,27 +1,85 @@
 {% extends '../index.html' %}
 
 {% block content %}
-    <!-- Vložení šablony pro přidání zaměstnance -->
+    <!-- Šablona pro přidání zaměstnance -->
+    <!-- Vkládá sdílenou část šablony (například hlavička nebo navigace) -->
     {% include '../common_pages/add-employee.html' %}
 
-    <!-- Formulář pro přidání zaměstnance -->
-    <form method="POST">
+    <!-- Formulář pro přidání nového zaměstnance -->
+    <form method="POST" class="add-employee-form">
+        <!-- Zajištění ochrany proti CSRF útokům -->
         {% csrf_token %}
-        <div>
+
+        <!-- Uživatelské jméno -->
+        <div class="form-group">
             <label for="username">Uživatelské jméno:</label>
-            <input type="text" name="username" id="username" required>
+            <input type="text" name="username" id="username" class="form-control" placeholder="Zadejte uživatelské jméno" required>
         </div>
-        <div>
+
+        <!-- E-mailová adresa -->
+        <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" name="email" id="email" required>
+            <input type="email" name="email" id="email" class="form-control" placeholder="Zadejte e-mailovou adresu" required>
         </div>
-        <div>
+
+        <!-- Výběr role -->
+        <div class="form-group">
             <label for="role">Role:</label>
-            <select name="role" id="role">
+            <select name="role" id="role" class="form-control">
                 <option value="manager">Manager</option>
                 <option value="staff">Zaměstnanec</option>
             </select>
         </div>
-        <button type="submit">Přidat zaměstnance</button>
+
+        <!-- Tlačítko pro odeslání formuláře -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Přidat zaměstnance</button>
+        </div>
     </form>
 {% endblock %}
+
+<!-- CSS pro stylování formuláře -->
+<style>
+    .add-employee-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>

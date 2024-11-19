@@ -1,7 +1,11 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro zobrazení profilu události -->
+<div class="container py-5">
+    <h1 class="text-primary text-center">Profil události</h1>
 
-{% include '../common_pages/authorized-events.html' %}
-
+    <!-- Vložení šablony s detailem události -->
+    {% include '../common_pages/event-profile.html' %}
+</div>
 {% endblock %}

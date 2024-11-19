@@ -1,7 +1,18 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšiřuje hlavní šablonu projektu -->
 
 {% block context %}
+<!-- Blok specifického obsahu stránky -->
 
-{% include '../common_pages/refunds.html' %}
+    <!-- Kontejner pro seznam refundací -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Seznam refundací</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro zobrazení refundací -->
+        {% include '../common_pages/refunds.html' %}
+        <!-- 
+            Šablona `refunds.html` obsahuje detailní seznam refundací, jejich informace 
+            (např. ID refundace, částku, důvod) a případné akce (schválení/zamítnutí).
+        -->
+    </div>
 
 {% endblock %}

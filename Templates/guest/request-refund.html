@@ -1,26 +1,41 @@
 {% extends '../index.html' %}
 {% load static %}
-{% block context %}
+{% block content %}
 
+<!-- Hlavní kontejner -->
 <div class="container py-5">
+
+  <!-- Sekce pro zobrazení zpráv -->
   <div id="messages">
     {% for m in messages %}
-
-    <div class="alert alert-info">
-      {{m}}
-    </div>
-
+      <div class="alert alert-info">
+        {{ m }} <!-- Zobrazení jednotlivých zpráv z backendu -->
+      </div>
     {% endfor %}
   </div>
 
+  <!-- Formulář pro odeslání žádosti -->
   <form action="" method="POST">
-    {% csrf_token %}
+    {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
+    
+    <!-- Textarea pro vysvětlení žádosti -->
     <div class="form-floating">
-      <label for="floatingTextarea2">Explanation </label>
-      <textarea class="form-control" name="reqExp" placeholder="Leave your explanation here" id="floatingTextarea2"
-        style="height: 100px"></textarea>
-      <input type="hidden" name="bid" value="{{id}}">
-      <button type="submit" class="btn btn-outline-success btn-lg float-right" name="sendReq">Send Request</button>
+      <label for="floatingTextarea2">Vysvětlení</label>
+      <textarea class="form-control" 
+                name="reqExp" 
+                placeholder="Zde napište své vysvětlení" 
+                id="floatingTextarea2" 
+                style="height: 100px"></textarea>
+      
+      <!-- Skryté pole pro ID rezervace -->
+      <input type="hidden" name="bid" value="{{ id }}">
+      
+      <!-- Tlačítko pro odeslání žádosti -->
+      <button type="submit" 
+              class="btn btn-outline-success btn-lg float-right" 
+              name="sendReq">
+        Odeslat žádost
+      </button>
     </div>
   </form>
 </div>

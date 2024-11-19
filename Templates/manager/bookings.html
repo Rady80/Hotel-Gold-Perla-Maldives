@@ -1,7 +1,46 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro seznam rezervací -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Seznam rezervací</h1>
 
-{% include '../common_pages/bookings.html' %}
-
+    <!-- Vložení obsahu šablony pro seznam rezervací -->
+    {% include '../common_pages/bookings.html' %}
+</div>
 {% endblock %}
+
+<!-- Obsah šablony bookings.html -->
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>#</th>
+            <th>Pokoj</th>
+            <th>Host</th>
+            <th>Datum rezervace</th>
+            <th>Od</th>
+            <th>Do</th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ booking.roomNumber.number }} - {{ booking.roomNumber.name }}</td>
+            <td>{{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }}</td>
+            <td>{{ booking.dateOfReservation }}</td>
+            <td>{{ booking.startDate }}</td>
+            <td>{{ booking.endDate }}</td>
+            <td>
+                <a href="{% url 'booking-edit' booking.id %}" class="btn btn-warning btn-sm">Upravit</a>
+                <a href="{% url 'delete-booking' booking.id %}" class="btn btn-danger btn-sm">Smazat</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">Žádné rezervace nenalezeny.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

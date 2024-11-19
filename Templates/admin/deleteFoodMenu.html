@@ -3,23 +3,28 @@
 {% block content %}
     <!-- Sekce pro smazání jídelního menu -->
     <div class="container mt-4">
+        <!-- Nadpis sekce -->
         <h2 class="text-danger">Smazat jídelní menu</h2>
-        <p>Opravdu chcete smazat toto jídelní menu?</p>
+        <p>Opravdu chcete smazat toto jídelní menu? Tato akce je nevratná.</p>
 
-        <!-- Detail jídelního menu -->
+        <!-- Zobrazení detailů jídelního menu -->
         <div class="card my-3">
             <div class="card-body">
+                <!-- Zobrazení platnosti jídelního menu -->
                 <h5 class="card-title"><strong>Platnost od:</strong> {{ food_menu.startDate }}</h5>
                 <h5 class="card-title"><strong>Platnost do:</strong> {{ food_menu.endDate }}</h5>
+                <!-- Zobrazení položek jídelního menu -->
                 <p class="card-text"><strong>Položky menu:</strong> {{ food_menu.menuItems }}</p>
             </div>
         </div>
 
         <!-- Formulář pro potvrzení nebo zrušení akce -->
         <form method="POST">
-            {% csrf_token %}
+            {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
             <div class="d-flex justify-content-between">
+                <!-- Tlačítko pro potvrzení smazání -->
                 <button type="submit" class="btn btn-danger">Smazat</button>
+                <!-- Tlačítko pro návrat na seznam jídelních menu -->
                 <a href="{% url 'food-menu' %}" class="btn btn-secondary">Zrušit</a>
             </div>
         </form>

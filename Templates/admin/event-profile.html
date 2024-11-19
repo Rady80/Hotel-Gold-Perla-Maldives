@@ -1,7 +1,28 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Hlavní obsah stránky -->
+    <div class="container mt-5">
+        <!-- Nadpis sekce -->
+        <h1 class="text-center text-primary">Profil Události</h1>
 
-{% include '../common_pages/event-profile.html' %}
-
+        <!-- Karta s informacemi o události -->
+        <div class="card shadow mt-4">
+            <!-- Hlavička karty -->
+            <div class="card-header bg-primary text-white">
+                <h3>{{ event.eventType }}</h3> <!-- Typ události -->
+            </div>
+            <!-- Tělo karty -->
+            <div class="card-body">
+                <p><strong>Místo konání:</strong> {{ event.location }}</p> <!-- Místo konání -->
+                <p><strong>Začátek:</strong> {{ event.startDate }}</p> <!-- Začátek události -->
+                <p><strong>Konec:</strong> {{ event.endDate }}</p> <!-- Konec události -->
+                <p><strong>Popis:</strong> {{ event.explanation }}</p> <!-- Popis události -->
+            </div>
+            <!-- Patička karty -->
+            <div class="card-footer text-end">
+                <a href="{% url 'events' %}" class="btn btn-secondary">Zpět na seznam</a> <!-- Tlačítko pro návrat -->
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -4,9 +4,9 @@
         <!-- Značka navigační lišty -->
         <a href="#" class="navbar-brand">
             <!-- Zobrazení jména uživatele a role -->
-            <h2 class="text-capitalize">
+            <h2 class="text-capitalize text-white">
                 {{ request.user.first_name }} {{ request.user.last_name }}
-                <small>{{ role }}</small>
+                <small class="text-muted">({{ role }})</small>
             </h2>
         </a>
 
@@ -20,7 +20,7 @@
             <ul class="navbar-nav ms-auto">
                 <!-- Dropdown menu pro možnosti -->
                 <li class="nav-item dropdown p-2">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Možnosti
                     </a>
@@ -77,15 +77,15 @@
                 <!-- Odkaz na profil -->
                 <li class="nav-item mr-3 p-2">
                     {% if role in ['staff', 'receptionist', 'admin', 'manager'] %}
-                        <a href="{% url 'employee-profile' user.id %}" class="nav-link">Profil</a>
+                        <a href="{% url 'employee-profile' user.id %}" class="nav-link text-white">Profil</a>
                     {% elif role == 'guest' %}
-                        <a href="{% url 'guest-profile' user.id %}" class="nav-link">Profil</a>
+                        <a href="{% url 'guest-profile' user.id %}" class="nav-link text-white">Profil</a>
                     {% endif %}
                 </li>
 
                 <!-- Odkaz na odhlášení -->
                 <li class="nav-item p-2">
-                    <a href="{% url 'logout' %}" class="nav-link">Odhlásit se</a>
+                    <a href="{% url 'logout' %}" class="nav-link text-white">Odhlásit se</a>
                 </li>
             </ul>
         </div>

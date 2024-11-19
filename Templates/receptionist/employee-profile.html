@@ -1,7 +1,21 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšíření hlavní šablony projektu -->
 
 {% block context %}
+<!-- Blok specifického obsahu stránky -->
 
-{% include '../common_pages/employee-profile.html' %}
+    <!-- Kontejner pro zobrazení profilu zaměstnance -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Profil zaměstnance</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro zobrazení profilu zaměstnance -->
+        {% include '../common_pages/employee-profile.html' %}
+        <!-- 
+            Šablona `employee-profile.html` by měla obsahovat:
+            - Základní informace o zaměstnanci (jméno, příjmení, uživatelské jméno, e-mail, telefonní číslo).
+            - Pracovní informace (role, plat, pracovní zařazení).
+            - Možnosti akcí (např. úprava profilu, návrat zpět).
+            - Responzivní design pro zobrazení na různých zařízeních.
+        -->
+    </div>
 
 {% endblock %}

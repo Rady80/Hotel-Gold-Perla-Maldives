@@ -3,38 +3,76 @@
 {% block content %}
     <!-- Sekce pro úpravu zaměstnance -->
     <div class="container mt-4">
+        <!-- Nadpis sekce -->
         <h2 class="text-primary">Úprava zaměstnance</h2>
 
         <!-- Formulář pro editaci zaměstnance -->
         <form method="POST">
-            {% csrf_token %}
+            {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
+
+            <!-- Pole pro uživatelské jméno (readonly) -->
             <div class="mb-3">
                 <label for="username" class="form-label">Uživatelské jméno</label>
-                <input type="text" class="form-control" id="username" name="username" value="{{ employee.user.username }}" readonly>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="username" 
+                    name="username" 
+                    value="{{ employee.user.username }}" 
+                    readonly>
             </div>
+
+            <!-- Pole pro e-mail -->
             <div class="mb-3">
                 <label for="email" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ employee.user.email }}">
+                <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email" 
+                    name="email" 
+                    value="{{ employee.user.email }}">
             </div>
+
+            <!-- Pole pro telefonní číslo -->
             <div class="mb-3">
                 <label for="phoneNumber" class="form-label">Telefonní číslo</label>
-                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" value="{{ employee.phoneNumber }}">
+                <input 
+                    type="tel" 
+                    class="form-control" 
+                    id="phoneNumber" 
+                    name="phoneNumber" 
+                    value="{{ employee.phoneNumber }}">
             </div>
+
+            <!-- Pole pro plat -->
             <div class="mb-3">
                 <label for="salary" class="form-label">Plat</label>
-                <input type="number" class="form-control" id="salary" name="salary" value="{{ employee.salary }}" step="0.01">
+                <input 
+                    type="number" 
+                    class="form-control" 
+                    id="salary" 
+                    name="salary" 
+                    value="{{ employee.salary }}" 
+                    step="0.01">
             </div>
+
+            <!-- Výběr role -->
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
-                <select class="form-select" id="role" name="role">
+                <select 
+                    class="form-select" 
+                    id="role" 
+                    name="role">
                     <option value="manager" {% if employee.user.groups.first.name == "manager" %}selected{% endif %}>Manager</option>
                     <option value="receptionist" {% if employee.user.groups.first.name == "receptionist" %}selected{% endif %}>Recepční</option>
                     <option value="staff" {% if employee.user.groups.first.name == "staff" %}selected{% endif %}>Zaměstnanec</option>
                 </select>
             </div>
+
+            <!-- Tlačítka pro akce -->
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary">Uložit změny</button>
-                <a href="{% url 'employees' %}" class="btn btn-secondary">Zrušit</a>
+                <button type="submit" class="btn btn-primary">Uložit změny</button> <!-- Odeslání formuláře -->
+                <a href="{% url 'employees' %}" class="btn btn-secondary">Zrušit</a> <!-- Zpět na seznam zaměstnanců -->
             </div>
         </form>
     </div>

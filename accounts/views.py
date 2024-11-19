@@ -1,3 +1,4 @@
+# accounts/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -16,16 +17,17 @@ from .forms import CreateUserForm
 def register_page(request):
     """
     Registrace nového uživatele a vytvoření profilu hosta.
+    Při úspěšné registraci je uživatel automaticky přihlášen.
     """
     if request.user.is_authenticated:
         return redirect('home')  # Přesměrování přihlášeného uživatele na domovskou stránku
     else:
         form = CreateUserForm()  # Inicializace formuláře
-        if request.method == 'POST':  # Zpracování odeslaného formuláře
+        if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 email = form.cleaned_data.get("email")
-                if User.objects.filter(email=email).exists():  # Kontrola existence e-mailu
+                if User.objects.filter(email=email).exists():
                     messages.error(request, 'Tento e-mail je již používán.')
                     return redirect('register')
 
@@ -55,17 +57,18 @@ def register_page(request):
 def login_page(request):
     """
     Přihlášení uživatele do systému.
+    Při neúspěšném přihlášení je zobrazena chybová zpráva.
     """
     if request.user.is_authenticated:
         return redirect('home')  # Přesměrování přihlášeného uživatele
     else:
-        if request.method == "POST":  # Zpracování přihlašovacího formuláře
+        if request.method == "POST":
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
-                login(request, user)  # Přihlášení uživatele
+                login(request, user)
                 return redirect('home')
             else:
                 messages.error(request, "Nesprávné uživatelské jméno nebo heslo.")
@@ -81,6 +84,7 @@ def logout_user(request):
     Odhlášení uživatele a přesměrování na přihlašovací stránku.
     """
     logout(request)
+    messages.info(request, "Byli jste úspěšně odhlášeni.")
     return redirect('login')
 
 
@@ -90,7 +94,7 @@ def logout_user(request):
 @login_required(login_url='login')
 def guests(request):
     """
-    Zobrazení seznamu hostů s možností filtrování.
+    Zobrazení seznamu hostů s možností filtrování podle atributů nebo data rezervací.
     """
     role = str(request.user.groups.first()) if request.user.groups.exists() else "guest"
     path = f"{role}/"

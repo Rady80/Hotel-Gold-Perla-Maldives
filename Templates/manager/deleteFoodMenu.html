@@ -1,7 +1,38 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro odstranění jídelního menu -->
+<div class="container mt-5">
+    <h1 class="text-danger text-center">Smazat jídelní menu</h1>
 
-{% include '../common_pages/deleteFoodMenu.html' %}
-
+    <!-- Vložení obsahu šablony pro smazání jídelního menu -->
+    {% include '../common_pages/deleteFoodMenu.html' %}
+</div>
 {% endblock %}
+
+<!-- Obsah šablony deleteFoodMenu.html -->
+<div class="card my-5">
+    <div class="card-header bg-warning">
+        <h3 class="text-center">Opravdu chcete smazat toto jídelní menu?</h3>
+    </div>
+    <div class="card-body">
+        <!-- Zobrazení detailů jídelního menu -->
+        <p><strong>Platnost od:</strong> {{ food_menu.startDate }}</p>
+        <p><strong>Platnost do:</strong> {{ food_menu.endDate }}</p>
+        <p><strong>Položky menu:</strong></p>
+        <ul>
+            {% for item in food_menu.menuItems.all %}
+            <li>{{ item.name }} - {{ item.price }} Kč</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <!-- Formulář pro potvrzení smazání -->
+        <form method="POST">
+            {% csrf_token %} <!-- CSRF token pro zabezpečení -->
+            <button type="submit" class="btn btn-danger">Smazat</button>
+        </form>
+        <!-- Tlačítko pro zrušení akce -->
+        <a href="{% url 'menu_list' %}" class="btn btn-secondary">Zrušit</a>
+    </div>
+</div>

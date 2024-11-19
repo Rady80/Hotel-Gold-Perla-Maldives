@@ -3,25 +3,33 @@
 {% block content %}
     <!-- Sekce pro smazání události -->
     <div class="container mt-4">
+        <!-- Nadpis stránky -->
         <h2 class="text-danger">Smazat událost</h2>
-        <p>Opravdu chcete smazat tuto událost?</p>
+        <p>Opravdu chcete smazat tuto událost? Tato akce je nevratná.</p>
 
-        <!-- Detail události -->
+        <!-- Zobrazení detailů události -->
         <div class="card my-3">
             <div class="card-body">
+                <!-- Typ události -->
                 <h5 class="card-title"><strong>Typ události:</strong> {{ event.eventType }}</h5>
+                <!-- Místo konání -->
                 <p class="card-text"><strong>Místo konání:</strong> {{ event.location }}</p>
+                <!-- Začátek události -->
                 <p class="card-text"><strong>Začátek:</strong> {{ event.startDate }}</p>
+                <!-- Konec události -->
                 <p class="card-text"><strong>Konec:</strong> {{ event.endDate }}</p>
+                <!-- Popis události -->
                 <p class="card-text"><strong>Popis:</strong> {{ event.explanation }}</p>
             </div>
         </div>
 
-        <!-- Formulář pro potvrzení nebo zrušení akce -->
+        <!-- Formulář pro potvrzení nebo zrušení smazání -->
         <form method="POST">
-            {% csrf_token %}
+            {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
             <div class="d-flex justify-content-between">
+                <!-- Tlačítko pro potvrzení smazání -->
                 <button type="submit" class="btn btn-danger">Smazat</button>
+                <!-- Tlačítko pro návrat na seznam událostí -->
                 <a href="{% url 'events' %}" class="btn btn-secondary">Zrušit</a>
             </div>
         </form>

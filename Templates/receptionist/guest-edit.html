@@ -1,7 +1,13 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšiřuje základní šablonu -->
 
 {% block context %}
+<!-- Hlavní obsah stránky -->
 
-{% include '../common_pages/guest-edit.html' %}
+    <!-- Zahrnutí šablony pro úpravu hosta -->
+    {% include '../common_pages/guest-edit.html' %}
+    <!-- 
+        Tato část zahrnuje šablonu `guest-edit.html`, která obsahuje formulář pro editaci informací o hostovi.
+        Tento přístup umožňuje snadnou opakovanou použitelnost šablony.
+    -->
 
 {% endblock %}

@@ -1,34 +1,39 @@
 {% extends '../index.html' %}
 
 {% block content %}
-    <!-- Profil zaměstnance -->
+    <!-- Sekce profilu zaměstnance -->
     <div class="container mt-4">
+        <!-- Nadpis -->
         <h2 class="text-primary">Profil zaměstnance</h2>
         
-        <!-- Základní informace o zaměstnanci -->
+        <!-- Karta se základními informacemi o zaměstnanci -->
         <div class="card my-4">
+            <!-- Hlavička karty -->
             <div class="card-header bg-primary text-white">
-                <h5>{{ employee.user.first_name }} {{ employee.user.last_name }}</h5>
+                <h5>{{ employee.user.first_name }} {{ employee.user.last_name }}</h5> <!-- Zobrazení celého jména -->
             </div>
+
+            <!-- Tělo karty -->
             <div class="card-body">
-                <p><strong>Uživatelské jméno:</strong> {{ employee.user.username }}</p>
-                <p><strong>Email:</strong> {{ employee.user.email }}</p>
-                <p><strong>Telefonní číslo:</strong> {{ employee.phoneNumber }}</p>
-                <p><strong>Plat:</strong> {{ employee.salary }} Kč</p>
+                <!-- Informace o uživateli -->
+                <p><strong>Uživatelské jméno:</strong> {{ employee.user.username }}</p> <!-- Uživatelské jméno -->
+                <p><strong>Email:</strong> {{ employee.user.email }}</p> <!-- Emailová adresa -->
+                <p><strong>Telefonní číslo:</strong> {{ employee.phoneNumber }}</p> <!-- Telefonní číslo -->
+                <p><strong>Plat:</strong> {{ employee.salary }} Kč</p> <!-- Plat zaměstnance -->
                 <p><strong>Role:</strong> 
-                    {% if employee.user.groups.exists %}
-                        {{ employee.user.groups.first.name|title }}
+                    {% if employee.user.groups.exists %} <!-- Kontrola existence přiřazené role -->
+                        {{ employee.user.groups.first.name|title }} <!-- Zobrazení názvu role s velkým písmenem na začátku -->
                     {% else %}
-                        Role není přiřazena
+                        Role není přiřazena <!-- Text pro případ, že role není nastavena -->
                     {% endif %}
                 </p>
             </div>
         </div>
 
-        <!-- Akce -->
+        <!-- Akce - Tlačítka pro úpravu nebo návrat -->
         <div class="d-flex justify-content-between">
-            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-primary">Upravit</a>
-            <a href="{% url 'employees' %}" class="btn btn-secondary">Zpět na seznam</a>
+            <a href="{% url 'employee-edit' employee.id %}" class="btn btn-primary">Upravit</a> <!-- Odkaz na editaci zaměstnance -->
+            <a href="{% url 'employees' %}" class="btn btn-secondary">Zpět na seznam</a> <!-- Odkaz na seznam zaměstnanců -->
         </div>
     </div>
 {% endblock %}

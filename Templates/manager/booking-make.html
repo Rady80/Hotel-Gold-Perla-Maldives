@@ -1,7 +1,61 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro vytvoření nové rezervace -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Vytvořit novou rezervaci</h1>
 
-{% include '../common_pages/booking-make.html' %}
+    <!-- Formulář pro vytvoření rezervace -->
+    <form method="POST">
+        {% csrf_token %}
 
+        <!-- Výběr pokoje -->
+        <div class="form-group mt-3">
+            <label for="room">Pokoj:</label>
+            <select id="room" name="room" class="form-control" required>
+                {% for room in rooms %}
+                <option value="{{ room.number }}">
+                    {{ room.name }} (Číslo: {{ room.number }}) - Kapacita: {{ room.capacity }} - Cena: {{ room.price }} Kč
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Výběr hosta -->
+        <div class="form-group mt-3">
+            <label for="guest">Host:</label>
+            <select id="guest" name="guest" class="form-control" required>
+                {% for guest in guests %}
+                <option value="{{ guest.id }}">
+                    {{ guest.user.first_name }} {{ guest.user.last_name }} - {{ guest.phoneNumber }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Výběr data začátku -->
+        <div class="form-group mt-3">
+            <label for="startDate">Datum začátku:</label>
+            <input type="date" id="startDate" name="startDate" class="form-control" required>
+        </div>
+
+        <!-- Výběr data konce -->
+        <div class="form-group mt-3">
+            <label for="endDate">Datum konce:</label>
+            <input type="date" id="endDate" name="endDate" class="form-control" required>
+        </div>
+
+        <!-- Možnost přidání dalších hostů -->
+        <div class="form-group mt-3">
+            <label for="dependees">Další hosté (volitelné):</label>
+            <input type="text" id="dependees" name="dependees" class="form-control" placeholder="Zadejte jména oddělená čárkou">
+        </div>
+
+        <!-- Tlačítka akce -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Vytvořit rezervaci</button>
+            <a href="{% url 'bookings' %}" class="btn btn-secondary">Zpět na seznam rezervací</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

@@ -1,7 +1,18 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšiřuje hlavní šablonu projektu -->
 
 {% block context %}
+<!-- Blok obsahu specifického pro editaci hosta -->
 
-{% include '../common_pages/guest-edit.html' %}
+    <!-- Kontejner pro úpravu informací o hostu -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Úprava informací o hostu</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro editaci hosta -->
+        {% include '../common_pages/guest-edit.html' %}
+        <!-- 
+            Tímto způsobem je znovupoužita šablona `guest-edit.html`, 
+            která obsahuje formulář a logiku pro úpravu dat o hostu.
+        -->
+    </div>
 
 {% endblock %}

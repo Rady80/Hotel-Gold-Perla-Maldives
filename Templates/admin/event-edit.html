@@ -2,13 +2,16 @@
 {% load static %}
 
 {% block content %}
-    <!-- Formulář pro úpravu události -->
+    <!-- Sekce pro úpravu události -->
     <div class="container mt-5">
+        <!-- Nadpis stránky -->
         <h1 class="text-center text-primary">Upravit událost</h1>
+        
+        <!-- Karta obsahující formulář -->
         <div class="card shadow mt-4">
             <div class="card-body">
                 <form method="POST">
-                    {% csrf_token %}
+                    {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
                     
                     <!-- Typ události -->
                     <div class="form-group">
@@ -23,7 +26,7 @@
                         </select>
                     </div>
 
-                    <!-- Místo -->
+                    <!-- Místo konání -->
                     <div class="form-group">
                         <label for="location">Místo</label>
                         <input 

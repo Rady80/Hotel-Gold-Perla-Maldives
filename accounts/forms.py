@@ -4,8 +4,13 @@ from django.contrib.auth.models import User
 from django import forms
 from .models import Employee, Guest
 
-# Formulář pro vytvoření uživatele (User)
+
+# Formulář pro vytvoření nového uživatele
 class CreateUserForm(UserCreationForm):
+    """
+    Formulář pro vytvoření uživatele na základě modelu User.
+    Zahrnuje pole pro uživatelské jméno, jméno, příjmení, email a heslo.
+    """
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
@@ -18,11 +23,16 @@ class CreateUserForm(UserCreationForm):
             'password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Potvrzení hesla'}),
         }
         help_texts = {
-            'username': 'Můžete použít písmena, čísla a @/./+/-/_',
+            'username': 'Můžete použít písmena, čísla a znaky jako @, ., +, -, _.',
         }
 
-# Formulář pro vytvoření zaměstnance (Employee)
+
+# Formulář pro vytvoření nového zaměstnance
 class CreateEmployeeForm(ModelForm):
+    """
+    Formulář pro vytvoření zaměstnance na základě modelu Employee.
+    Obsahuje pole pro telefonní číslo a plat.
+    """
     class Meta:
         model = Employee
         fields = ['phoneNumber', 'salary']
@@ -32,13 +42,20 @@ class CreateEmployeeForm(ModelForm):
         }
 
     def clean_phoneNumber(self):
+        """
+        Ověření, že telefonní číslo má minimálně 10 číslic.
+        """
         phoneNumber = self.cleaned_data.get('phoneNumber')
         if len(phoneNumber) < 10:
             raise forms.ValidationError("Telefonní číslo musí mít minimálně 10 číslic.")
         return phoneNumber
 
+
 # Formulář pro úpravu zaměstnance
 class EditEmployeeForm(ModelForm):
+    """
+    Formulář pro úpravu údajů zaměstnance.
+    """
     class Meta:
         model = Employee
         fields = ["phoneNumber", "salary"]
@@ -47,8 +64,12 @@ class EditEmployeeForm(ModelForm):
             'salary': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Plat'}),
         }
 
-# Formulář pro úpravu uživatele (User)
+
+# Formulář pro úpravu uživatele
 class EditUserForm(ModelForm):
+    """
+    Formulář pro úpravu osobních údajů uživatele (jméno, příjmení, email).
+    """
     class Meta:
         model = User
         fields = ["first_name", "last_name", "email"]
@@ -58,8 +79,12 @@ class EditUserForm(ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'E-mail'}),
         }
 
-# Formulář pro úpravu hosta (Guest)
+
+# Formulář pro úpravu hosta
 class EditGuestForm(ModelForm):
+    """
+    Formulář pro úpravu údajů hosta (telefonní číslo).
+    """
     class Meta:
         model = Guest
         fields = ["phoneNumber"]
@@ -67,8 +92,13 @@ class EditGuestForm(ModelForm):
             'phoneNumber': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Telefonní číslo'}),
         }
 
-# Formulář pro výběr role
+
+# Formulář pro výběr role uživatele
 class RoleSelectionForm(Form):
+    """
+    Formulář pro výběr role uživatele.
+    Obsahuje volby pro role: Manažer, Recepční, Personál.
+    """
     ROLE_CHOICES = [
         ('manager', 'Manažer'),
         ('receptionist', 'Recepční'),

@@ -1,25 +1,34 @@
 {% extends '../index.html' %}
 
 {% block content %}
-    <!-- Sekce pro smazání oznámení -->
+    <!-- Sekce pro potvrzení smazání oznámení -->
     <div class="container mt-4">
+        <!-- Nadpis sekce -->
         <h2 class="text-danger">Smazat oznámení</h2>
-        <p>Opravdu chcete smazat toto oznámení?</p>
+        <p>Opravdu chcete smazat toto oznámení? Tato akce je nevratná.</p>
 
-        <!-- Detail oznámení -->
+        <!-- Detail oznámení, které se má smazat -->
         <div class="card my-3">
             <div class="card-body">
-                <h5 class="card-title">Odesílatel: {{ announcement.sender.user.first_name }} {{ announcement.sender.user.last_name }}</h5>
+                <!-- Odesílatel oznámení -->
+                <h5 class="card-title">
+                    Odesílatel: 
+                    {{ announcement.sender.user.first_name }} {{ announcement.sender.user.last_name }}
+                </h5>
+                <!-- Obsah oznámení -->
                 <p class="card-text"><strong>Obsah:</strong> {{ announcement.content }}</p>
+                <!-- Datum vytvoření oznámení -->
                 <p class="card-text"><strong>Datum:</strong> {{ announcement.date }}</p>
             </div>
         </div>
 
-        <!-- Formulář pro potvrzení nebo zrušení akce -->
+        <!-- Formulář pro potvrzení nebo zrušení smazání -->
         <form method="POST">
-            {% csrf_token %}
+            {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
             <div class="d-flex justify-content-between">
+                <!-- Tlačítko pro potvrzení smazání -->
                 <button type="submit" class="btn btn-danger">Smazat</button>
+                <!-- Odkaz pro zrušení a návrat zpět -->
                 <a href="{% url 'announcements' %}" class="btn btn-secondary">Zrušit</a>
             </div>
         </form>

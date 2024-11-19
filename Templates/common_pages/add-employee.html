@@ -1,86 +1,89 @@
-<div class="container clear-fix">
+<div class="container clearfix">
     <!-- Zobrazení chyb formuláře, pokud existují -->
-    {{ form.errors }}
-    {{ form2.errors }}
-    {{ form3.errors }}
+    {% if form.errors or form2.errors or form3.errors %}
+        <div class="alert alert-danger mt-4">
+            <ul>
+                {% for error in form.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                {% for error in form2.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                {% for error in form3.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 
     <!-- Formulář pro přidání zaměstnance -->
     <form action="" method="POST">
         {% csrf_token %}
-        <div class="row mt-5 clear-fix">
+        <div class="row mt-5 clearfix">
 
-            <!-- Levý sloupec -->
-            <div class="col-6 pr-3 border-right">
-                <!-- Uživatelské jméno -->
+            <!-- Levý sloupec: Osobní údaje -->
+            <div class="col-md-6 pr-3 border-right">
                 <div class="form-group pt-3">
                     <label for="id_username"><b>Uživatelské jméno</b></label>
                     <input type="text" class="form-control border border-secondary" id="id_username" name="username" required>
                 </div>
 
-                <!-- Jméno -->
                 <div class="form-group pt-3">
                     <label for="id_first_name"><b>Jméno</b></label>
                     <input type="text" class="form-control border border-secondary" id="id_first_name" name="first_name" required>
                 </div>
 
-                <!-- Příjmení -->
                 <div class="form-group pt-3">
                     <label for="id_last_name"><b>Příjmení</b></label>
                     <input type="text" class="form-control border border-secondary" id="id_last_name" name="last_name" required>
                 </div>
 
-                <!-- Email -->
                 <div class="form-group">
                     <label for="id_email"><b>Email</b></label>
                     <input type="email" class="form-control border border-secondary" id="id_email" name="email" required>
                 </div>
             </div>
 
-            <!-- Pravý sloupec -->
-            <div class="col-6 pl-3">
-                <!-- Telefonní číslo -->
+            <!-- Pravý sloupec: Další informace -->
+            <div class="col-md-6 pl-3">
                 <div class="form-group pt-3">
                     <label for="id_phoneNumber"><b>Telefonní číslo</b></label>
-                    <input type="tel" name="phoneNumber" pattern="[0-9]{10}" maxlength="10" id="id_phoneNumber"
-                        class="form-control border border-secondary" placeholder="5*********" required>
+                    <input type="tel" name="phoneNumber" pattern="[0-9]{9}" maxlength="9" id="id_phoneNumber"
+                        class="form-control border border-secondary" placeholder="Např. 123456789" required>
                 </div>
 
-                <!-- Plat -->
                 <div class="form-group pt-3">
                     <label for="id_salary"><b>Plat</b></label>
                     <input type="number" step="any" class="form-control border border-secondary" id="id_salary" name="salary" required>
                 </div>
 
-                <!-- Heslo -->
                 <div class="form-group pt-3">
                     <label for="id_password1"><b>Heslo</b></label>
                     <input type="password" class="form-control border border-secondary" id="id_password1" name="password1" required>
                 </div>
 
-                <!-- Potvrzení hesla -->
                 <div class="form-group">
                     <label for="id_password2"><b>Potvrzení hesla</b></label>
                     <input type="password" class="form-control border border-secondary" id="id_password2" name="password2" required>
                 </div>
             </div>
-
         </div>
 
-        <!-- Výběr role -->
-        <div class="role-input">
+        <!-- Výběr role zaměstnance -->
+        <div class="role-input mt-4">
             <label class="radio-inline mr-3" for="id_ROLES_TYPES_0">
                 <input type="radio" name="ROLES_TYPES" value="manager" required id="id_ROLES_TYPES_0"> Manager
             </label>
             <label class="radio-inline mr-3" for="id_ROLES_TYPES_1">
-                <input type="radio" name="ROLES_TYPES" value="receptionist" required id="id_ROLES_TYPES_1"> Receptionist
+                <input type="radio" name="ROLES_TYPES" value="receptionist" required id="id_ROLES_TYPES_1"> Recepční
             </label>
             <label class="radio-inline mr-3" for="id_ROLES_TYPES_2">
-                <input type="radio" name="ROLES_TYPES" value="staff" required id="id_ROLES_TYPES_2"> Staff
+                <input type="radio" name="ROLES_TYPES" value="staff" required id="id_ROLES_TYPES_2"> Zaměstnanec
             </label>
         </div>
 
         <!-- Tlačítko pro odeslání formuláře -->
-        <div class="clear-fix mb-5 pb-5">
+        <div class="clearfix mt-4 mb-5">
             <button type="submit" name="submit" class="btn btn-success float-right">Přidat zaměstnance</button>
         </div>
     </form>

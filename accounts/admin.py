@@ -3,48 +3,70 @@ from .models import Guest, Employee, Task
 
 
 # Vlastní nastavení administrace pro model Guest
-@admin.register(Guest)  # Registrace modelu Guest v administraci
+@admin.register(Guest)
 class GuestAdmin(admin.ModelAdmin):
+    """
+    Administrace modelu Guest (Host).
+    Poskytuje přehled a správu hostů s přizpůsobenými zobrazeními a akcemi.
+    """
     # Sloupce zobrazené v seznamu hostů
-    list_display = ('id', 'user', 'phoneNumber', 'numOfBooking', 'numOfDays', 'user_date_joined')
-    # Pole pro vyhledávání (lze hledat podle jména, emailu nebo telefonu)
+    list_display = ('id', 'user', 'phoneNumber', 'num_of_bookings', 'num_of_days', 'user_date_joined')
+    # Pole pro vyhledávání
     search_fields = ('user__username', 'user__email', 'phoneNumber')
-    # Filtry v postranním panelu (např. podle data registrace)
+    # Filtry v postranním panelu
     list_filter = ('user__date_joined',)
-    # Výchozí řazení seznamu (např. podle uživatelského jména)
+    # Výchozí řazení seznamu
     ordering = ('user__username',)
-    # Pole, která jsou pouze ke čtení (nelze je editovat)
-    readonly_fields = ('numOfBooking', 'numOfDays', 'user_date_joined')
+    # Pole pouze ke čtení
+    readonly_fields = ('num_of_bookings', 'num_of_days', 'user_date_joined')
 
-    # Vlastní metoda pro zobrazení data registrace uživatele
     def user_date_joined(self, obj):
-        return obj.user.date_joined  # Vrátí datum, kdy se uživatel zaregistroval
-    user_date_joined.short_description = "Datum registrace"  # Popisek sloupce v administraci
+        """
+        Vrátí datum, kdy byl uživatel registrován.
+        """
+        return obj.user.date_joined
+    user_date_joined.short_description = "Datum registrace"
 
-    # Akce dostupné v administraci pro tento model
     actions = ['mark_missing_phone_number']
 
-    # Akce: Nastavit telefonní číslo na "Neznámé", pokud chybí
     def mark_missing_phone_number(self, request, queryset):
-        # Aktualizace vybraných záznamů
+        """
+        Akce: Nastavit telefonní číslo na 'Neznámé', pokud chybí.
+        """
         queryset.update(phoneNumber='Neznámé')
-        # Zobrazení zprávy pro administrátora
         self.message_user(request, "Telefonní číslo bylo nastaveno na 'Neznámé' u vybraných hostů.")
     mark_missing_phone_number.short_description = "Označit chybějící telefonní číslo"
 
 
-# Registrace modelu Employee s výchozím nastavením
+# Vlastní nastavení administrace pro model Employee
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'position', 'phone')  # Sloupce v seznamu zaměstnanců
-    search_fields = ('name', 'position')  # Pole pro vyhledávání
-    list_filter = ('position',)  # Filtr podle pozice zaměstnance
+    """
+    Administrace modelu Employee (Zaměstnanec).
+    Poskytuje správu zaměstnanců s možností hledání a filtrování podle pozice.
+    """
+    # Sloupce zobrazené v seznamu zaměstnanců
+    list_display = ('id', 'user', 'phoneNumber', 'salary')
+    # Pole pro vyhledávání
+    search_fields = ('user__username', 'user__email', 'phoneNumber')
+    # Filtry v postranním panelu
+    list_filter = ('salary',)
+    # Řazení podle jména uživatele
+    ordering = ('user__username',)
 
 
-# Registrace modelu Task s výchozím nastavením
+# Vlastní nastavení administrace pro model Task
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'description', 'assigned_to', 'due_date', 'status')  # Sloupce v seznamu úkolů
-    search_fields = ('title', 'assigned_to__name')  # Pole pro vyhledávání (podle názvu nebo zaměstnance)
-    list_filter = ('status', 'due_date')  # Filtr podle stavu a termínu úkolu
-    ordering = ('-due_date',)  # Řazení podle nejnovějšího termínu
+    """
+    Administrace modelu Task (Úkol).
+    Umožňuje správu úkolů přiřazených zaměstnancům s přizpůsobenými sloupci a filtry.
+    """
+    # Sloupce zobrazené v seznamu úkolů
+    list_display = ('id', 'description', 'employee', 'startTime', 'endTime')
+    # Pole pro vyhledávání
+    search_fields = ('description', 'employee__user__username', 'employee__phoneNumber')
+    # Filtry v postranním panelu
+    list_filter = ('startTime', 'endTime')
+    # Výchozí řazení
+    ordering = ('-startTime',)

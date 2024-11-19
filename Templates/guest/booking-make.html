@@ -1,7 +1,11 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+    <!-- Sekce pro vytvoření rezervace -->
+    <div class="container mt-5">
+        <h1 class="text-primary text-center">Vytvoření Rezervace</h1>
 
-{% include '../common_pages/booking-make.html' %}
-
+        <!-- Vložení šablony s formulářem pro vytvoření rezervace -->
+        {% include '../common_pages/booking-make.html' %}
+    </div>
 {% endblock %}

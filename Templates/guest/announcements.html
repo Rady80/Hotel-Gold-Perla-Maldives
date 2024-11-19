@@ -1,8 +1,11 @@
 {% extends '../index.html' %}
 
-{% block context %}
-
-{% include '../common_pages/authorized-announcements.html' %}
-
-
+{% block content %}
+    <!-- Sekce pro autorizovaná oznámení -->
+    <div class="container mt-5">
+        <h1 class="text-primary text-center">Autorizovaná Oznámení</h1>
+        
+        <!-- Vložení šablony s autorizovanými oznámeními -->
+        {% include '../common_pages/authorized-announcements.html' %}
+    </div>
 {% endblock %}

@@ -1,7 +1,16 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšíření hlavní šablony projektu -->
 
 {% block context %}
+<!-- Blok specifického obsahu stránky -->
 
-{% include '../common_pages/event-profile.html' %}
+    <!-- Vložení šablony profilu události -->
+    {% include '../common_pages/event-profile.html' %}
+    <!-- 
+        Šablona `event-profile.html` by měla obsahovat:
+        - Detailní informace o události, jako je typ, místo, datum začátku a konce.
+        - Popis události.
+        - Možnost návratu na seznam událostí.
+        - Případně tlačítka pro úpravu nebo smazání události (pokud má uživatel oprávnění).
+    -->
 
 {% endblock %}

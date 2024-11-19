@@ -1,4 +1,58 @@
 {% extends '../index.html' %}
-{% block context %}
-{% include '../common_pages/createEvent.html' %}
+
+{% block content %}
+<!-- Sekce pro vytvoření události -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Vytvořit novou událost</h1>
+
+    <!-- Vložení obsahu šablony pro vytvoření události -->
+    {% include '../common_pages/createEvent.html' %}
+</div>
 {% endblock %}
+
+<!-- Obsah šablony createEvent.html -->
+<div class="container">
+    <form method="POST">
+        {% csrf_token %} <!-- CSRF token pro zabezpečení formuláře -->
+
+        <!-- Typ události -->
+        <div class="form-group">
+            <label for="eventType"><strong>Typ události</strong></label>
+            <select id="eventType" name="eventType" class="form-control" required>
+                <option value="Movie">Film</option>
+                <option value="Theater">Divadlo</option>
+                <option value="Conference">Konference</option>
+                <option value="Concert">Koncert</option>
+                <option value="Entertainment">Zábava</option>
+                <option value="Live Music">Živá hudba</option>
+            </select>
+        </div>
+
+        <!-- Místo konání -->
+        <div class="form-group">
+            <label for="location"><strong>Místo konání</strong></label>
+            <input type="text" id="location" name="location" class="form-control" placeholder="Zadejte místo" required>
+        </div>
+
+        <!-- Začátek události -->
+        <div class="form-group">
+            <label for="startDate"><strong>Začátek</strong></label>
+            <input type="date" id="startDate" name="startDate" class="form-control" required>
+        </div>
+
+        <!-- Konec události -->
+        <div class="form-group">
+            <label for="endDate"><strong>Konec</strong></label>
+            <input type="date" id="endDate" name="endDate" class="form-control" required>
+        </div>
+
+        <!-- Popis události -->
+        <div class="form-group">
+            <label for="explanation"><strong>Popis</strong></label>
+            <textarea id="explanation" name="explanation" class="form-control" rows="5" placeholder="Popis události" required></textarea>
+        </div>
+
+        <!-- Tlačítko pro odeslání -->
+        <button type="submit" class="btn btn-success btn-lg btn-block mt-4">Vytvořit událost</button>
+    </form>
+</div>

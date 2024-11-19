@@ -1,7 +1,27 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšiřuje hlavní šablonu projektu -->
 
 {% block context %}
+<!-- Blok, který obsahuje konkrétní obsah stránky -->
 
-{% include '../common_pages/event-profile.html' %}
+    <!-- Kontejner karty s podrobnostmi o události -->
+    <div class="card shadow mt-4">
+        <!-- Záhlaví karty -->
+        <div class="card-header bg-primary text-white">
+            <h3>{{ event.eventType }}</h3> <!-- Typ události -->
+        </div>
+
+        <!-- Tělo karty s detaily o události -->
+        <div class="card-body">
+            <p><strong>Místo konání:</strong> {{ event.location }}</p> <!-- Místo konání události -->
+            <p><strong>Začátek:</strong> {{ event.startDate }}</p> <!-- Datum a čas začátku -->
+            <p><strong>Konec:</strong> {{ event.endDate }}</p> <!-- Datum a čas ukončení -->
+            <p><strong>Popis:</strong> {{ event.explanation }}</p> <!-- Popis události -->
+        </div>
+
+        <!-- Patička karty s tlačítkem -->
+        <div class="card-footer text-end">
+            <a href="{% url 'events' %}" class="btn btn-secondary">Zpět na seznam</a> <!-- Tlačítko pro návrat -->
+        </div>
+    </div>
 
 {% endblock %}

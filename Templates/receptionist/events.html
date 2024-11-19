@@ -1,7 +1,15 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšíření základní šablony -->
 
 {% block context %}
+<!-- Začátek bloku s konkrétním obsahem stránky -->
 
-{% include '../common_pages/authorized-events.html' %}
+    <!-- Vložení šablony pro autorizované události -->
+    {% include '../common_pages/authorized-events.html' %}
+    <!-- 
+        Šablona `authorized-events.html` by měla obsahovat:
+        - Přehled událostí, ke kterým má uživatel přístup.
+        - Možnost filtrovat, zobrazit detaily nebo přidat novou událost (pokud má uživatel oprávnění).
+        - Tlačítka pro interakci s událostmi, jako je úprava nebo odstranění, pokud je to povoleno.
+    -->
 
 {% endblock %}

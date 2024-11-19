@@ -1,3 +1,4 @@
+# accounts/test.py
 from django.test import TestCase, Client
 from django.contrib.auth.models import User, Group
 from accounts.models import Guest, Employee
@@ -68,7 +69,7 @@ class AccountsTestCase(TestCase):
         Testování počtu rezervací hosta.
         Výchozí hodnota by měla být 0.
         """
-        self.assertEqual(self.guest.numOfBooking(), 0)
+        self.assertEqual(self.guest.num_of_bookings(), 0)
 
     def test_employee_creation(self):
         """

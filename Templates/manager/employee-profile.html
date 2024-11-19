@@ -1,7 +1,37 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
+<!-- Sekce pro profil zaměstnance -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Profil zaměstnance</h1>
 
-{% include '../common_pages/employee-profile.html' %}
-
+    <!-- Vložení obsahu šablony pro profil zaměstnance -->
+    {% include '../common_pages/employee-profile.html' %}
+</div>
 {% endblock %}
+
+<!-- Obsah šablony employee-profile.html -->
+<div class="card my-5">
+    <div class="card-header bg-info">
+        <h3 class="text-center">{{ employee.user.first_name }} {{ employee.user.last_name }}</h3>
+    </div>
+    <div class="card-body">
+        <!-- Zobrazení základních informací o zaměstnanci -->
+        <p><strong>Uživatelské jméno:</strong> {{ employee.user.username }}</p>
+        <p><strong>Email:</strong> {{ employee.user.email }}</p>
+        <p><strong>Telefonní číslo:</strong> {{ employee.phoneNumber }}</p>
+        <p><strong>Plat:</strong> {{ employee.salary }} Kč</p>
+        <p><strong>Role:</strong>
+            {% if employee.user.groups.exists %}
+                {{ employee.user.groups.first.name|title }}
+            {% else %}
+                Role není přiřazena
+            {% endif %}
+        </p>
+    </div>
+    <div class="card-footer text-end">
+        <!-- Tlačítka pro akce -->
+        <a href="{% url 'employee-edit' employee.id %}" class="btn btn-warning">Upravit</a>
+        <a href="{% url 'employees' %}" class="btn btn-secondary">Zpět na seznam</a>
+    </div>
+</div>

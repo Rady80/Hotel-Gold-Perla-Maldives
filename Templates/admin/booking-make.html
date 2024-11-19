@@ -3,13 +3,16 @@
 {% block content %}
     <!-- Sekce pro vytvoření rezervace -->
     <h2>Vytvořit novou rezervaci</h2>
+    
+    <!-- Formulář pro zadání údajů rezervace -->
     <form method="POST">
-        {% csrf_token %}
-        
+        {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
+
+        <!-- Výběr pokoje -->
         <div class="form-group">
             <label for="room">Pokoj:</label>
             <select name="room" id="room" class="form-control" required>
-                {% for room in rooms %}
+                {% for room in rooms %} <!-- Iterace přes dostupné pokoje -->
                     <option value="{{ room.number }}">
                         {{ room.name }} - Kapacita: {{ room.capacity }} - Cena: {{ room.price }} Kč
                     </option>
@@ -17,10 +20,11 @@
             </select>
         </div>
 
+        <!-- Výběr hosta -->
         <div class="form-group">
             <label for="guest">Host:</label>
             <select name="guest" id="guest" class="form-control" required>
-                {% for guest in guests %}
+                {% for guest in guests %} <!-- Iterace přes seznam hostů -->
                     <option value="{{ guest.id }}">
                         {{ guest.user.first_name }} {{ guest.user.last_name }} - {{ guest.phoneNumber }}
                     </option>
@@ -28,21 +32,40 @@
             </select>
         </div>
 
+        <!-- Datum začátku rezervace -->
         <div class="form-group">
             <label for="startDate">Datum začátku:</label>
-            <input type="date" name="startDate" id="startDate" class="form-control" required>
+            <input 
+                type="date" 
+                name="startDate" 
+                id="startDate" 
+                class="form-control" 
+                required>
         </div>
 
+        <!-- Datum konce rezervace -->
         <div class="form-group">
             <label for="endDate">Datum konce:</label>
-            <input type="date" name="endDate" id="endDate" class="form-control" required>
+            <input 
+                type="date" 
+                name="endDate" 
+                id="endDate" 
+                class="form-control" 
+                required>
         </div>
 
+        <!-- Další hosté (volitelné pole) -->
         <div class="form-group">
             <label for="dependees">Další hosté (volitelné):</label>
-            <input type="text" name="dependees" id="dependees" placeholder="Zadejte jména oddělená čárkou" class="form-control">
+            <input 
+                type="text" 
+                name="dependees" 
+                id="dependees" 
+                placeholder="Zadejte jména oddělená čárkou" 
+                class="form-control">
         </div>
 
+        <!-- Tlačítko pro vytvoření rezervace -->
         <button type="submit" class="btn btn-primary">Vytvořit rezervaci</button>
     </form>
 {% endblock %}

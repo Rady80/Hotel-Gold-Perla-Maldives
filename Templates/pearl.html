@@ -1,13 +1,23 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs"> <!-- Nastavený jazyk na češtinu -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golden Pearl</title>
+    <title>Zlatá perla - Hotel</title> <!-- Titulek stránky v češtině -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Možnost přidání ikon -->
 </head>
-<body style="background-color: #001f3f; color: white; text-align: center; padding: 50px;">
-    <h1>Zlatá perla</h1>
+<body class="text-center" style="background-color: #001f3f; color: white; padding: 50px;">
+    <h1>Zlatá Perla</h1>
+    <p>Vítejte na stránkách našeho luxusního hotelu Zlatá Perla!</p> <!-- Přidání uvítacího textu -->
+    
+    <!-- Obrázek Zlaté perly -->
     <img src="{% static 'images/golden_pearl.png' %}" alt="Golden Pearl" style="max-width: 300px; border-radius: 50%;">
+
+    <!-- Možnost přidat ikonu s textem pro lepší design -->
+    <div>
+        <i class="fas fa-star" style="color: #ffd700; font-size: 30px;"></i> <!-- Ikona hvězdy pro zvýraznění -->
+        <p>Prohlédněte si naše exkluzivní nabídky a služby!</p>
+    </div>
 </body>
 </html>

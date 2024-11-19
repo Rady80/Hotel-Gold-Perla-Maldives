@@ -1,84 +1,77 @@
 {% extends '../index.html' %}
 
-{% block context %}
+{% block content %}
 
+<!-- Zobrazení chybové zprávy, pokud existuje -->
 {% if error is not None %}
 <div class="alert alert-danger p-3 m-5">
-    {{error}}
+    {{ error }}
 </div>
 {% else %}
 <div class="container py-5">
     <div class="row">
-
+        <!-- Sekce aktuálních služeb pokoje -->
         <div class="col-md-6">
             <div class="table-header row">
-
                 <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-                    <h2>Room Services</h2>
-                    <span class="text-muted">The list include last 1 month room services</span>
+                    <h2>Služby pokoje</h2>
+                    <span class="text-muted">Seznam obsahuje poslední měsíční služby.</span>
                 </div>
-
             </div>
             <table class="table table-hover table-striped">
-                <thead class="bg-secondary rounded">
+                <thead class="bg-secondary text-white">
                     <tr>
-
-                        <th>Room Number</th>
-                        <th>Type</th>
-                        <th>Created Date</th>
-                        <th>Price</th>
+                        <th>Číslo pokoje</th>
+                        <th>Typ služby</th>
+                        <th>Datum vytvoření</th>
+                        <th>Cena</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for crs in curRoomServices %}
                     <tr>
-                        <td>{{curRoom}}</td>
-                        <td>{{crs.servicesType}}</td>
-                        <td>{{crs.createdDate}}</td>
-                        <td>{{crs.price}}</td>
+                        <td>{{ curRoom }}</td>
+                        <td>{{ crs.servicesType }}</td>
+                        <td>{{ crs.createdDate }}</td>
+                        <td>{{ crs.price }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
-
             </table>
-
         </div>
+
+        <!-- Sekce dostupných služeb -->
         <div class="table-responsive col-md-6">
             <div class="table-header row">
-
                 <div class="col-sm-12 col-md-12 col-lg-4 mb-4">
-                    <h2> Available Services</h2>
-                    <span class="text-muted">You can select service from this menu.</span>
+                    <h2>Dostupné služby</h2>
+                    <span class="text-muted">Vyberte službu z této nabídky.</span>
                 </div>
-
             </div>
             <table class="table table-hover table-striped">
                 <form action="" method="POST">
                     {% csrf_token %}
                     <tbody>
                         <tr>
-                            <td>Food</td>
-                            <td>$50</td>
-                            <td><button name="foodReq" type="submit" class="btn btn-info">Request</button></td>
+                            <td>Jídlo</td>
+                            <td>50 Kč</td>
+                            <td><button name="foodReq" type="submit" class="btn btn-info">Požádat</button></td>
                         </tr>
                         <tr>
-                            <td>Cleaning</td>
-                            <td>Free of charge</td>
-                            <td><button name="cleaningReq" type="submit" class="btn btn-info">Request</button></td>
+                            <td>Úklid</td>
+                            <td>Zdarma</td>
+                            <td><button name="cleaningReq" type="submit" class="btn btn-info">Požádat</button></td>
                         </tr>
                         <tr>
-                            <td>Technical</td>
-                            <td>Free of charge</td>
-                            <td><button name="techReq" type="submit" class="btn btn-info">Request</button></td>
+                            <td>Technická podpora</td>
+                            <td>Zdarma</td>
+                            <td><button name="techReq" type="submit" class="btn btn-info">Požádat</button></td>
                         </tr>
                     </tbody>
                 </form>
             </table>
-
         </div>
-
     </div>
-
 </div>
 {% endif %}
 

@@ -1,7 +1,21 @@
-{% extends '../index.html' %}
+{% extends '../index.html' %} <!-- Rozšíření hlavní šablony projektu -->
 
 {% block context %}
+<!-- Blok specifického obsahu stránky -->
 
-{% include '../common_pages/bookings.html' %}
+    <!-- Kontejner pro seznam rezervací -->
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">Seznam rezervací</h1> <!-- Nadpis stránky -->
+
+        <!-- Vložení šablony pro zobrazení seznamu rezervací -->
+        {% include '../common_pages/bookings.html' %}
+        <!-- 
+            Šablona `bookings.html` by měla obsahovat:
+            - Tabulku s detailními informacemi o rezervacích.
+            - Možnost filtrování podle kritérií, jako je pokoj, host, datum začátku nebo konce rezervace.
+            - Akce, jako je editace nebo smazání rezervace (pokud má uživatel oprávnění).
+            - Zobrazení informací v přehledném formátu.
+        -->
+    </div>
 
 {% endblock %}

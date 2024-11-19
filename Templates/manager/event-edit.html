@@ -1,7 +1,82 @@
 {% extends '../index.html' %}
 {% load static %}
-{% block context %}
 
-{% include '../common_pages/event-edit.html' %}
+{% block content %}
+<!-- Sekce pro úpravu události -->
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Úprava události</h1> <!-- Nadpis stránky -->
 
+    <!-- Vložení šablony pro editaci události -->
+    {% include '../common_pages/event-edit.html' %}
+</div>
 {% endblock %}
+
+<!-- Formulář pro úpravu události -->
+<form method="POST" class="container mt-4">
+    {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
+    
+    <!-- Pole pro typ události -->
+    <div class="form-group">
+        <label for="eventType"><b>Typ události</b></label>
+        <input 
+            type="text" 
+            id="eventType" 
+            name="eventType" 
+            class="form-control" 
+            value="{{ event.eventType }}" 
+            required>
+    </div>
+    
+    <!-- Pole pro místo konání -->
+    <div class="form-group">
+        <label for="location"><b>Místo konání</b></label>
+        <input 
+            type="text" 
+            id="location" 
+            name="location" 
+            class="form-control" 
+            value="{{ event.location }}" 
+            required>
+    </div>
+    
+    <!-- Pole pro datum začátku -->
+    <div class="form-group">
+        <label for="startDate"><b>Datum začátku</b></label>
+        <input 
+            type="date" 
+            id="startDate" 
+            name="startDate" 
+            class="form-control" 
+            value="{{ event.startDate|date:'Y-m-d' }}" 
+            required>
+    </div>
+    
+    <!-- Pole pro datum konce -->
+    <div class="form-group">
+        <label for="endDate"><b>Datum konce</b></label>
+        <input 
+            type="date" 
+            id="endDate" 
+            name="endDate" 
+            class="form-control" 
+            value="{{ event.endDate|date:'Y-m-d' }}" 
+            required>
+    </div>
+    
+    <!-- Pole pro popis události -->
+    <div class="form-group">
+        <label for="description"><b>Popis</b></label>
+        <textarea 
+            id="description" 
+            name="description" 
+            class="form-control" 
+            rows="4" 
+            required>{{ event.description }}</textarea>
+    </div>
+    
+    <!-- Tlačítka pro odeslání a návrat -->
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Uložit změny</button>
+        <a href="{% url 'events' %}" class="btn btn-secondary">Zpět</a>
+    </div>
+</form>

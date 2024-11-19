@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import FoodMenu, Event, EventAttendees, Storage
+from .models import FoodMenu, Event, EventAttendees, Storage, Refund
 from .forms import EditFoodMenuForm, CreateEventForm
 from accounts.models import Guest
 
@@ -52,10 +52,8 @@ def events(request):
     """
     Správa událostí - filtrování a správa účasti na událostech.
     """
-    role = str(request.user.groups.first())  # Role uživatele
-    path = f"{role}/"  # Nastavení cesty šablony podle role
-
-    events = Event.objects.all()  # Načtení všech událostí
+    role = str(request.user.groups.first()) if request.user.groups.exists() else "guest"
+    events = Event.objects.all()
     attended_events = None
 
     if role == 'guest':
@@ -78,12 +76,14 @@ def events(request):
             temp_event = events.get(id=request.POST.get('id'))
             if not EventAttendees.objects.filter(event=temp_event, guest=request.user.guest).exists():
                 EventAttendees.objects.create(event=temp_event, guest=request.user.guest)
+                messages.success(request, f"Byli jste přidáni na událost '{temp_event.eventType}'.")
             return redirect('events')
 
         # Odebrání účasti
         if 'remove' in request.POST:
             temp_event = events.get(id=request.POST.get('id'))
             EventAttendees.objects.filter(event=temp_event, guest=request.user.guest).delete()
+            messages.success(request, f"Vaše účast na události '{temp_event.eventType}' byla zrušena.")
             return redirect('events')
 
     context = {
@@ -92,7 +92,17 @@ def events(request):
         'attended_events': attended_events,
         "filters": request.POST,
     }
-    return render(request, f"{path}events.html", context)
+    return render(request, "hotel/events.html", context)
+
+# ------------------------------
+# Profil události
+# ------------------------------
+def event_profile(request, event_id):
+    """
+    Zobrazení detailu události.
+    """
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'hotel/event_detail.html', {'event': event})
 
 # ------------------------------
 # Vytvoření nové události
@@ -102,9 +112,6 @@ def create_event(request):
     """
     Umožňuje vytvoření nové události.
     """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
-
     form = CreateEventForm()
     if request.method == "POST":
         form = CreateEventForm(request.POST)
@@ -113,7 +120,7 @@ def create_event(request):
             messages.success(request, "Událost byla úspěšně vytvořena.")
             return redirect('events')
 
-    return render(request, f"{path}create_event.html", {'form': form, "role": role})
+    return render(request, "hotel/create_event.html", {'form': form})
 
 # ------------------------------
 # Editace jídelního menu
@@ -142,16 +149,13 @@ def delete_event(request, pk):
     """
     Smazání vybrané události.
     """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
-
     event = get_object_or_404(Event, id=pk)
     if request.method == "POST":
         event.delete()
         messages.success(request, "Událost byla úspěšně smazána.")
         return redirect('events')
 
-    return render(request, f"{path}delete_event.html", {"event": event, "role": role})
+    return render(request, "hotel/delete_event.html", {"event": event})
 
 # ------------------------------
 # Správa skladových položek
@@ -161,12 +165,8 @@ def storage(request):
     """
     Správa skladových položek.
     """
-    role = str(request.user.groups.first())
-    path = f"{role}/"
-
     storage_items = Storage.objects.all()
     if request.method == "POST":
-        # Přidání nové položky
         if "add" in request.POST:
             Storage.objects.create(
                 itemName=request.POST.get("itemName"),
@@ -174,7 +174,6 @@ def storage(request):
                 quantity=request.POST.get("quantity"),
             )
             messages.success(request, "Položka byla úspěšně přidána.")
-        # Filtrování skladu
         elif "filter" in request.POST:
             filters = {
                 "itemName__icontains": request.POST.get("name"),
@@ -183,8 +182,18 @@ def storage(request):
             filters = {key: value for key, value in filters.items() if value}
             storage_items = storage_items.filter(**filters)
 
-    return render(request, f"{path}storage.html", {
-        "role": role,
+    return render(request, "hotel/storage.html", {
         "storage_items": storage_items,
         "filters": request.POST,
     })
+
+# ------------------------------
+# Zobrazení seznamu refundací
+# ------------------------------
+@login_required(login_url='login')
+def refunds_view(request):
+    """
+    Zobrazení seznamu refundací.
+    """
+    refunds = Refund.objects.all()
+    return render(request, 'hotel/refunds.html', {'refunds': refunds})

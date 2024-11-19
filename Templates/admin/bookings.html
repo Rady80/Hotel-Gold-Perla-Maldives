@@ -6,56 +6,95 @@
 
     <!-- Filtrovací formulář -->
     <form method="POST" class="mb-4">
-        {% csrf_token %}
+        {% csrf_token %} <!-- Ochrana proti CSRF útokům -->
         <div class="form-row">
+            <!-- Filtrovat podle čísla pokoje -->
             <div class="form-group col-md-3">
                 <label for="room">Pokoj:</label>
-                <input type="text" name="room" id="room" class="form-control" placeholder="Číslo pokoje">
+                <input 
+                    type="text" 
+                    name="room" 
+                    id="room" 
+                    class="form-control" 
+                    placeholder="Číslo pokoje">
             </div>
+
+            <!-- Filtrovat podle jména hosta -->
             <div class="form-group col-md-3">
                 <label for="guest">Host:</label>
-                <input type="text" name="guest" id="guest" class="form-control" placeholder="Jméno hosta">
+                <input 
+                    type="text" 
+                    name="guest" 
+                    id="guest" 
+                    class="form-control" 
+                    placeholder="Jméno hosta">
             </div>
+
+            <!-- Filtrovat od určitého data -->
             <div class="form-group col-md-3">
                 <label for="startDate">Od:</label>
-                <input type="date" name="startDate" id="startDate" class="form-control">
+                <input 
+                    type="date" 
+                    name="startDate" 
+                    id="startDate" 
+                    class="form-control">
             </div>
+
+            <!-- Filtrovat do určitého data -->
             <div class="form-group col-md-3">
                 <label for="endDate">Do:</label>
-                <input type="date" name="endDate" id="endDate" class="form-control">
+                <input 
+                    type="date" 
+                    name="endDate" 
+                    id="endDate" 
+                    class="form-control">
             </div>
         </div>
-        <button type="submit" name="filter" class="btn btn-primary">Filtrovat</button>
+        <!-- Tlačítko pro odeslání filtru -->
+        <button 
+            type="submit" 
+            name="filter" 
+            class="btn btn-primary">Filtrovat</button>
     </form>
 
-    <!-- Tabulka s rezervacemi -->
+    <!-- Tabulka s přehledem rezervací -->
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th>Číslo rezervace</th>
-                <th>Pokoj</th>
-                <th>Host</th>
-                <th>Datum rezervace</th>
-                <th>Od</th>
-                <th>Do</th>
-                <th>Akce</th>
+                <th>Číslo rezervace</th> <!-- Sloupec ID rezervace -->
+                <th>Pokoj</th> <!-- Sloupec s informacemi o pokoji -->
+                <th>Host</th> <!-- Sloupec s informacemi o hostovi -->
+                <th>Datum rezervace</th> <!-- Datum vytvoření rezervace -->
+                <th>Od</th> <!-- Datum začátku rezervace -->
+                <th>Do</th> <!-- Datum konce rezervace -->
+                <th>Akce</th> <!-- Sloupec s dostupnými akcemi -->
             </tr>
         </thead>
         <tbody>
-            {% for booking in bookings %}
+            {% for booking in bookings %} <!-- Iterace přes všechny rezervace -->
                 <tr>
-                    <td>{{ booking.id }}</td>
-                    <td>{{ booking.roomNumber.number }} - {{ booking.roomNumber.name }}</td>
-                    <td>{{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }}</td>
-                    <td>{{ booking.dateOfReservation }}</td>
-                    <td>{{ booking.startDate }}</td>
-                    <td>{{ booking.endDate }}</td>
+                    <td>{{ booking.id }}</td> <!-- ID rezervace -->
+                    <td>{{ booking.roomNumber.number }} - {{ booking.roomNumber.name }}</td> <!-- Informace o pokoji -->
                     <td>
-                        <a href="{% url 'booking-edit' booking.id %}" class="btn btn-sm btn-warning">Upravit</a>
-                        <a href="{% url 'deleteBooking' booking.id %}" class="btn btn-sm btn-danger">Smazat</a>
+                        {{ booking.guest.user.first_name }} {{ booking.guest.user.last_name }} <!-- Jméno hosta -->
+                    </td>
+                    <td>{{ booking.dateOfReservation }}</td> <!-- Datum vytvoření rezervace -->
+                    <td>{{ booking.startDate }}</td> <!-- Datum začátku rezervace -->
+                    <td>{{ booking.endDate }}</td> <!-- Datum konce rezervace -->
+                    <td>
+                        <!-- Odkaz na úpravu rezervace -->
+                        <a 
+                            href="{% url 'booking-edit' booking.id %}" 
+                            class="btn btn-sm btn-warning">Upravit</a>
+                        
+                        <!-- Odkaz na smazání rezervace -->
+                        <a 
+                            href="{% url 'deleteBooking' booking.id %}" 
+                            class="btn btn-sm btn-danger">Smazat</a>
                     </td>
                 </tr>
             {% empty %}
+                <!-- Zobrazení, pokud nejsou nalezeny žádné rezervace -->
                 <tr>
                     <td colspan="7" class="text-center">Žádné rezervace nenalezeny.</td>
                 </tr>

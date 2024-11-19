@@ -1,0 +1,57 @@
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Autorizované Události</h1> <!-- Nadpis stránky -->
+
+    <!-- Filtrovací formulář -->
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4">
+                <label for="eventType">Typ události</label>
+                <input type="text" id="eventType" name="eventType" class="form-control" placeholder="Např. Koncert">
+            </div>
+            <div class="col-md-4">
+                <label for="location">Místo</label>
+                <input type="text" id="location" name="location" class="form-control" placeholder="Např. Sál A">
+            </div>
+            <div class="col-md-4">
+                <label for="date">Datum</label>
+                <input type="date" id="date" name="date" class="form-control">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Filtrovat</button>
+    </form>
+
+    <!-- Seznam událostí -->
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Typ</th>
+                <th>Místo</th>
+                <th>Začátek</th>
+                <th>Konec</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ event.eventType }}</td>
+                <td>{{ event.location }}</td>
+                <td>{{ event.startDate }}</td>
+                <td>{{ event.endDate }}</td>
+                <td>
+                    <a href="{% url 'event-profile' event.id %}" class="btn btn-info btn-sm">Detail</a>
+                    <a href="{% url 'event-edit' event.id %}" class="btn btn-warning btn-sm">Upravit</a>
+                    <a href="{% url 'delete-event' event.id %}" class="btn btn-danger btn-sm">Smazat</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Žádné události k zobrazení.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

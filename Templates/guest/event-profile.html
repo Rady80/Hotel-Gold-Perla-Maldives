@@ -1,7 +1,21 @@
 {% extends '../index.html' %}
+{% load static %}
 
-{% block context %}
-
-{% include '../common_pages/event-profile.html' %}
-
+{% block content %}
+<!-- Sekce chybové stránky -->
+<div class="container text-center py-5">
+    <h1 class="display-4 text-danger">Chyba!</h1>
+    <p class="lead">Omlouváme se, ale při zpracování vašeho požadavku došlo k chybě. Zkuste to prosím znovu nebo kontaktujte podporu.</p>
+    
+    <!-- Ikona chyby -->
+    <div class="mt-4">
+        <img src="{% static 'images/error-icon.png' %}" alt="Ikona chyby" class="img-fluid" style="max-width: 200px;">
+    </div>
+    
+    <!-- Možnosti navigace -->
+    <div class="mt-5">
+        <a href="{% url 'home' %}" class="btn btn-primary btn-lg">Zpět na domovskou stránku</a>
+        <a href="{% url 'contact' %}" class="btn btn-secondary btn-lg">Kontaktujte podporu</a>
+    </div>
+</div>
 {% endblock %}
