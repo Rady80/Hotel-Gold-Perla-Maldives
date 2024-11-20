@@ -3,109 +3,122 @@ from django.forms import ModelForm
 from .models import FoodMenu, Event, Announcement, Storage
 
 
+# ------------------------------
+# Formulář pro úpravu jídelního menu
+# ------------------------------
 class EditFoodMenuForm(ModelForm):
     """
     Formulář pro úpravu jídelního menu.
-    Umožňuje editovat položky menu a nastavit období platnosti.
+    Umožňuje editovat položky menu.
     """
     class Meta:
         model = FoodMenu
-        fields = ["menuItems", "startDate", "endDate"]
+        fields = ['name', 'description', 'price', 'category']  # Pole definovaná v modelu
         labels = {
-            "menuItems": "Položky menu",
-            "startDate": "Datum začátku",
-            "endDate": "Datum konce",
+            "name": "Název jídla",
+            "description": "Popis jídla",
+            "price": "Cena",
+            "category": "Kategorie",
         }
         widgets = {
-            "menuItems": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
-            "startDate": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "endDate": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+            "price": forms.NumberInput(attrs={"class": "form-control"}),
+            "category": forms.TextInput(attrs={"class": "form-control"}),
         }
 
 
-class EditEventForm(ModelForm):
-    """
-    Formulář pro úpravu událostí.
-    Umožňuje upravit typ, místo, období a další detaily události.
-    """
-    class Meta:
-        model = Event
-        fields = ["eventType", "location", "startDate", "endDate", "explanation"]
-        labels = {
-            "eventType": "Typ události",
-            "location": "Místo",
-            "startDate": "Datum začátku",
-            "endDate": "Datum konce",
-            "explanation": "Vysvětlení",
-        }
-        widgets = {
-            "eventType": forms.TextInput(attrs={"class": "form-control"}),
-            "location": forms.TextInput(attrs={"class": "form-control"}),
-            "startDate": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "endDate": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "explanation": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
-        }
-
-
+# ------------------------------
+# Formulář pro vytvoření nové události
+# ------------------------------
 class CreateEventForm(ModelForm):
     """
     Formulář pro vytvoření nové události.
-    Zahrnuje typ, místo, datumy a vysvětlení.
     """
     class Meta:
         model = Event
-        fields = ["eventType", "location", "startDate", "endDate", "explanation"]
+        fields = ['title', 'event_type', 'location', 'start_date', 'end_date', 'description']
         labels = {
-            "eventType": "Typ události",
-            "location": "Místo",
-            "startDate": "Datum začátku",
-            "endDate": "Datum konce",
-            "explanation": "Vysvětlení",
+            "title": "Název události",
+            "event_type": "Typ události",
+            "location": "Místo konání",
+            "start_date": "Datum začátku",
+            "end_date": "Datum konce",
+            "description": "Popis události",
         }
         widgets = {
-            "eventType": forms.TextInput(attrs={"class": "form-control"}),
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "event_type": forms.Select(attrs={"class": "form-control"}),  # Výběrový seznam
             "location": forms.TextInput(attrs={"class": "form-control"}),
-            "startDate": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "endDate": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "explanation": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+            "start_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "end_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
         }
 
 
+# ------------------------------
+# Formulář pro úpravu událostí
+# ------------------------------
+class EditEventForm(ModelForm):
+    """
+    Formulář pro úpravu událostí.
+    """
+    class Meta:
+        model = Event
+        fields = ['title', 'event_type', 'location', 'start_date', 'end_date', 'description']
+        labels = {
+            "title": "Název události",
+            "event_type": "Typ události",
+            "location": "Místo konání",
+            "start_date": "Datum začátku",
+            "end_date": "Datum konce",
+            "description": "Popis události",
+        }
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "event_type": forms.Select(attrs={"class": "form-control"}),  # Výběrový seznam
+            "location": forms.TextInput(attrs={"class": "form-control"}),
+            "start_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "end_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+        }
+        
+
+# ------------------------------
+# Formulář pro vytvoření oznámení
+# ------------------------------
 class CreateAnnouncementForm(ModelForm):
     """
     Formulář pro vytvoření oznámení.
-    Obsahuje nadpis, obsah a datum vytvoření.
     """
     class Meta:
         model = Announcement
-        fields = ["title", "content", "date_created"]
+        fields = ["title", "content"]
         labels = {
-            "title": "Nadpis",
-            "content": "Obsah",
-            "date_created": "Datum vytvoření",
+            "title": "Nadpis oznámení",
+            "content": "Obsah oznámení",
         }
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "content": forms.Textarea(attrs={"class": "form-control", "rows": 5}),
-            "date_created": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
         }
 
 
+# ------------------------------
+# Formulář pro vytvoření položky ve skladu
+# ------------------------------
 class CreateItemForm(ModelForm):
     """
     Formulář pro vytvoření položky ve skladu.
-    Umožňuje zadat název, typ a množství položky.
     """
     class Meta:
         model = Storage
-        fields = ["itemName", "itemType", "quantity"]
+        fields = ["item_name", "quantity"]
         labels = {
-            "itemName": "Název položky",
-            "itemType": "Typ položky",
-            "quantity": "Množství",
+            "item_name": "Název položky",
+            "quantity": "Množství na skladě",
         }
         widgets = {
-            "itemName": forms.TextInput(attrs={"class": "form-control"}),
-            "itemType": forms.Select(attrs={"class": "form-control"}),  # Použití výběrového seznamu
+            "item_name": forms.TextInput(attrs={"class": "form-control"}),
             "quantity": forms.NumberInput(attrs={"class": "form-control"}),  # Číselný vstup
         }

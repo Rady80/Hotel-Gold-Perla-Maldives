@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ event.title }}</h1>
+<p><strong>Typ události:</strong> {{ event.event_type }}</p>
+<p><strong>Místo:</strong> {{ event.location }}</p>
+<p><strong>Začátek:</strong> {{ event.start_date }}</p>
+<p><strong>Konec:</strong> {{ event.end_date }}</p>
+<p><strong>Popis:</strong> {{ event.description }}</p>
+{% endblock %}

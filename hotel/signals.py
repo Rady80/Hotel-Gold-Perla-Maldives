@@ -4,38 +4,38 @@ from .models import Event, EventAttendees, Storage
 from accounts.models import Guest
 import logging
 
-# Nastavení loggeru pro ladění
+# ------------------------------
+# Nastavení loggeru
+# ------------------------------
 logger = logging.getLogger(__name__)
 
 
 # ------------------------------
-# Signál pro vytvoření logu při uložení nebo změně události
+# Signál: Logování vytvoření nebo aktualizace události
 # ------------------------------
 @receiver(post_save, sender=Event)
 def log_event_creation_or_update(sender, instance, created, **kwargs):
     """
-    Signál pro logování vytvoření nebo aktualizace události.
-    Spouští se pokaždé, když je instance modelu Event vytvořena nebo změněna.
+    Loguje vytvoření nebo aktualizaci události.
 
     Parametry:
     - sender: Model, který spustil signál (Event).
-    - instance: Instance modelu Event, která byla vytvořena nebo aktualizována.
-    - created: Boolean označující, zda byla instance nově vytvořena.
+    - instance: Instance modelu Event.
+    - created: True, pokud byla instance nově vytvořena; jinak False.
     """
     if created:
-        logger.info(f"Nová událost vytvořena: {instance.eventType} v {instance.location}.")
+        logger.info(f"Nová událost vytvořena: {instance.eventType} na lokaci {instance.location}.")
     else:
-        logger.info(f"Událost aktualizována: {instance.eventType} v {instance.location}.")
+        logger.info(f"Událost aktualizována: {instance.eventType} na lokaci {instance.location}.")
 
 
 # ------------------------------
-# Signál pro odstranění účastníků události při odstranění události
+# Signál: Odstranění účastníků při smazání události
 # ------------------------------
 @receiver(post_delete, sender=Event)
 def delete_event_attendees(sender, instance, **kwargs):
     """
-    Signál pro odstranění účastníků události při jejím smazání.
-    Spouští se při odstranění instance modelu Event.
+    Odstraňuje účastníky přidružené k odstraněné události.
 
     Parametry:
     - sender: Model, který spustil signál (Event).
@@ -48,38 +48,40 @@ def delete_event_attendees(sender, instance, **kwargs):
 
 
 # ------------------------------
-# Signál pro kontrolu skladového množství po změně skladu
+# Signál: Kontrola skladového množství
 # ------------------------------
 @receiver(post_save, sender=Storage)
 def check_storage_quantity(sender, instance, **kwargs):
     """
-    Signál pro kontrolu skladového množství.
-    Spouští se po každém uložení instance modelu Storage.
+    Kontroluje skladové množství a loguje upozornění při nízké úrovni zásob.
 
     Parametry:
     - sender: Model, který spustil signál (Storage).
-    - instance: Instance modelu Storage, která byla vytvořena nebo aktualizována.
+    - instance: Instance modelu Storage.
     """
     if instance.quantity < 10:
         logger.warning(f"Nízké množství položky '{instance.itemName}': {instance.quantity} ks.")
 
 
 # ------------------------------
-# Signál pro vytvoření výchozího záznamu účastníka při přidání události
+# Signál: Automatické přidání hosta na událost
 # ------------------------------
 @receiver(post_save, sender=Guest)
 def create_event_attendance_for_guest(sender, instance, created, **kwargs):
     """
-    Signál pro automatické vytvoření výchozího záznamu účasti na události při registraci nového hosta.
-    Spouští se při vytvoření instance modelu Guest.
+    Při registraci nového hosta automaticky přidává hosta na první dostupnou událost.
 
     Parametry:
     - sender: Model, který spustil signál (Guest).
-    - instance: Instance modelu Guest, která byla vytvořena.
-    - created: Boolean označující, zda byla instance nově vytvořena.
+    - instance: Instance modelu Guest.
+    - created: True, pokud byla instance nově vytvořena; jinak False.
     """
     if created:
-        event = Event.objects.first()  # Získání první události (pro ukázkové účely)
+        # Výběr první dostupné události
+        event = Event.objects.first()
         if event:
+            # Vytvoření účasti hosta na události
             EventAttendees.objects.create(event=event, guest=instance, numberOfDependees=0)
-            logger.info(f"Host {instance.user.username} přidán na událost '{event.eventType}'.")
+            logger.info(f"Host {instance.user.username} automaticky přidán na událost '{event.eventType}'.")
+        else:
+            logger.warning(f"Není dostupná žádná událost pro hosta {instance.user.username}.")

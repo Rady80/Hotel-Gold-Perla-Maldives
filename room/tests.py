@@ -3,6 +3,9 @@ from .models import Room, Booking, Guest
 from datetime import date
 
 
+# ------------------------------
+# Testy pro model Room (Pokoje)
+# ------------------------------
 class RoomModelTest(TestCase):
     """
     Testy pro model Room.
@@ -33,9 +36,12 @@ class RoomModelTest(TestCase):
         """
         Testuje textovou reprezentaci pokoje (metoda __str__).
         """
-        self.assertEqual(str(self.room), "Luxury Suite (101)")
+        self.assertEqual(str(self.room), "Luxury Suite (Číslo: 101)")
 
 
+# ------------------------------
+# Testy pro model Booking (Rezervace)
+# ------------------------------
 class BookingModelTest(TestCase):
     """
     Testy pro model Booking.
@@ -75,10 +81,13 @@ class BookingModelTest(TestCase):
         """
         Testuje textovou reprezentaci rezervace (metoda __str__).
         """
-        expected_str = f"Rezervace: {self.room} pro {self.guest}"
+        expected_str = f"Rezervace: {self.room.name} (Číslo: {self.room.number}) pro hosta {self.guest.phoneNumber}"
         self.assertEqual(str(self.booking), expected_str)
 
 
+# ------------------------------
+# Testy pro model Guest (Hosté)
+# ------------------------------
 class GuestModelTest(TestCase):
     """
     Testy pro model Guest.

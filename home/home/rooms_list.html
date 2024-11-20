@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Seznam pokojů</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Číslo pokoje</th>
+            <th>Typ</th>
+            <th>Kapacita</th>
+            <th>Cena za noc</th>
+            <th>Dostupnost</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for room in rooms %}
+        <tr>
+            <td>{{ room.room_number }}</td>
+            <td>{{ room.room_type }}</td>
+            <td>{{ room.capacity }}</td>
+            <td>{{ room.price_per_night }}</td>
+            <td>{{ room.is_available|yesno:"Ano,Ne" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

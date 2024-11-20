@@ -16,16 +16,26 @@ class HotelConfig(AppConfig):
     verbose_name = _('Správa hotelu')  # Přátelský název aplikace v administraci (s podporou lokalizace)
 
     def ready(self):
+        import hotel.signals  # Registrace signálů 
         """
         Inicializace aplikace při startu Django.
 
         Používá se například pro:
         - Registraci signálů
-        - Nastavení specifických procesů při spuštění aplikace
+        - Nastavení specifických procesů při inicializaci aplikace
+        """
+        self._register_signals()
+
+    def _register_signals(self):
+        """
+        Registrace signálů aplikace.
+        Pokud soubor `signals.py` neexistuje, zaznamená varování do logu.
+
+        Tato metoda je volána během inicializace aplikace.
         """
         try:
-            import hotel.signals  # Registrace signálů (pokud existují)
-            logger.info("Signály aplikace 'hotel' byly úspěšně načteny.")
+            import hotel.signals  # Pokus o import souboru se signály aplikace
+            logger.info("Signály aplikace 'hotel' byly úspěšně načteny.")  # Log úspěšného načtení signálů
         except ImportError as e:
-            # Pokud soubor se signály neexistuje, zaznamenáme varování
-            logger.warning(f"Soubor 'hotel.signals' nebyl nalezen: {e}")
+            # Pokud soubor `signals.py` neexistuje nebo obsahuje chyby, zaznamenáme varování
+            logger.warning(f"Soubor 'hotel.signals' nebyl nalezen nebo obsahuje chyby: {e}")

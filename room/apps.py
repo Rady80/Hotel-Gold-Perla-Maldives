@@ -1,32 +1,46 @@
 from django.apps import AppConfig
 from django.core.exceptions import ImproperlyConfigured
 
+
 class RoomConfig(AppConfig):
     """
     Konfigurace aplikace 'room' pro Django projekt.
 
-    Tento soubor definuje nastavení pro aplikaci 'room', včetně inicializace aplikace a
-    registrace signálů během spuštění.
+    Tento soubor definuje základní nastavení aplikace 'room', včetně jejího názvu,
+    popisu a inicializační logiky při spuštění aplikace.
     """
-    default_auto_field = 'django.db.models.BigAutoField'  # Výchozí typ primárního klíče pro modely (automaticky generovaný)
-    name = 'room'  # Název aplikace, jak je registrován v Django projektu
-    verbose_name = "Pokoje a správa"  # Přátelský název aplikace pro administraci
+    # ------------------------------
+    # Výchozí nastavení aplikace
+    # ------------------------------
+    
+    # Výchozí typ primárního klíče pro modely v této aplikaci
+    default_auto_field = 'django.db.models.BigAutoField'
+    
+    # Název aplikace, jak je registrována v Django projektu
+    name = 'room'
+    
+    # Přátelský název aplikace, který se zobrazuje v administraci
+    verbose_name = "Pokoje a správa"
 
+    # ------------------------------
+    # Inicializační logika při spuštění aplikace
+    # ------------------------------
     def ready(self):
         """
         Inicializační logika aplikace při jejím spuštění.
 
-        Tato metoda je volána automaticky během startu Django aplikace. Slouží k registraci
-        signálů aplikace, které umožňují provádět určité akce při událostech, jako je
-        vytvoření nebo smazání objektů.
+        Tato metoda se volá automaticky během startu Django aplikace. Její hlavní úlohou je:
+        - Načítat a registrovat signály aplikace (definované v `room/signals.py`).
+        - Zajistit, že všechny potřebné komponenty aplikace jsou správně inicializovány.
 
-        Pokud dojde k chybě při importu signálů, vyvoláme výjimku s popisem chyby.
+        Pokud se při importu signálů vyskytne chyba, metoda vyvolá výjimku
+        `ImproperlyConfigured`, která poskytuje detailní informace o problému.
         """
         try:
-            # Pokus o importování signálů aplikace z `room/signals.py`
-            import room.signals  # Tento soubor je zodpovědný za registraci signálů
+            # Pokus o import signálů aplikace z modulu `room.signals`
+            import room.signals
         except ImportError as e:
-            # Pokud dojde k chybě při načítání signálů, vyvoláme výjimku a poskytneme detailní informaci
+            # Pokud se import nezdaří, vyvolá se výjimka s podrobnou chybovou zprávou
             raise ImproperlyConfigured(
-                f"Chyba při načítání signálů aplikace 'room': {e}"  # Poskytuje podrobnosti o chybě
+                f"Chyba při načítání signálů aplikace 'room': {e}"
             )

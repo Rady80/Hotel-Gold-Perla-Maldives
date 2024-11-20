@@ -1,62 +1,50 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.db.models import Q
-from datetime import datetime, timedelta
+from datetime import datetime
 from accounts.models import Guest
-from room.models import Room, Booking, Dependees, RoomServices, Refund
+from room.models import Room, Booking
 from .forms import EditRoomForm
 
 
+# ------------------------------
 # Funkce pro určení role uživatele
+# ------------------------------
 def get_user_role(user):
     """
-    Získá roli aktuálního uživatele. Pokud uživatel nemá žádnou skupinu, vrátí 'guest'.
+    Vrací roli aktuálního uživatele.
+    Pokud uživatel nemá přiřazenou skupinu, vrátí 'guest'.
     """
     return str(user.groups.first()) if user.groups.exists() else "guest"
 
 
-# Funkce pro získání cesty k šabloně na základě role uživatele
+# ------------------------------
+# Funkce pro generování cesty k šabloně
+# ------------------------------
 def get_template_path(role, template_name):
     """
-    Vrací cestu k šabloně na základě role uživatele.
+    Generuje cestu k šabloně na základě role uživatele a názvu šablony.
     """
     return f"{role}/{template_name}"
 
 
+# ------------------------------
 # Zobrazení seznamu pokojů
+# ------------------------------
 @login_required(login_url='login')
 def rooms(request):
     """
-    Zobrazuje seznam pokojů s možností filtrování (dostupnost, cena, kapacita atd.).
+    Zobrazuje seznam pokojů s možností filtrování podle dostupnosti, kapacity a dalších kritérií.
     """
     role = get_user_role(request.user)  # Získání role uživatele
     rooms = Room.objects.all()  # Načtení všech pokojů
-    first_day, last_day = None, None
-
-    def check_availability(start_date, end_date):
-        """
-        Vrací seznam dostupných pokojů v zadaném období.
-        """
-        available_rooms = []
-        for room in rooms:
-            if not room.statusStartDate or (room.statusStartDate > end_date or room.statusEndDate < start_date):
-                bookings = Booking.objects.filter(roomNumber=room)
-                if all(b.startDate > end_date or b.endDate < start_date for b in bookings):
-                    available_rooms.append(room)
-        return available_rooms
 
     if request.method == "POST":
-        if "dateFilter" in request.POST:
-            # Filtrování podle dat
-            first_day = datetime.strptime(request.POST.get("fd", ""), '%Y-%m-%d')
-            last_day = datetime.strptime(request.POST.get("ld", ""), '%Y-%m-%d')
-            rooms = check_availability(first_day.date(), last_day.date())
-
         if "filter" in request.POST:
-            # Filtrování podle dalších kritérií
+            # Filtrování podle zadaných kritérií
             filters = {
                 'number__icontains': request.POST.get("number"),
                 'capacity__gte': request.POST.get("capacity"),
@@ -70,21 +58,22 @@ def rooms(request):
     context = {
         "role": role,
         "rooms": rooms,
-        "fd": first_day,
-        "ld": last_day,
     }
     return render(request, get_template_path(role, "rooms.html"), context)
 
 
+# ------------------------------
 # Přidání nového pokoje
+# ------------------------------
 @login_required(login_url='login')
 def add_room(request):
     """
-    Umožňuje přidat nový pokoj do systému.
+    Umožňuje přidání nového pokoje do systému.
     """
     role = get_user_role(request.user)
 
     if request.method == "POST":
+        # Vytvoření nového pokoje na základě odeslaných dat
         room = Room(
             number=request.POST.get('number'),
             capacity=request.POST.get('capacity'),
@@ -99,35 +88,34 @@ def add_room(request):
     return render(request, get_template_path(role, "add-room.html"), {"role": role})
 
 
+# ------------------------------
 # Profil pokoje
+# ------------------------------
 @login_required(login_url='login')
 def room_profile(request, id):
     """
-    Zobrazuje profil pokoje včetně rezervací a možností správy.
+    Zobrazuje detail pokoje, včetně jeho rezervací a správy.
     """
     role = get_user_role(request.user)
-    room = Room.objects.get(number=id)
-    bookings = Booking.objects.filter(roomNumber=room)
+    room = get_object_or_404(Room, number=id)  # Získání pokoje podle čísla
+    bookings = Booking.objects.filter(roomNumber=room)  # Načtení rezervací pro daný pokoj
 
     if request.method == "POST":
         if "lockRoom" in request.POST:
-            # Zablokování pokoje
+            # Zablokování pokoje na zadané období
             start_date = datetime.strptime(request.POST.get("bsd", ""), '%Y-%m-%d').date()
             end_date = datetime.strptime(request.POST.get("bed", ""), '%Y-%m-%d').date()
-            if not any(b.startDate <= end_date and b.endDate >= start_date for b in bookings):
-                room.statusStartDate, room.statusEndDate = start_date, end_date
-                room.save()
-                messages.success(request, f"Pokoj číslo {room.number} byl zablokován od {start_date} do {end_date}.")
-            else:
-                messages.error(request, "Pokoj je v tomto období již rezervován.")
+            room.statusStartDate, room.statusEndDate = start_date, end_date
+            room.save()
+            messages.success(request, f"Pokoj číslo {room.number} byl zablokován od {start_date} do {end_date}.")
         elif "unlockRoom" in request.POST:
             # Odblokování pokoje
             room.statusStartDate, room.statusEndDate = None, None
             room.save()
             messages.success(request, f"Pokoj číslo {room.number} byl odblokován.")
         elif "deleteRoom" in request.POST:
-            # Smazání pokoje
-            if not any(b.startDate <= datetime.now().date() <= b.endDate for b in bookings):
+            # Smazání pokoje (pouze pokud nemá aktivní rezervace)
+            if not bookings.filter(startDate__lte=datetime.now().date(), endDate__gte=datetime.now().date()).exists():
                 room.delete()
                 messages.success(request, f"Pokoj číslo {room.number} byl úspěšně smazán.")
                 return redirect("rooms")
@@ -142,15 +130,17 @@ def room_profile(request, id):
     return render(request, get_template_path(role, "room-profile.html"), context)
 
 
+# ------------------------------
 # Editace pokoje
+# ------------------------------
 @login_required(login_url='login')
 def room_edit(request, pk):
     """
-    Umožňuje upravit detaily pokoje (kapacita, cena atd.).
+    Umožňuje upravit údaje o pokoji.
     """
     role = get_user_role(request.user)
-    room = Room.objects.get(number=pk)
-    form = EditRoomForm(instance=room)
+    room = get_object_or_404(Room, number=pk)  # Načtení pokoje podle čísla
+    form = EditRoomForm(instance=room)  # Formulář předvyplněný daty pokoje
 
     if request.method == "POST":
         form = EditRoomForm(request.POST, instance=room)
@@ -159,4 +149,8 @@ def room_edit(request, pk):
             messages.success(request, f"Pokoj číslo {room.number} byl úspěšně aktualizován.")
             return redirect("room-profile", id=room.number)
 
-    return render(request, get_template_path(role, "room-edit.html"), {"role": role, "form": form})
+    context = {
+        "role": role,
+        "form": form,
+    }
+    return render(request, get_template_path(role, "room-edit.html"), context)

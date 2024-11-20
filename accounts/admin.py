@@ -1,8 +1,9 @@
 from django.contrib import admin
 from .models import Guest, Employee, Task
 
-
-# Vlastní nastavení administrace pro model Guest
+# ------------------------------
+# Administrace modelu Guest (Host)
+# ------------------------------
 @admin.register(Guest)
 class GuestAdmin(admin.ModelAdmin):
     """
@@ -38,12 +39,14 @@ class GuestAdmin(admin.ModelAdmin):
     mark_missing_phone_number.short_description = "Označit chybějící telefonní číslo"
 
 
-# Vlastní nastavení administrace pro model Employee
+# ------------------------------
+# Administrace modelu Employee (Zaměstnanec)
+# ------------------------------
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
     """
     Administrace modelu Employee (Zaměstnanec).
-    Poskytuje správu zaměstnanců s možností hledání a filtrování podle pozice.
+    Poskytuje správu zaměstnanců s možností hledání a filtrování podle platu.
     """
     # Sloupce zobrazené v seznamu zaměstnanců
     list_display = ('id', 'user', 'phoneNumber', 'salary')
@@ -55,7 +58,9 @@ class EmployeeAdmin(admin.ModelAdmin):
     ordering = ('user__username',)
 
 
-# Vlastní nastavení administrace pro model Task
+# ------------------------------
+# Administrace modelu Task (Úkol)
+# ------------------------------
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     """

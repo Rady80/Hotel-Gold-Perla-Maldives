@@ -1,11 +1,14 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from hotel.models import Guest, Employee, Event, Bills, Storage
+from hotel.models import Guest, Employee, Event, Bill, Storage
 
 
+# ------------------------------
+# Testy pro model Guest
+# ------------------------------
 class GuestModelTest(TestCase):
     """
-    Testy pro model Guest.
+    Testy pro model Guest (Host).
     """
     def setUp(self):
         """
@@ -28,9 +31,12 @@ class GuestModelTest(TestCase):
         self.assertEqual(str(self.guest), "testuser (Guest)")
 
 
+# ------------------------------
+# Testy pro model Employee
+# ------------------------------
 class EmployeeModelTest(TestCase):
     """
-    Testy pro model Employee.
+    Testy pro model Employee (Zaměstnanec).
     """
     def setUp(self):
         """
@@ -54,9 +60,12 @@ class EmployeeModelTest(TestCase):
         self.assertEqual(str(self.employee), "employee1 (Employee)")
 
 
+# ------------------------------
+# Testy pro model Event
+# ------------------------------
 class EventModelTest(TestCase):
     """
-    Testy pro model Event.
+    Testy pro model Event (Událost).
     """
     def setUp(self):
         """
@@ -89,9 +98,12 @@ class EventModelTest(TestCase):
         )
 
 
-class BillsModelTest(TestCase):
+# ------------------------------
+# Testy pro model Bill
+# ------------------------------
+class BillModelTest(TestCase):
     """
-    Testy pro model Bills.
+    Testy pro model Bill (Faktura).
     """
     def setUp(self):
         """
@@ -99,11 +111,11 @@ class BillsModelTest(TestCase):
         """
         self.user = User.objects.create_user(username="guest1", email="guest@example.com", password="password123")
         self.guest = Guest.objects.create(user=self.user, phoneNumber="+123456789")
-        self.bill = Bills.objects.create(
+        self.bill = Bill.objects.create(
             guest=self.guest,
             totalAmount=1200.50,
             summary="Room and meal charges",
-            date="2024-01-01"
+            date_created="2024-01-01"
         )
 
     def test_bill_creation(self):
@@ -116,14 +128,17 @@ class BillsModelTest(TestCase):
 
     def test_bill_str_method(self):
         """
-        Ověření správného fungování metody __str__ u modelu Bills.
+        Ověření správného fungování metody __str__ u modelu Bill.
         """
         self.assertEqual(str(self.bill), "Faktura pro guest1 (1200.5 Kč)")
 
 
+# ------------------------------
+# Testy pro model Storage
+# ------------------------------
 class StorageModelTest(TestCase):
     """
-    Testy pro model Storage.
+    Testy pro model Storage (Sklad).
     """
     def setUp(self):
         """

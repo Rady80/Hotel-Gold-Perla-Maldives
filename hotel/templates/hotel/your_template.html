@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="cs"> <!-- Jazyk nastaven na češtinu -->
+<head>
+    <meta charset="UTF-8"> <!-- Nastavení kódování -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsivní zobrazení -->
+    <title>Formulář</title> <!-- Titulek stránky -->
+</head>
+<body>
+    <!-- Hlavní nadpis stránky -->
+    <h1>Vyplňte formulář</h1>
+
+    <!-- Začátek formuláře -->
+    <form method="post">
+        {% csrf_token %} <!-- Token pro ochranu proti CSRF útokům -->
+
+        <!-- Vykreslení formuláře Django -->
+        {{ form.as_p }}
+
+        <!-- Tlačítko pro odeslání formuláře -->
+        <button type="submit">Odeslat</button>
+    </form>
+
+    <!-- Záloha: Formulář bez CSRF tokenu (pro případ testování nebo ukázky) -->
+    <!-- Poznámka: Tento formulář nepoužívejte v produkčním prostředí -->
+    <form method="post">
+        {{ form.as_p }} <!-- Jednoduché vykreslení formuláře -->
+        <button type="submit">Odeslat</button> <!-- Tlačítko pro odeslání -->
+    </form>
+</body>
+</html>

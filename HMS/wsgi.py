@@ -12,10 +12,18 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 import os
 from django.core.wsgi import get_wsgi_application
 
-# Nastavení výchozího prostředí pro konfiguraci Django
-# Určuje, který soubor nastavení se má použít pro tento projekt
+# ------------------------------
+# Nastavení prostředí pro Django
+# ------------------------------
+# Určuje, který soubor nastavení se má použít pro tento projekt.
+# Pokud používáte více prostředí (např. vývoj, testování, produkce),
+# můžete zde dynamicky nastavovat různé konfigurační soubory.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HMS.settings')
 
-# Inicializace a získání WSGI aplikace
-# Tato proměnná `application` slouží jako vstupní bod pro WSGI servery
+# ------------------------------
+# Inicializace WSGI aplikace
+# ------------------------------
+# Tato proměnná `application` slouží jako vstupní bod pro WSGI servery,
+# které komunikují s vaší Django aplikací. Webový server (např. Apache)
+# deleguje požadavky na tuto aplikaci.
 application = get_wsgi_application()

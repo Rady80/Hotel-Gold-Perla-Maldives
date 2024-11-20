@@ -1,90 +1,72 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import FoodMenu, Event, EventAttendees, Storage, Refund
-from .forms import EditFoodMenuForm, CreateEventForm
-from accounts.models import Guest
+# ------------------------------
+# Základní Django funkce pro práci s pohledy
+# ------------------------------
+from django.shortcuts import render, get_object_or_404, redirect  # Pro práci s šablonami, získání objektů a přesměrování
+from django.contrib.auth.decorators import login_required  # Omezení přístupu pouze na přihlášené uživatele
+from django.contrib import messages  # Pro zobrazování zpráv uživateli
+from django.apps import apps  # Pro dynamické načítání modelů
+from .forms import CreateEventForm  # Import formuláře pro vytvoření události
+from .models import Event
+from .models import Room  # Ujistěte se, že model Room je správně definován
 
 # ------------------------------
-# Domovská stránka
+# Import modelů
+# ------------------------------
+from .models import Event, FoodMenu, EventAttendees, Room  # Import modelů používaných v aplikaci
+
+# ------------------------------
+# Pohled pro domovskou stránku
 # ------------------------------
 @login_required(login_url='login')
 def home(request):
     """
-    Zajišťuje zobrazení domovské stránky s informacemi podle role uživatele.
+    Pohled pro zobrazení domovské stránky aplikace 'hotel'.
     """
-    role = str(request.user.groups.first()) if request.user.groups.exists() else "No Group"
-    context = {"role": role}
-    return render(request, "hotel/home.html", context)
+    return render(request, 'hotel/home.html')  # Šablona `home.html` musí existovat.
+
 
 # ------------------------------
-# Zobrazení stránky "O hotelu"
-# ------------------------------
-def about_view(request):
-    """
-    Zobrazení stránky 'O hotelu'.
-    """
-    return render(request, 'hotel/about.html')
-
-# ------------------------------
-# Kontaktní stránka
-# ------------------------------
-def contact_view(request):
-    """
-    Zobrazení kontaktní stránky.
-    """
-    return render(request, 'hotel/contact.html')
-
-# ------------------------------
-# Zobrazení Zlaté Perly
-# ------------------------------
-def pearl_view(request):
-    """
-    Zobrazení stránky Zlatá Perla.
-    """
-    return render(request, 'hotel/pearl.html')
-
-# ------------------------------
-# Správa událostí
+# Pohled pro seznam událostí
 # ------------------------------
 @login_required(login_url='login')
-def events(request):
+def events_view(request):
     """
-    Správa událostí - filtrování a správa účasti na událostech.
+    Zobrazení seznamu událostí s možností účasti na událostech.
     """
     role = str(request.user.groups.first()) if request.user.groups.exists() else "guest"
     events = Event.objects.all()
     attended_events = None
 
+    # Načtení událostí, kterých se uživatel účastní
     if role == 'guest':
         attended_events = EventAttendees.objects.filter(guest=request.user.guest)
 
+    # Zpracování formulářových požadavků (např. filtrování nebo účast na události)
     if request.method == "POST":
-        # Filtrování událostí
         if "filter" in request.POST:
             filters = {
-                "eventType__icontains": request.POST.get("type"),
+                "event_type__icontains": request.POST.get("type"),
                 "location__icontains": request.POST.get("location"),
-                "startDate__gte": request.POST.get("fd"),
-                "endDate__lte": request.POST.get("ed"),
+                "start_date__gte": request.POST.get("fd"),
+                "end_date__lte": request.POST.get("ed"),
             }
             filters = {key: value for key, value in filters.items() if value}
             events = events.filter(**filters)
 
-        # Přidání účasti
         if 'attend' in request.POST:
-            temp_event = events.get(id=request.POST.get('id'))
-            if not EventAttendees.objects.filter(event=temp_event, guest=request.user.guest).exists():
-                EventAttendees.objects.create(event=temp_event, guest=request.user.guest)
-                messages.success(request, f"Byli jste přidáni na událost '{temp_event.eventType}'.")
-            return redirect('events')
+            event_id = request.POST.get('id')
+            event = get_object_or_404(Event, id=event_id)
+            if not EventAttendees.objects.filter(event=event, guest=request.user.guest).exists():
+                EventAttendees.objects.create(event=event, guest=request.user.guest)
+                messages.success(request, f"Byli jste přidáni na událost '{event.title}'.")
+            return redirect('events_view')
 
-        # Odebrání účasti
         if 'remove' in request.POST:
-            temp_event = events.get(id=request.POST.get('id'))
-            EventAttendees.objects.filter(event=temp_event, guest=request.user.guest).delete()
-            messages.success(request, f"Vaše účast na události '{temp_event.eventType}' byla zrušena.")
-            return redirect('events')
+            event_id = request.POST.get('id')
+            event = get_object_or_404(Event, id=event_id)
+            EventAttendees.objects.filter(event=event, guest=request.user.guest).delete()
+            messages.success(request, f"Vaše účast na události '{event.title}' byla zrušena.")
+            return redirect('events_view')
 
     context = {
         "role": role,
@@ -94,106 +76,145 @@ def events(request):
     }
     return render(request, "hotel/events.html", context)
 
+
 # ------------------------------
-# Profil události
+# Pohled pro detail události
 # ------------------------------
-def event_profile(request, event_id):
+def event_detail(request, event_id):
     """
-    Zobrazení detailu události.
+    Zobrazení detailu konkrétní události.
     """
     event = get_object_or_404(Event, id=event_id)
     return render(request, 'hotel/event_detail.html', {'event': event})
 
-# ------------------------------
-# Vytvoření nové události
-# ------------------------------
-@login_required(login_url='login')
-def create_event(request):
-    """
-    Umožňuje vytvoření nové události.
-    """
-    form = CreateEventForm()
-    if request.method == "POST":
-        form = CreateEventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Událost byla úspěšně vytvořena.")
-            return redirect('events')
-
-    return render(request, "hotel/create_event.html", {'form': form})
 
 # ------------------------------
-# Editace jídelního menu
+# Pohled pro úpravu jídelního menu
 # ------------------------------
 @login_required(login_url='login')
 def edit_food_menu(request, menu_id):
     """
-    Umožňuje úpravu konkrétního jídelního menu.
+    Pohled pro úpravu konkrétního jídelního menu.
     """
     menu = get_object_or_404(FoodMenu, id=menu_id)
     if request.method == "POST":
+        # Pokud formuláře neexistují, je potřeba je vytvořit v souboru `forms.py`
+        from .forms import EditFoodMenuForm  # Import formuláře pro úpravu menu
         form = EditFoodMenuForm(request.POST, instance=menu)
         if form.is_valid():
             form.save()
             messages.success(request, "Menu bylo úspěšně upraveno.")
-            return redirect("menu_list")
+            return redirect("menu_view")
     else:
+        from .forms import EditFoodMenuForm  # Import formuláře
         form = EditFoodMenuForm(instance=menu)
     return render(request, "hotel/edit_food_menu.html", {"form": form, "menu": menu})
 
+
 # ------------------------------
-# Smazání události
+# Pohled pro zobrazení jídelního menu
 # ------------------------------
+def menu_view(request):
+    """
+    Zobrazení jídelního lístku s možností filtrování a řazení.
+    """
+    menu_items = FoodMenu.objects.all()
+
+    # Filtrování a řazení
+    category = request.GET.get('category')
+    if category:
+        menu_items = menu_items.filter(category__icontains=category)
+
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    if min_price:
+        menu_items = menu_items.filter(price__gte=min_price)
+    if max_price:
+        menu_items = menu_items.filter(price__lte=max_price)
+
+    sort_by = request.GET.get('sort_by', 'name')
+    if sort_by in ['name', '-name', 'price', '-price']:
+        menu_items = menu_items.order_by(sort_by)
+
+    context = {
+        'menu_items': menu_items,
+        'category': category,
+        'min_price': min_price,
+        'max_price': max_price,
+        'sort_by': sort_by,
+    }
+    return render(request, 'hotel/menu.html', context)
+
+
+# ------------------------------
+# Pohled pro detail pokoje
+# ------------------------------
+def room_detail(request, room_id):
+    """
+    Zobrazení detailu konkrétního pokoje.
+    """
+    room = get_object_or_404(Room, id=room_id)
+    return render(request, 'hotel/room_detail.html', {'room': room})
+
+
+# ------------------------------
+# Funkce pro dynamické načtení modelu Event
+# ------------------------------
+def get_event_model():
+    """
+    Funkce pro dynamické načtení modelu Event.
+    """
+    return apps.get_model('hotel', 'Event')
+
+@login_required(login_url='login')
+def create_event(request):
+    """
+    Pohled pro vytvoření nové události.
+    """
+    if request.method == 'POST':
+        form = CreateEventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('events_view')  # Přesměrování na seznam událostí
+    else:
+        form = CreateEventForm()
+    return render(request, 'hotel/create_event.html', {'form': form})
+
 @login_required(login_url='login')
 def delete_event(request, pk):
     """
-    Smazání vybrané události.
+    Pohled pro smazání události.
     """
     event = get_object_or_404(Event, id=pk)
-    if request.method == "POST":
-        event.delete()
-        messages.success(request, "Událost byla úspěšně smazána.")
-        return redirect('events')
+    event.delete()
+    messages.success(request, f"Událost '{event.title}' byla úspěšně smazána.")
+    return redirect('events_view')
 
-    return render(request, "hotel/delete_event.html", {"event": event})
-
-# ------------------------------
-# Správa skladových položek
-# ------------------------------
 @login_required(login_url='login')
-def storage(request):
+def pearl_view(request):
     """
-    Správa skladových položek.
+    Pohled pro zobrazení statické stránky "Zlatá Perla".
     """
-    storage_items = Storage.objects.all()
-    if request.method == "POST":
-        if "add" in request.POST:
-            Storage.objects.create(
-                itemName=request.POST.get("itemName"),
-                itemType=request.POST.get("itemType"),
-                quantity=request.POST.get("quantity"),
-            )
-            messages.success(request, "Položka byla úspěšně přidána.")
-        elif "filter" in request.POST:
-            filters = {
-                "itemName__icontains": request.POST.get("name"),
-                "itemType__icontains": request.POST.get("type"),
-            }
-            filters = {key: value for key, value in filters.items() if value}
-            storage_items = storage_items.filter(**filters)
+    return render(request, 'hotel/pearl.html')  # Předpokládá existenci šablony `hotel/pearl.html`.
 
-    return render(request, "hotel/storage.html", {
-        "storage_items": storage_items,
-        "filters": request.POST,
-    })
-
-# ------------------------------
-# Zobrazení seznamu refundací
-# ------------------------------
 @login_required(login_url='login')
+def rooms_list(request):
+    """
+    Pohled pro zobrazení seznamu pokojů.
+    """
+    rooms = Room.objects.all()  # Načtení všech pokojů z databáze
+    return render(request, 'hotel/rooms_list.html', {'rooms': rooms})  # Šablona `rooms_list.html`
+
+@login_required(login_url='login')
+def event_profile(request, event_id):
+    """
+    Pohled pro zobrazení detailu konkrétní události.
+    """
+    event = get_object_or_404(Event, id=event_id)  # Načtení události nebo 404
+    return render(request, 'hotel/event_profile.html', {'event': event})
+
+# Pohled pro zobrazení seznamu refundací
 def refunds_view(request):
-    """
-    Zobrazení seznamu refundací.
-    """
-    refunds = Refund.objects.all()
-    return render(request, 'hotel/refunds.html', {'refunds': refunds})
+    # Logika pro získání dat o refundacích
+    refunds = []  # Nahraďte reálnými daty
+    return render(request, 'refunds.html', {'refunds': refunds})

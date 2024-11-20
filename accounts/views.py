@@ -1,4 +1,3 @@
-# accounts/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,7 +8,6 @@ from datetime import datetime, date, timedelta
 from accounts.models import Guest, Employee
 from room.models import Booking
 from .forms import CreateUserForm
-
 
 # ------------------------------
 # Registrace nového uživatele
@@ -22,7 +20,7 @@ def register_page(request):
     if request.user.is_authenticated:
         return redirect('home')  # Přesměrování přihlášeného uživatele na domovskou stránku
     else:
-        form = CreateUserForm()  # Inicializace formuláře
+        form = CreateUserForm()  # Inicializace registračního formuláře
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
@@ -31,14 +29,15 @@ def register_page(request):
                     messages.error(request, 'Tento e-mail je již používán.')
                     return redirect('register')
 
-                user = form.save()  # Uložení nového uživatele
+                # Vytvoření uživatele
+                user = form.save()
                 username = form.cleaned_data.get('username')
 
                 # Přidání uživatele do skupiny "guest"
                 group, _ = Group.objects.get_or_create(name="guest")
                 user.groups.add(group)
 
-                # Vytvoření hosta
+                # Vytvoření hosta s telefonním číslem
                 phone_number = request.POST.get("phoneNumber")
                 Guest.objects.create(user=user, phoneNumber=phone_number)
 
@@ -97,7 +96,7 @@ def guests(request):
     Zobrazení seznamu hostů s možností filtrování podle atributů nebo data rezervací.
     """
     role = str(request.user.groups.first()) if request.user.groups.exists() else "guest"
-    path = f"{role}/"
+    path = f"{role}/"  # Cesta k šablonám dle role
     bookings = Booking.objects.all()
 
     # Výchozí časové období pro filtrování
@@ -130,17 +129,11 @@ def guests(request):
 
             guests = Guest.objects.filter(user__in=users)
 
-        context = {
-            "role": role,
-            "guests": guests,
-            "fd": fd,
-            "ld": ld,
-        }
-        return render(request, f"{path}guests.html", context)
-
     context = {
         "role": role,
         "guests": guests,
+        "fd": fd,
+        "ld": ld,
     }
     return render(request, f"{path}guests.html", context)
 
@@ -154,7 +147,7 @@ def employees(request):
     Zobrazení seznamu zaměstnanců.
     """
     role = str(request.user.groups.first()) if request.user.groups.exists() else "guest"
-    path = f"{role}/"
+    path = f"{role}/"  # Cesta k šablonám dle role
     employees = Employee.objects.all()
 
     context = {
@@ -172,3 +165,14 @@ def pearl_view(request):
     Zobrazení statické stránky Zlaté Perly.
     """
     return render(request, 'pearl.html')
+
+
+# ------------------------------
+# Pohled pro zobrazení profilu uživatele
+# ------------------------------
+@login_required
+def profile_view(request):
+    """
+    Pohled pro zobrazení profilu uživatele.
+    """
+    return render(request, 'accounts/profile.html', {'user': request.user})
