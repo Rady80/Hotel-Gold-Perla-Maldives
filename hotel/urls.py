@@ -1,5 +1,7 @@
 from django.urls import path  # Pro definování URL cest
 from hotel import views as hotel_views  # Import pohledů z aplikace hotel
+from django.views.generic import TemplateView  # Pro použití šablony
+from . import views
 
 # ------------------------------
 # Definice URL směrování pro aplikaci 'hotel'
@@ -10,7 +12,7 @@ urlpatterns = [
     # ------------------------------
     path(
         '', 
-        hotel_views.home,  # Pohled pro zobrazení domovské stránky
+        TemplateView.as_view(template_name='index.html'),  # Zobrazení šablony index.html pro domovskou stránku
         name='home'  # Název URL pro použití v šablonách (např. `{% url 'home' %}`)
     ),
 
@@ -52,7 +54,7 @@ urlpatterns = [
         hotel_views.event_profile,  # Pohled pro detail konkrétní události
         name='event_profile'  # Název URL pro použití v šablonách (např. `{% url 'event_profile' event_id=1 %}`)
     ),
-    
+
     # ------------------------------
     # Zobrazení seznamu refundací
     # ------------------------------
@@ -60,5 +62,7 @@ urlpatterns = [
         'refunds/', 
         hotel_views.refunds_view,  # Pohled pro zobrazení seznamu refundací
         name='refunds'  # Název URL pro použití v šablonách (např. `{% url 'refunds' %}`)
+        
     ),
+    path('', views.home, name='home'),
 ]

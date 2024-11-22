@@ -1,59 +1,18 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seznam pokojů</title>
-</head>
-<body>
-    <!-- Nadpis stránky -->
-    <h1>Seznam pokojů</h1>
-
-    <!-- Výpis jednoduchého seznamu pokojů -->
-    <ul>
-        {% for room in rooms %}
-            <!-- Zobrazí název a cenu každého pokoje -->
-            <li>{{ room.name }} - Cena: {{ room.price }} Kč</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
-
-<!-- Rozšíření základní šablony -->
 {% extends 'base.html' %}
 
 {% block content %}
-    <!-- Hlavní obsah stránky -->
     <h1>Seznam pokojů</h1>
-    
-    <!-- Tabulka pro detailní zobrazení pokojů -->
-    <table>
-        <thead>
-            <!-- Hlavička tabulky -->
-            <tr>
-                <th>Číslo pokoje</th>
-                <th>Typ</th>
-                <th>Kapacita</th>
-                <th>Cena za noc</th>
-                <th>Dostupnost</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Iterace přes seznam pokojů -->
-            {% for room in rooms %}
-            <tr>
-                <!-- Číslo pokoje -->
-                <td>{{ room.room_number }}</td>
-                <!-- Typ pokoje (např. Jednolůžkový, Dvoulůžkový apod.) -->
-                <td>{{ room.room_type }}</td>
-                <!-- Kapacita pokoje -->
-                <td>{{ room.capacity }}</td>
-                <!-- Cena za jednu noc -->
-                <td>{{ room.price_per_night }}</td>
-                <!-- Dostupnost pokoje (Ano/Ne) -->
-                <td>{{ room.is_available|yesno:"Ano,Ne" }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <ul>
+        {% for room in rooms %}
+            <li>
+                Číslo pokoje: {{ room.room_number }}<br>
+                Typ: {{ room.room_type }}<br>
+                Kapacita: {{ room.capacity }} osob<br>
+                Cena za noc: {{ room.price_per_night }} Kč<br>
+                Dostupnost: {{ room.is_available|yesno:"Ano,Ne" }}
+            </li>
+        {% empty %}
+            <li>Žádné pokoje nejsou k dispozici.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}

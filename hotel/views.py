@@ -8,6 +8,7 @@ from django.apps import apps  # Pro dynamické načítání modelů
 from .forms import CreateEventForm  # Import formuláře pro vytvoření události
 from .models import Event
 from .models import Room  # Ujistěte se, že model Room je správně definován
+from .models import Guest 
 
 # ------------------------------
 # Import modelů
@@ -22,7 +23,7 @@ def home(request):
     """
     Pohled pro zobrazení domovské stránky aplikace 'hotel'.
     """
-    return render(request, 'hotel/home.html')  # Šablona `home.html` musí existovat.
+    return render(request, 'index.html') # Šablona `home.html` musí existovat.
 
 
 # ------------------------------
@@ -218,3 +219,12 @@ def refunds_view(request):
     # Logika pro získání dat o refundacích
     refunds = []  # Nahraďte reálnými daty
     return render(request, 'refunds.html', {'refunds': refunds})
+
+login_required
+def events_view(request):
+    try:
+        guest = request.user.guest  # Pokus o přístup k souvisejícímu objektu Guest
+    except Guest.DoesNotExist:  # Pokud objekt Guest pro uživatele neexistuje
+        guest = None  # Pokud neexistuje, nastavíme guest na None
+
+    return render(request, 'events.html', {'guest': guest})

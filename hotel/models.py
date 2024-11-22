@@ -1,27 +1,37 @@
 from django.db import models
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import User
 
-# ------------------------------
-# Model pro hosty (Guest)
-# ------------------------------
 class Guest(models.Model):
     """
     Model pro hosty.
-    Obsahuje informace o uživateli a telefonním čísle.
+    Obsahuje informace o uživateli, plném jménu a telefonním čísle.
     """
     user = models.OneToOneField(
-        'auth.User', null=True, on_delete=models.CASCADE, verbose_name="Uživatel"
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='guest',
+        verbose_name="Uživatel"
     )
-    phone_number = PhoneNumberField(unique=True, verbose_name="Telefonní číslo")
+    full_name = models.CharField(
+        max_length=255, 
+        verbose_name="Plné jméno"
+    )
+    phone_number = PhoneNumberField(
+        unique=True, 
+        blank=True, 
+        null=True, 
+        verbose_name="Telefonní číslo"
+    )
 
     def __str__(self):
-        return f"{self.user.username} (Host)" if self.user else "Neznámý host"
+        return f"{self.full_name} (Host)" if self.full_name else "Neznámý host"
 
     class Meta:
         verbose_name = "Host"
         verbose_name_plural = "Hosté"
-
+        
 # ------------------------------
 # Model pro zaměstnance (Employee)
 # ------------------------------
@@ -243,4 +253,3 @@ class Storage(models.Model):
 
     class Meta:
         verbose_name = "Sklad"
-        verbose_name_plural = "Sklady"

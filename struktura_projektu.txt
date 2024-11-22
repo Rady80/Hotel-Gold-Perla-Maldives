@@ -1,0 +1,91 @@
+Folder PATH listing for volume OS
+Volume serial number is E25A-584B
+C:.
++¦¦¦accounts
+-   +¦¦¦migrations
+-   -   L¦¦¦__pycache__
+-   +¦¦¦templates
+-   -   +¦¦¦accounts
+-   -   L¦¦¦registration
+-   L¦¦¦__pycache__
++¦¦¦bookings
+-   +¦¦¦management
+-   -   L¦¦¦commands
+-   +¦¦¦migrations
+-   +¦¦¦rezervace
+-   +¦¦¦templates
+-   -   L¦¦¦bookings
+-   L¦¦¦__pycache__
++¦¦¦HMS
+-   L¦¦¦__pycache__
++¦¦¦home
+-   +¦¦¦templates
+-   -   L¦¦¦home
+-   L¦¦¦__pycache__
++¦¦¦hotel
+-   +¦¦¦migrations
+-   -   L¦¦¦__pycache__
+-   +¦¦¦static
+-   -   +¦¦¦audio
+-   -   +¦¦¦css
+-   -   -   L¦¦¦admin
+-   -   -       +¦¦¦css
+-   -   -       -   L¦¦¦vendor
+-   -   -       -       L¦¦¦select2
+-   -   -       +¦¦¦img
+-   -   -       -   L¦¦¦gis
+-   -   -       L¦¦¦js
+-   -   -           +¦¦¦admin
+-   -   -           L¦¦¦vendor
+-   -   -               +¦¦¦jquery
+-   -   -               +¦¦¦select2
+-   -   -               -   L¦¦¦i18n
+-   -   -               L¦¦¦xregexp
+-   -   +¦¦¦images
+-   -   +¦¦¦js
+-   -   +¦¦¦media
+-   -   -   L¦¦¦rooom_images
+-   -   L¦¦¦staticfiles
+-   +¦¦¦templates
+-   -   +¦¦¦common_pages
+-   -   L¦¦¦hotel
+-   L¦¦¦__pycache__
++¦¦¦myapp
+-   +¦¦¦templates
+-   -   L¦¦¦myapp
+-   L¦¦¦__pycache__
++¦¦¦room
+-   +¦¦¦migrations
+-   -   L¦¦¦__pycache__
+-   L¦¦¦__pycache__
++¦¦¦rooms
+-   +¦¦¦templates
+-   -   L¦¦¦rooms
+-   L¦¦¦__pycache__
++¦¦¦staticfiles
+-   +¦¦¦audio
+-   +¦¦¦css
+-   -   L¦¦¦admin
+-   -       +¦¦¦css
+-   -       -   L¦¦¦vendor
+-   -       -       L¦¦¦select2
+-   -       +¦¦¦img
+-   -       -   L¦¦¦gis
+-   -       L¦¦¦js
+-   -           +¦¦¦admin
+-   -           L¦¦¦vendor
+-   -               +¦¦¦jquery
+-   -               +¦¦¦select2
+-   -               -   L¦¦¦i18n
+-   -               L¦¦¦xregexp
+-   +¦¦¦images
+-   +¦¦¦js
+-   +¦¦¦rooom_images
+-   L¦¦¦Video
+L¦¦¦Templates
+    +¦¦¦admin
+    +¦¦¦common_pages
+    +¦¦¦guest
+    +¦¦¦incs
+    +¦¦¦receptionist
+    L¦¦¦staff

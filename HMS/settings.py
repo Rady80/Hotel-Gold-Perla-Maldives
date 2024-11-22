@@ -40,14 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'phonenumber_field',
-    'hotel',  # Aplikace pro správu hotelu
-    'accounts',  # Aplikace pro správu uživatelských účtů
-    'room.apps.RoomConfig',  # Aplikace pro správu pokojů
+    'phonenumber_field',  # Podpora telefonních čísel
+
+    # Vlastní aplikace
+    'hotel',
+    'accounts',
+    'room.apps.RoomConfig',
     'myapp',
+    'bookings',
+    'rooms',
+    'home',
 ]
 
-# Middleware
+# Middleware - řetězec middlewarů, které budou zpracovávat požadavky
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -91,31 +96,33 @@ AUTH_PASSWORD_VALIDATORS = [
 # Autentizace a přihlášení
 # ------------------------------
 
-LOGIN_REDIRECT_URL = '/accounts/dashboard/'  # Přesměrování po přihlášení
-LOGIN_URL = '/login/'  # URL pro přihlášení
-LOGOUT_REDIRECT_URL = '/'  # Přesměrování po odhlášení
+LOGIN_REDIRECT_URL = '/accounts/dashboard/'
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 
 # ------------------------------
 # Lokalizace a časová zóna
 # ------------------------------
 
-LANGUAGE_CODE = 'cs'  # Jazyk aplikace (čeština)
-TIME_ZONE = 'Europe/Prague'  # Časová zóna
-USE_I18N = True  # Internacionalizace (překlady)
-USE_L10N = True  # Lokalizace formátů dat a čísel
-USE_TZ = True  # Povolení časových zón
+LANGUAGE_CODE = 'cs'
+TIME_ZONE = 'Europe/Prague'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 
 # ------------------------------
 # Statické a mediální soubory
 # ------------------------------
 
-STATIC_URL = '/static/'  # URL pro statické soubory
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Cesty ke statickým souborům
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # Kořenový adresář pro produkční nasazení
+# Statické soubory (CSS, JavaScript, obrázky)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'hotel' / 'static']  # Statické soubory aplikace hotel
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Složka pro shromažďování statických souborů (pro produkci)
 
-MEDIA_URL = '/media/'  # URL pro mediální soubory
-MEDIA_ROOT = BASE_DIR / 'media'  # Kořenový adresář mediálních souborů
+# Mediální soubory (nahrané uživatelské soubory)
+MEDIA_URL = '/media/'  # URL prefix pro mediální soubory
+MEDIA_ROOT = BASE_DIR / 'media'  # Cesta k adresáři mediálních souborů
 
 # ------------------------------
 # Nastavení šablon
@@ -124,7 +131,7 @@ MEDIA_ROOT = BASE_DIR / 'media'  # Kořenový adresář mediálních souborů
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Složky s šablonami
+        'DIRS': [BASE_DIR / 'templates'],  # Hlavní adresář pro šablony
         'APP_DIRS': True,  # Automatické načítání šablon z aplikací
         'OPTIONS': {
             'context_processors': [
@@ -142,11 +149,11 @@ TEMPLATES = [
 # ------------------------------
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # SMTP server
-EMAIL_PORT = 587  # SMTP port
-EMAIL_USE_TLS = True  # Šifrování
-EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER', 'your_email@gmail.com')  # Uživatelské jméno
-EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD', 'your_password')  # Heslo
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER', 'your_email@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD', 'your_password')
 
 # ------------------------------
 # Protokolování
@@ -170,8 +177,8 @@ LOGGING = {
 # Další zabezpečení
 # ------------------------------
 
-SECURE_BROWSER_XSS_FILTER = True  # Ochrana proti XSS útokům
-SECURE_CONTENT_TYPE_NOSNIFF = True  # Ochrana proti nosní sniffing útokům
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Maximální velikost nahrávaných souborů (v bajtech)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB

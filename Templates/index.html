@@ -1,46 +1,6 @@
-{% extends 'base.html' %}  <!-- Odkaz na základní šablonu -->
+{% extends 'base.html' %}
 
 {% block content %}
-
-<!-- Zahrnutí hlavičky stránky -->
-{% include 'incs/head.html' %}
-
-<body>
-    <!-- Zahrnutí navigační lišty -->
-    {% include 'incs/nav.html' %}
-
-    <!-- Kontextová část, která se mění podle potřeby -->
-    {% block context %}
-
-    {% endblock %}
-
-    <!-- Zahrnutí patičky stránky -->
-    {% include 'incs/footer.html' %}
-</body>
-
-</html>
-
-<!DOCTYPE html>
-<html lang="cs"> <!-- Změněno na češtinu -->
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Hlavní stránka{% endblock %}</title>
-</head>
-<body>
-    <header>
-        <!-- Hlavní nadpis stránky -->
-        <h1>Hotelový systém správy</h1>
-    </header>
-
-    <main>
-        <!-- Obsah stránky, který se bude dynamicky měnit -->
-        {% block content %}{% endblock %}
-    </main>
-
-    <footer>
-        <!-- Patička stránky -->
-        <p>&copy; 2024 Systém pro správu hotelu</p>
-    </footer>
-</body>
-</html>
+<h1>Domovská stránka hotelu Gold Perla</h1>
+<p>Vítejte v našem luxusním hotelu. Prohlédněte si pokoje a služby.</p>
+{% endblock %}

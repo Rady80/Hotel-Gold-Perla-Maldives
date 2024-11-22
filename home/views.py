@@ -1,13 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render  # Import pro renderování šablon
 
-def home(request):
-    """Domovská stránka"""
+# Domovská stránka
+def home_view(request):
+    """
+    Zobrazuje domovskou stránku.
+    """
     return render(request, 'home/home.html')
 
+# Stránka "O nás"
 def about_view(request):
-    """Stránka 'O nás'"""
+    """
+    Zobrazuje stránku 'O nás'.
+    """
     return render(request, 'home/about.html')
 
+# Kontaktní stránka
 def contact_view(request):
-    """Kontaktní stránka"""
+    """
+    Zobrazuje kontaktní stránku.
+    """
     return render(request, 'home/contact.html')

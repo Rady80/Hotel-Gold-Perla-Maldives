@@ -20,10 +20,12 @@
         html {
             margin: 0;
             padding: 0;
-            height: 100%;
-            background-image: url("{% static 'images/hotel.jpg' %}");
-            background-repeat: no-repeat;
-            background-size: cover;
+            height: 100%; /* Nastaví výšku obrazovky */
+            background-image: url("{% static 'images/background2.jpg' %}");
+            background-repeat: no-repeat; /* Zamezí opakování obrázku */
+            background-size: cover; /* Zajistí, že obrázek bude celý viditelný */
+            background-position: center center; /* Zarovná obrázek na střed */
+            
         }
 
         .container-center {

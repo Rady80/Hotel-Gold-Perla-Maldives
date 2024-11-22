@@ -1,0 +1,72 @@
+/* Reset stylů */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Globální stylování */
+body {
+    font-family: 'Georgia', serif;
+    line-height: 1.6;
+    background: linear-gradient(to bottom, #f7e2d5, #d6c1e1);
+    color: #0d0b0b;
+}
+
+nav {
+    background: #7851a9;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav a:hover {
+    color: #00d0ff;
+    text-decoration: underline;
+}
+
+/* Hlavní obsah */
+.hero {
+    background: url('../images/hero-image.jpg') no-repeat center center;
+    background-size: cover;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: rgb(6, 3, 3);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.5rem;
+}
+
+/* Kontakt */
+.contact {
+    text-align: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 80%;
+}
+
+/* Patička */
+footer {
+    text-align: center;
+    background: #d6c1e1;
+    padding: 10px 0;
+    color: #7851a9;
+}

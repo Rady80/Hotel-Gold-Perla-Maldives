@@ -1,0 +1,40 @@
+{% load static %}  <!-- Načítáme knihovnu static -->
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hotel Gold Perla{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- Používáme tag static pro cestu k CSS souboru -->
+</head>
+<body>
+    <!-- Navigační lišta -->
+    <nav>
+        <a href="/">Domů</a>
+        <a href="/rooms/">Pokoje</a>
+        <a href="/bookings/">Rezervace</a>
+        <a href="/events/">Události</a>
+        <a href="/storage/">Sklad</a>
+
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Odhlásit se</button>
+            </form>
+        {% else %}
+            <p>Nejste přihlášeni.</p>
+        {% endif %}
+    </nav>
+
+    <!-- Hlavní obsah -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Patička -->
+    <footer>
+        <p>&copy; 2024 Hotel Gold Perla. Všechna práva vyhrazena.</p>
+    </footer>
+</body>
+</html>

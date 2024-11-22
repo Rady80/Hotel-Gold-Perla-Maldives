@@ -1,6 +1,14 @@
-{% extends '../index.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
+
+{% block content %}
+    <!-- Obsah šablony -->
+    <ul>
+        {% for room in rooms %}
+            <li>{{ room.name }} - Cena: {{ room.price }} Kč</li>
+        {% endfor %}
+    </ul>
     <!-- Sekce: Pokoje -->
     <div class="container mt-5">
         <h1 class="text-center text-primary">Seznam pokojů</h1>
@@ -30,7 +38,7 @@
                             <td>{{ room.roomType }}</td>
                             <td>{{ room.capacity }}</td>
                             <td>{{ room.numberOfBeds }}</td>
-                            <td>{{ room.price }}</td>
+                            <td>{{ room.price }} Kč</td>
                             <td>{{ room.status }}</td>
                             <td>
                                 <a href="{% url 'room-profile' room.number %}" class="btn btn-info btn-sm">Profil</a>
@@ -52,4 +60,3 @@
             <a href="{% url 'room-add' %}" class="btn btn-primary">Přidat nový pokoj</a>
         </div>
     </div>
-{% endblock %}

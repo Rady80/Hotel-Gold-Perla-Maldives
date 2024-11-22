@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Můj Profil{% endblock %}
+
+{% block content %}
+<h1>Můj Profil</h1>
+<p>Jméno: {{ user.first_name }} {{ user.last_name }}</p>
+<p>Email: {{ user.email }}</p>
+<a href="{% url 'edit_profile' %}">Upravit profil</a>
+{% endblock %}

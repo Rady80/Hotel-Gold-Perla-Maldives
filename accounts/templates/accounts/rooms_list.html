@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Seznam pokojů</h1>
+<ul>
+    {% for room in rooms %}
+        <li>{{ room.name }} - Cena: {{ room.price }} Kč</li>
+    {% endfor %}
+</ul>
+{% endblock %}

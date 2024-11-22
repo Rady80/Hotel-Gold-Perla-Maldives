@@ -1,0 +1,104 @@
+/* -------------------------------- */
+/* Globální stylování */
+/* -------------------------------- */
+body.login, /* Stylování pouze pro přihlašovací obrazovku */
+body {
+    /* Pozadí: obrázek s překryvým gradientem */
+    background-image: 
+        url("{% static 'images/hotel1.jpg' %}"), /* Obrázek na pozadí z adresáře statických souborů */
+        linear-gradient(to bottom right, rgba(0, 123, 255, 0.8), rgba(51, 204, 255, 0.8)); /* Modrý překryvný gradient */
+    background-blend-mode: overlay; /* Kombinace gradientu a obrázku */
+    background-size: cover; /* Přizpůsobení obrázku celé obrazovce */
+    background-position: center; /* Vycentrování obrázku */
+    background-repeat: no-repeat; /* Obrázek se neopakuje */
+    color: #ffffff; /* Bílá barva textu */
+    font-family: 'Arial', sans-serif; /* Nastavení základního písma */
+    margin: 0; /* Odstranění výchozích okrajů */
+    padding: 0; /* Odstranění výchozích odsazení */
+}
+
+/* -------------------------------- */
+/* Stylování nadpisů */
+/* -------------------------------- */
+body.login h1, 
+body h1 {
+    color: #ffffff; /* Bílá barva nadpisu */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Stín pro lepší čitelnost */
+    font-size: 2rem; /* Velikost textu nadpisu */
+    text-align: center; /* Zarovnání textu na střed */
+    margin-bottom: 20px; /* Vzdálenost pod nadpisem */
+}
+
+/* -------------------------------- */
+/* Stylování tlačítek */
+/* -------------------------------- */
+button, 
+input[type="submit"] {
+    background-color: rgba(51, 153, 255, 0.9); /* Modrá barva tlačítka */
+    border: none; /* Bez okraje */
+    border-radius: 5px; /* Kulaté rohy tlačítka */
+    padding: 10px 20px; /* Polstrování uvnitř tlačítka */
+    color: white; /* Bílá barva textu */
+    cursor: pointer; /* Změna kurzoru na ukazatel */
+    font-size: 1rem; /* Velikost textu tlačítka */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hladká animace při hoveru */
+}
+
+button:hover, 
+input[type="submit"]:hover {
+    background-color: rgba(0, 123, 255, 1); /* Tmavší modrá při najetí myší */
+    transform: scale(1.05); /* Jemné zvětšení tlačítka */
+}
+
+/* -------------------------------- */
+/* Stylování vstupních polí */
+/* -------------------------------- */
+input[type="text"], 
+input[type="password"], 
+input[type="email"] {
+    background-color: rgba(255, 255, 255, 0.8); /* Světlé pozadí pole */
+    border: 1px solid rgba(0, 123, 255, 0.5); /* Světle modrý okraj */
+    border-radius: 5px; /* Kulaté rohy */
+    padding: 10px; /* Polstrování uvnitř pole */
+    width: 100%; /* Šířka přes celou dostupnou oblast */
+    margin-bottom: 15px; /* Vzdálenost mezi jednotlivými poli */
+    font-size: 1rem; /* Velikost textu v poli */
+}
+
+/* Styl při zaměření na vstupní pole */
+input[type="text"]:focus, 
+input[type="password"]:focus, 
+input[type="email"]:focus {
+    outline: none; /* Odstranění výchozího obrysu */
+    border-color: rgba(51, 153, 255, 0.9); /* Tmavší modrý okraj při focusu */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Jemný stín pro zvýraznění */
+}
+
+/* -------------------------------- */
+/* Stylování formulářů */
+/* -------------------------------- */
+form {
+    background-color: rgba(0, 0, 0, 0.7); /* Poloprůhledné černé pozadí */
+    border-radius: 10px; /* Kulaté rohy formuláře */
+    padding: 20px; /* Polstrování uvnitř formuláře */
+    max-width: 400px; /* Maximální šířka formuláře */
+    margin: 0 auto; /* Vycentrování na stránce */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Jemný stín formuláře */
+}
+
+/* -------------------------------- */
+/* Responzivní design */
+/* -------------------------------- */
+@media (max-width: 768px) {
+    body.login, body {
+        background-size: contain; /* Přizpůsobení pozadí menším obrazovkám */
+    }
+
+    h1 {
+        font-size: 1.5rem; /* Zmenšení nadpisů na menších obrazovkách */
+    }
+
+    form {
+        width: 90%; /* Přizpůsobení šířky formuláře na malých zařízeních */
+    }
+}
